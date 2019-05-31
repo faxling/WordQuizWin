@@ -1,0 +1,60 @@
+<DicResult>
+    <head/>
+    <def pos="noun">
+        <text>tid</text>
+        <tr pos="noun">
+            <text>время</text>
+            <syn pos="noun">
+                <text>срок</text>
+            </syn>
+            <syn pos="noun">
+                <text>момент</text>
+            </syn>
+            <syn pos="noun">
+                <text>период</text>
+            </syn>
+            <mean>
+                <text>tids</text>
+            </mean>
+            <mean>
+                <text>tidsfrist</text>
+            </mean>
+            <mean>
+                <text>tidpunkt</text>
+            </mean>
+        </tr>
+        <tr pos="noun">
+            <text>период времени</text>
+            <mean>
+                <text>tidsperiod</text>
+            </mean>
+        </tr>
+        <tr pos="noun">
+            <text>свое время</text>
+        </tr>
+        <tr pos="verb">
+            <text>успеть</text>
+            <syn pos="verb">
+                <text>успевать</text>
+            </syn>
+        </tr>
+        <tr pos="noun">
+            <text>промежуток времени</text>
+            <mean>
+                <text>tidsperiod</text>
+            </mean>
+        </tr>
+        <tr pos="noun">
+            <text>момент времени</text>
+            <mean>
+                <text>tidpunkt</text>
+            </mean>
+        </tr>
+        <tr pos="noun">
+            <text>много времени</text>
+            <mean>
+                <text>tidskrävande</text>
+            </mean>
+        </tr>
+    </def>
+</DicResult>

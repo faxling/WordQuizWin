@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>TextList.qml</file>
+        <file>tid.xml</file>
+        <file>rm.png</file>
+    </qresource>
+</RCC>
