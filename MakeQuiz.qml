@@ -2,22 +2,17 @@ import QtQuick 2.3
 import QtQuick.Window 2.2
 import QtQuick.Controls 1.4
 import QtQuick.XmlListModel 2.0
-import QtQuick.LocalStorage 2.0 as Sql
+
 
 Item {
 
-  property variant db
 
-  ListModel {
-    id: glosModel
-  }
-  property string sReqDictUrl : "https://dictionary.yandex.net/api/v1/dicservice/lookup?key=dict.1.1.20190526T201825Z.ad1b7fb5407a1478.20679d5d18a62fa88bd53b643af2dee64416b739&lang=sv-ru&text="
-  property string sReqUrl: "https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20190526T164138Z.e99d5807bb2acb8d.d11f94738ea722cfaddf111d2e8f756cb3b71f4f&lang=sv-ru&text="
 
+  property int nLastSearch : 0
   Column
   {
     spacing:20
-    anchors.topMargin: 50
+    anchors.topMargin: 20
     anchors.rightMargin: 50
     anchors.bottomMargin: 50
     anchors.fill: parent
@@ -43,30 +38,7 @@ Item {
         }
       }
     }
-    Component.onCompleted:
-    {
-      var i;
 
-      db =  Sql.LocalStorage.openDatabaseSync("GlosDB", "1.0", "Glos Databas!", 1000000);
-
-      db.transaction(
-            function(tx) {
-
-              // tx.executeSql('DROP TABLE Glosa');
-
-              tx.executeSql('CREATE TABLE IF NOT EXISTS Glosa( number INT , quizword TEXT, answer TEXT)');
-
-              // tx.executeSql('INSERT INTO Glosa VALUES(?, ?)', [ 'ja', 'да' ]);
-
-              // Show all added greetings
-              var rs = tx.executeSql('SELECT * FROM Glosa');
-
-              for(var i = 0; i < rs.rows.length; i++) {
-                glosModel.append({"number": rs.rows.item(i).number, "name": rs.rows.item(i).quizword , "answer": rs.rows.item(i).answer})
-              }
-            }
-            )
-    }
 
     XmlListModel {
       onStatusChanged:
@@ -93,21 +65,12 @@ Item {
       XmlRole { name: "mean"; query: "text/string()" }
     }
 
-    Row
-    {
-      TextList
-      {
-        width:100
-        id:idQuizName
-        text:"Djur"
-      }
-      TextList
-      {
-        id:idLangPair
-        text:"sv-ru"
-      }
-    }
 
+    TextList
+    {
+      id:idText
+      text :"-"
+    }
 
     InputTextQuiz
     {
@@ -117,15 +80,16 @@ Item {
 
     Row
     {
-      spacing:50
+      spacing:10
 
-      Button {
-        height:26
+      ButtonQuiz {
 
-        text: "Find in Dict"
+
+        text: "Find in Dict " + sLangLang
         onClicked: {
-
+          nLastSearch = 0
           var doc = new XMLHttpRequest();
+          console.log(sReqDictUrl + idTextInput.text);
           doc.open("GET",sReqDictUrl + idTextInput.text);
           console.log("find " + idTextInput.text);
 
@@ -139,17 +103,60 @@ Item {
             }
           }
           doc.send()
-
         }
       }
 
 
-      Button {
+      ButtonQuiz {
+
+
+        text: "Find in Dict " + sLangLangRev
+        onClicked: {
+          nLastSearch = 1
+          var doc = new XMLHttpRequest();
+          doc.open("GET",sReqDictUrlRev + idTextInput.text);
+          console.log("find " + idTextInput.text);
+
+          doc.onreadystatechange = function() {
+
+            if (doc.readyState === XMLHttpRequest.DONE) {
+              idTrSynModel.xml = doc.responseText
+              idTrTextModel.xml = doc.responseText
+              idTrMeanModel.xml = doc.responseText
+              console.log("answer")
+            }
+          }
+          doc.send()
+        }
+      }
+
+
+      ButtonQuiz {
+        text: "Find in Dict " + sLangLangEn
+        onClicked: {
+          nLastSearch = 2
+          var doc = new XMLHttpRequest();
+          doc.open("GET",sReqDictUrlEn + idTextInput.text);
+          console.log("find " + idTextInput.text);
+
+          doc.onreadystatechange = function() {
+
+            if (doc.readyState === XMLHttpRequest.DONE) {
+              idTrSynModel.xml = doc.responseText
+              idTrTextModel.xml = doc.responseText
+              idTrMeanModel.xml = doc.responseText
+              console.log("answer")
+            }
+          }
+          doc.send()
+        }
+      }
+
+      ButtonQuiz {
         text: "Add"
         onClicked: {
           var nC = 0;
           console.log("count "+ glosModel.count)
-
 
           for(var i = 0; i < glosModel.count; i++) {
             if (glosModel.get(i).number > nC)
@@ -158,42 +165,47 @@ Item {
 
           nC += 1;
 
+          if (nLastSearch !== 1)
+          {
 
-          console.log("add "+ nC)
-
-          db.transaction(
-                function(tx) {
-                  tx.executeSql('INSERT INTO Glosa VALUES(?, ?, ?)', [nC,  idTextInput.text, idText.text ]);
-                })
+            db.transaction(
+                  function(tx) {
+                    tx.executeSql('INSERT INTO Glosa VALUES(?, ?, ?, ?)', [nC,  idTextInput.text, idText.text, 0 ]);
+                  })
 
 
 
-          glosModel.append({"number": nC, "name": idTextInput.text , "answer": idText.text})
+            glosModel.append({"number": nC, "question": idTextInput.text , "answer": idText.text, "state1":0})
+          }
+          else
+          {
+            db.transaction(
+                  function(tx) {
+                    tx.executeSql('INSERT INTO Glosa VALUES(?, ?, ?, ?)', [nC,   idText.text, idTextInput.text,0 ]);
+                  })
 
+
+
+            glosModel.append({"number": nC, "question": idText.text  , "answer":   idTextInput.text, "state1":0})
+
+          }
 
         }
       }
-      TextList{
-        id:idText
-        width: 150
-        text:"-"
-      }
+
     }
 
     Row
     {
       height:150
       width:parent.width - 100
-      ListView {
+      ListViewHi {
         id:idDicList
         width:parent.width - 100
         height : parent.height
         model:idTrTextModel
         highlightFollowsCurrentItem: true
-        highlight: Rectangle {
-          opacity:0.5
-          color: "#009bff"
-        }
+
         delegate: Row {
 
           TextList {
@@ -271,7 +283,8 @@ Item {
 
         TextList {
           width:100
-          text:  name
+          text:  question
+          color: state1 === 0 ? "red" : "green"
         }
 
         TextList {

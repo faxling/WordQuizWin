@@ -8,5 +8,9 @@
         <file>MakeQuiz.qml</file>
         <file>CreateNewQuiz.qml</file>
         <file>InputTextQuiz.qml</file>
+        <file>left.png</file>
+        <file>r.png</file>
+        <file>ButtonQuiz.qml</file>
+        <file>ListViewHi.qml</file>
     </qresource>
 </RCC>

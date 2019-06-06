@@ -67,7 +67,7 @@ Item
     Row
     {
       spacing:20
-      Button
+      ButtonQuiz
       {
         text:"New Quiz"
       }
@@ -82,7 +82,7 @@ Item
       width:parent.width
       height : 100
 
-      ListView
+      ListViewHi
       {
         id:idLangList1
         width:100
@@ -100,24 +100,15 @@ Item
             }
           }
         }
-        highlight: Rectangle {
-          opacity:0.5
-          color: "#009bff"
-        }
       }
 
 
-      ListView
+      ListViewHi
       {
         id:idLangList2
         width:100
         height:parent.height
         model: idLangModel
-
-        highlight: Rectangle {
-          opacity:0.5
-          color: "#009bff"
-        }
 
         delegate: TextList {
           text:lang
@@ -145,11 +136,26 @@ Item
       text:"Available Quiz's:"
     }
 
-    ListView
+    ListViewHi
     {
+      id:idQuizList
       width:parent.width
       height:200
       model:idQuizModel
+
+
+      onCurrentIndexChanged:
+      {
+        sQuizName = idQuizModel.get(currentIndex).quizname
+        sLangLang = idQuizModel.get(currentIndex).langpair
+        var res = sLangLang.split("-");
+        sLangLangRev = res[1] + "-" + res[0];
+        sLangLangEn = "en"+ "-" + res[1];
+        sReqDictUrl = sReqDictUrlBase +  sLangLang + "&text="
+        sReqDictUrlRev = sReqDictUrlBase + sLangLangRev + "&text="
+        sReqDictUrlEn= sReqDictUrlBase + sLangLangEn + "&text="
+      }
+
       delegate:
           Row
       {
@@ -157,12 +163,24 @@ Item
       {
         width:100
         text:quizname
+        MouseArea
+        {
+          anchors.fill: parent
+          onClicked:
+          {
+            idQuizList.currentIndex = index
+          }
+        }
       }
       TextList
       {
         text:langpair
       }
+
     }
+  }
+  Component.onCompleted: {
+
   }
 }
 }
