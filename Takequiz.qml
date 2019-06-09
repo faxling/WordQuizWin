@@ -3,13 +3,10 @@ import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 
 Rectangle {
-
-
-
-
-
-
-  // May be the filler is calculated (PathLen - NoElem*sizeElem) /  (NoElem-1 )
+  id:idRectTakeQuiz
+  width:400
+  height:400
+  // May be the filler is calculated (PathLen - NoElem*sizeElem) /  (NoElem )
   Component
   {
     id:idQuestionComponent
@@ -17,14 +14,13 @@ Rectangle {
     Rectangle
     {
       property alias answerVisible: idTextAnswer.visible
-      radius:6
-      width:300
-      height:300
+      radius:10
+      width:idView.width
+      height:idView.height
       color:"mediumspringgreen"
       Column
       {
         height:200
-        width:300
         spacing: 20
         anchors.centerIn: parent
         Text
@@ -37,8 +33,9 @@ Rectangle {
 
         ButtonQuiz
         {
-          anchors.horizontalCenter: parent.horizontalCenter
           id:idBtnAnswer
+          anchors.horizontalCenter: parent.horizontalCenter
+
           text:"Show Answer"
           onClicked:
           {
@@ -52,13 +49,17 @@ Rectangle {
           //   color:"yellow"
           Text
           {
+            id:idTextAnswer
+            visible:visible1
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
-            id:idTextAnswer
-            visible: visible1
             font.pointSize: 25
             text : answer
           }
+        }
+        Image {
+          visible:allok
+          source: "thumb.png"
         }
       }
       Image
@@ -80,10 +81,6 @@ Rectangle {
     }
   }
 
-  Component.onCompleted:
-  {
-
-  }
 
 
   Text
@@ -100,9 +97,22 @@ Rectangle {
     property int nLastIndex : 1
     onCurrentIndexChanged:
     {
-      var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
-      var nI = (currentIndex+1) % 3
 
+      if (glosModelWorking.count<1)
+      {
+        for (var j = 0; j < 3 ;++j)
+        {
+          idQuizModel.get(j).question =  "-"
+          idQuizModel.get(j).answer =  "-"
+          idQuizModel.get(j).number =  -1
+          idQuizModel.get(j).visible1 = false
+          idQuizModel.get(j).allok = false
+        }
+
+        return;
+      }
+
+      var nI = (currentIndex+1) % 3
       var bDir = 0
 
       if (nLastIndex == 0 && nI === 1)
@@ -117,14 +127,13 @@ Rectangle {
         bDir = 1
       if (nLastIndex == 2 && nI === 1)
         bDir = -1
+
+
       var nLastNumber = idQuizModel.get(nLastIndex).number
 
       nLastIndex = nI
 
-      idQuizModel.get(nI).question =  glosModelWorking.get(nIndexOwNewWord).question
-      idQuizModel.get(nI).answer =  glosModelWorking.get(nIndexOwNewWord).answer
-      idQuizModel.get(nI).number =  glosModelWorking.get(nIndexOwNewWord).number
-      idQuizModel.setProperty(nI,"visible1",false)
+
       if (bDir ===-1)
       {
         var nC = glosModelWorking.count
@@ -132,6 +141,16 @@ Rectangle {
           if (glosModelWorking.get(i).number === nLastNumber)
           {
             glosModelWorking.remove(i);
+
+            if (glosModelWorking.count ===0 )
+            {
+              for ( i = 0; i < 3 ;++i)
+              {
+                idQuizModel.get(i).question =  ""
+                idQuizModel.get(i).allok = true
+              }
+            }
+
             sScoreText  = glosModelWorking.count + "/" + glosModel.count
             nC = glosModel.count
             for (  i = 0; i < nC;++i) {
@@ -150,23 +169,35 @@ Rectangle {
             break;
           }
         }
-
       }
+
+      if (glosModelWorking.count>0)
+      {
+        var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
+        idQuizModel.get(nI).question = glosModelWorking.get(nIndexOwNewWord).question
+        idQuizModel.get(nI).answer = glosModelWorking.get(nIndexOwNewWord).answer
+        idQuizModel.get(nI).number = glosModelWorking.get(nIndexOwNewWord).number
+        idQuizModel.get(nI).visible1 = false
+        idQuizModel.get(nI).allok = false
+      }
+
     }
 
 
     y:100
     clip:true
-    width:300
-    height:300
+    width:idRectTakeQuiz.width
+    height:idRectTakeQuiz.height
     model : idQuizModel
     delegate:idQuestionComponent
     snapMode: ListView.SnapOneItem
     path: Path {
-      startX: -250; startY: 150
-      PathLine  { relativeX:  1200; relativeY: 0}
+      startX: -(idView.width / 2 + 100); startY: idView.height / 2
+      PathLine  { relativeX:  idView.width*3 + 300; relativeY: 0}
     }
   }
+
+
 
 }
 

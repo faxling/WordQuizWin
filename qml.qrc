@@ -12,5 +12,6 @@
         <file>r.png</file>
         <file>ButtonQuiz.qml</file>
         <file>ListViewHi.qml</file>
+        <file>thumb.png</file>
     </qresource>
 </RCC>

@@ -325,8 +325,15 @@ Item {
         sScoreText = nC + "/" + nC
         for ( var i = 0; i < nC;++i) {
           glosModel.get(i).state1=0;
-          glosModelWorking.append(glosModel.get(i))
+          glosModelWorking.append(glosModel.get(i))          
         }
+
+        var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
+        idQuizModel.get(1).question = glosModelWorking.get(nIndexOwNewWord).question
+        idQuizModel.get(1).answer = glosModelWorking.get(nIndexOwNewWord).answer
+        idQuizModel.get(1).number = glosModelWorking.get(nIndexOwNewWord).number
+        idQuizModel.get(1).visible1 = false
+        idQuizModel.get(1).allok = false
 
       }
 

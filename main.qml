@@ -35,16 +35,13 @@ Window {
   {
     db.transaction(
           function(tx) {
-
-
             tx.executeSql('UPDATE GlosaDbIndex SET state1=? WHERE dbnumber=?',[sScoreText, ndbnumber]);
 
-            console.log("onSScoreTextChanged " + sScoreText + " " + ndbnumber)
             var nC = glosModelIndex.count
             for ( var i = 0; i < nC;++i) {
               if (glosModelIndex.get(i).dbnumber === ndbnumber)
               {
-               glosModelIndex.setProperty(i,"state1", sScoreText)
+                glosModelIndex.setProperty(i,"state1", sScoreText)
                 break;
               }
             }
@@ -66,10 +63,21 @@ Window {
 
     var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
 
-    sScoreText = nC + "/" + glosModelWorking.count
-    idQuizModel.get(1).question =  glosModelWorking.get(nIndexOwNewWord).question;
-    idQuizModel.get(1).answer = glosModelWorking.get(nIndexOwNewWord).answer;
-    idQuizModel.get(1).number = glosModelWorking.get(nIndexOwNewWord).number;
+    // sScoreText =  glosModelWorking.count + "/" + nC
+
+    if (glosModelWorking.count < 1)
+    {
+      idQuizModel.get(1).question =  "-";
+      idQuizModel.get(1).answer = "-";
+      idQuizModel.get(1).number = -1;
+    }
+    else
+    {
+      idQuizModel.get(1).question =  glosModelWorking.get(nIndexOwNewWord).question;
+      idQuizModel.get(1).answer = glosModelWorking.get(nIndexOwNewWord).answer;
+      idQuizModel.get(1).number = glosModelWorking.get(nIndexOwNewWord).number;
+    }
+
   }
 
   ListModel {
@@ -87,22 +95,25 @@ Window {
     id:idQuizModel
 
     ListElement {
-      question: "1"
+      question: "-"
       answer:"-"
       number:0
       visible1:false
+      allok:false
     }
     ListElement {
-      question: "2"
+      question: "-"
       answer:"-"
       number:1
       visible1:false
+      allok:false
     }
     ListElement {
-      question: "3"
+      question: "-"
       answer:"-"
       number:2
       visible1:false
+      allok:false
     }
   }
 
@@ -142,8 +153,11 @@ Window {
   }
 
   TabView {
+    id:idTabMain
     anchors.fill : parent
     anchors.leftMargin : 50
+    anchors.rightMargin : 50
+    anchors.bottomMargin:  150
     anchors.topMargin : 50
     Tab
     {
@@ -167,7 +181,8 @@ Window {
       title: "Quiz"
       TakeQuiz
       {
-        anchors.fill: parent
+        width : idTabMain.width
+        height : idTabMain.width
       }
     }
     style: TabViewStyle {
