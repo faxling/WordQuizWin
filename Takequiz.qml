@@ -5,28 +5,9 @@ import QtQuick.Controls.Styles 1.4
 Rectangle {
 
 
-  ListModel {
-    id:idQuizModel
 
-    ListElement {
-      question: "1"
-      answer:"-"
-      number:0
-      visible1:false
-    }
-    ListElement {
-      question: "2"
-      answer:"-"
-      number:1
-      visible1:false
-    }
-    ListElement {
-      question: "3"
-      answer:"-"
-      number:2
-      visible1:false
-    }
-  }
+
+
 
   // May be the filler is calculated (PathLen - NoElem*sizeElem) /  (NoElem-1 )
   Component
@@ -101,31 +82,16 @@ Rectangle {
 
   Component.onCompleted:
   {
-    if (glosModel.count < 1)
-      return;
-    var nC = glosModel.count
-    for ( var i = 0; i < nC;++i) {
-      if (glosModel.get(i).state === 0)
-        glosModelWorking.append(glosModel.get(i))
-    }
 
-    var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
-
-    idNumberText.text = nC + "/" + glosModel.count
-    idQuizModel.get(1).question =  glosModelWorking.get(nIndexOwNewWord).question;
-    idQuizModel.get(1).answer = glosModelWorking.get(nIndexOwNewWord).answer;
-    idQuizModel.get(1).number = glosModelWorking.get(nIndexOwNewWord).number;
   }
 
 
   Text
   {
     y:10
-
+    text: sScoreText
     id: idNumberText
   }
-
-
 
   PathView
   {
@@ -166,7 +132,7 @@ Rectangle {
           if (glosModelWorking.get(i).number === nLastNumber)
           {
             glosModelWorking.remove(i);
-            idNumberText.text = (nC-1) + "/" + glosModel.count
+            sScoreText  = glosModelWorking.count + "/" + glosModel.count
             nC = glosModel.count
             for (  i = 0; i < nC;++i) {
               if (glosModel.get(i).number === nLastNumber)
@@ -175,7 +141,7 @@ Rectangle {
 
                 db.transaction(
                       function(tx) {
-                        tx.executeSql("UPDATE Glosa SET state=1 WHERE number=?", nLastNumber);
+                        tx.executeSql("UPDATE Glosa"+ndbnumber+" SET state=1 WHERE number=?", nLastNumber);
                       })
 
                 break;

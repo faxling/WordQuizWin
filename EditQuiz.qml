@@ -6,6 +6,21 @@ import QtQuick.XmlListModel 2.0
 
 Item {
 
+  id:idItemEdit
+  function insertGlosa(dbnumber, nC, question, answer)
+  {
+    db.transaction(
+          function(tx) {
+            tx.executeSql('INSERT INTO Glosa'+dbnumber+' VALUES(?, ?, ?, ?)', [nC,  question, answer, 0 ]);
+          })
+
+
+    glosModel.append({"number": nC, "question": question , "answer": answer, "state1":0})
+
+    glosModelWorking.append({"number": nC, "question": question , "answer": answer, "state1":0})
+    idGlosList.positionViewAtEnd()
+    sScoreText = glosModelWorking.count + "/" + glosModel.count
+  }
 
 
   property int nLastSearch : 0
@@ -45,9 +60,14 @@ Item {
       {
         if (status === XmlListModel.Ready)
         {
+          if (idTrTextModel.count <= 0)
+          {
+            idText.text = "-"
+            return
+          }
           idText.text =  idTrTextModel.get(0).text1
-          // console.log("- " + idText.text )
-          //       idTopText.text =  xmlModel.get(0).trans
+
+
         }
       }
       id: idTrTextModel
@@ -82,6 +102,7 @@ Item {
     {
       spacing:10
 
+
       ButtonQuiz {
 
 
@@ -89,9 +110,7 @@ Item {
         onClicked: {
           nLastSearch = 0
           var doc = new XMLHttpRequest();
-          console.log(sReqDictUrl + idTextInput.text);
           doc.open("GET",sReqDictUrl + idTextInput.text);
-          console.log("find " + idTextInput.text);
 
           doc.onreadystatechange = function() {
 
@@ -99,7 +118,6 @@ Item {
               idTrSynModel.xml = doc.responseText
               idTrTextModel.xml = doc.responseText
               idTrMeanModel.xml = doc.responseText
-              console.log("answer")
             }
           }
           doc.send()
@@ -114,8 +132,7 @@ Item {
         onClicked: {
           nLastSearch = 1
           var doc = new XMLHttpRequest();
-          doc.open("GET",sReqDictUrlRev + idTextInput.text);
-          console.log("find " + idTextInput.text);
+          doc.open("GET",sReqDictUrlRev + idTextInput.text)
 
           doc.onreadystatechange = function() {
 
@@ -123,7 +140,6 @@ Item {
               idTrSynModel.xml = doc.responseText
               idTrTextModel.xml = doc.responseText
               idTrMeanModel.xml = doc.responseText
-              console.log("answer")
             }
           }
           doc.send()
@@ -137,7 +153,6 @@ Item {
           nLastSearch = 2
           var doc = new XMLHttpRequest();
           doc.open("GET",sReqDictUrlEn + idTextInput.text);
-          console.log("find " + idTextInput.text);
 
           doc.onreadystatechange = function() {
 
@@ -145,19 +160,20 @@ Item {
               idTrSynModel.xml = doc.responseText
               idTrTextModel.xml = doc.responseText
               idTrMeanModel.xml = doc.responseText
-              console.log("answer")
             }
           }
           doc.send()
         }
       }
 
+
+
       ButtonQuiz {
         text: "Add"
         onClicked: {
-          var nC = 0;
-          console.log("count "+ glosModel.count)
 
+          // Find a new Id
+          var nC = 0;
           for(var i = 0; i < glosModel.count; i++) {
             if (glosModel.get(i).number > nC)
               nC = glosModel.get(i).number;
@@ -167,27 +183,11 @@ Item {
 
           if (nLastSearch !== 1)
           {
-
-            db.transaction(
-                  function(tx) {
-                    tx.executeSql('INSERT INTO Glosa VALUES(?, ?, ?, ?)', [nC,  idTextInput.text, idText.text, 0 ]);
-                  })
-
-
-
-            glosModel.append({"number": nC, "question": idTextInput.text , "answer": idText.text, "state1":0})
+            insertGlosa(ndbnumber,nC, idTextInput.text, idText.text)
           }
           else
           {
-            db.transaction(
-                  function(tx) {
-                    tx.executeSql('INSERT INTO Glosa VALUES(?, ?, ?, ?)', [nC,   idText.text, idTextInput.text,0 ]);
-                  })
-
-
-
-            glosModel.append({"number": nC, "question": idText.text  , "answer":   idTextInput.text, "state1":0})
-
+            insertGlosa(ndbnumber, nC, idText.text, idTextInput.text)
           }
 
         }
@@ -222,9 +222,7 @@ Item {
                 idTrSynModel.query = "/DicResult/def/tr["  +(index + 1) + "]/syn"
                 idTrMeanModel.query = "/DicResult/def/tr["  +(index + 1) + "]/mean"
               }
-
             }
-
           }
         }
       }
@@ -263,10 +261,10 @@ Item {
       }
     }
 
-    ListView {
 
-      clip: true
+    ListView {
       id:idGlosList
+      clip: true
       width:parent.width - 100
       height:200
       spacing: 3
@@ -274,9 +272,9 @@ Item {
       header:idHeaderGlos
 
       model: glosModel
-
       delegate: Row {
         TextList {
+          id:idNumberText
           width:50
           text:  number
         }
@@ -284,7 +282,7 @@ Item {
         TextList {
           width:100
           text:  question
-          color: state1 === 0 ? "red" : "green"
+          color: state1 === 0 ? idNumberText.color : "green"
         }
 
         TextList {
@@ -300,11 +298,9 @@ Item {
           iconSource: "qrc:rm.png"
           onClicked:
           {
-            console.log("rm " + number)
             db.transaction(
                   function(tx) {
-                    tx.executeSql('DELETE FROM Glosa WHERE number = ?',[number]);
-
+                    tx.executeSql('DELETE FROM Glosa'+ndbnumber+' WHERE number = ?',[number]);
                   }
                   )
             glosModel.remove(index)
@@ -312,6 +308,29 @@ Item {
 
         }
       }
+    }
+    ButtonQuiz
+    {
+      text : "Reset"
+      onClicked:
+      {
+        db.transaction(
+              function(tx) {
+                tx.executeSql('UPDATE Glosa'+ndbnumber+' SET state=0');
+              })
+
+
+        glosModelWorking.clear()
+        var nC = glosModel.count
+
+        sScoreText = nC + "/" + nC
+        for ( var i = 0; i < nC;++i) {
+          glosModel.get(i).state1=0;
+          glosModelWorking.append(glosModel.get(i))
+        }
+
+      }
+
     }
   }
 }

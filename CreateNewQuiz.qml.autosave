@@ -67,16 +67,9 @@ Item
 
                   var rs = tx.executeSql('SELECT MAX(dbnumber) as newnr FROM GlosaDbIndex');
                   var nNr = 1
-
-
-                  console.log("GlosaDbIndex length " +rs.rows.length )
                   if (rs.rows.length > 0)
                   {
-
-                    console.log("number max = " + rs.rows.item(0).newnr)
-
                     nNr = rs.rows.item(0).newnr + 1
-
                   }
                   tx.executeSql('INSERT INTO GlosaDbIndex VALUES(?,?,?,?)',[nNr, idTextInputQuizName.text,"0/0",sLangLangSelected  ]);
 

@@ -5,7 +5,7 @@
         <file>tid.xml</file>
         <file>rm.png</file>
         <file>TakeQuiz.qml</file>
-        <file>MakeQuiz.qml</file>
+        <file>EditQuiz.qml</file>
         <file>CreateNewQuiz.qml</file>
         <file>InputTextQuiz.qml</file>
         <file>left.png</file>
