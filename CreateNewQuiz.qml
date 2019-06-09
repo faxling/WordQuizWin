@@ -43,11 +43,15 @@ Item
   Column
   {
     spacing:20
-    anchors.topMargin: 50
+    anchors.topMargin: 20
     anchors.rightMargin: 50
     anchors.bottomMargin: 50
     anchors.fill: parent
 
+    TextList
+    {
+      id:idTextSelected
+    }
     InputTextQuiz
     {
       id:idTextInputQuizName
@@ -67,16 +71,9 @@ Item
 
                   var rs = tx.executeSql('SELECT MAX(dbnumber) as newnr FROM GlosaDbIndex');
                   var nNr = 1
-
-
-                  console.log("GlosaDbIndex length " +rs.rows.length )
                   if (rs.rows.length > 0)
                   {
-
-                    console.log("number max = " + rs.rows.item(0).newnr)
-
                     nNr = rs.rows.item(0).newnr + 1
-
                   }
                   tx.executeSql('INSERT INTO GlosaDbIndex VALUES(?,?,?,?)',[nNr, idTextInputQuizName.text,"0/0",sLangLangSelected  ]);
 
@@ -86,6 +83,23 @@ Item
 
         }
       }
+      ButtonQuiz
+      {
+        text:"Rename"
+        onClicked:
+        {
+          glosModelIndex.setProperty(idQuizList.currentIndex,"quizname", idTextInputQuizName.text)
+          db.transaction(
+                function(tx) {
+                  var nId = glosModelIndex.get(idQuizList.currentIndex).dbnumber;
+                  tx.executeSql('UPDATE GlosaDbIndex SET quizname=? WHERE dbnumber=?',[idTextInputQuizName.text, nId]);
+                  idTextSelected.text = idTextInputQuizName.text
+                }
+
+                )
+        }
+      }
+
       TextList
       {
         id:idLangPair
@@ -214,6 +228,7 @@ Item
 
               }
               )
+        idTextSelected.text = sQuizName
 
       }
 
@@ -258,8 +273,8 @@ Item
           db.transaction(
                 function(tx) {
 
-
                   tx.executeSql('DELETE FROM GlosaDbIndex WHERE dbnumber = ?',[dbnumber]);
+                  tx.executeSql('DROP TABLE Glosa'+dbnumber);
 
                 }
                 )

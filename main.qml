@@ -137,7 +137,7 @@ Window {
   visible: true
   TextList
   {
-    text: sQuizName + " " + sLangLang + " " + ndbnumber
+    text: sQuizName + " " + sLangLang
     anchors.horizontalCenter: parent.horizontalCenter
   }
 
