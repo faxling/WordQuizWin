@@ -90,13 +90,14 @@ Rectangle {
   }
 
 
-
   Text
   {
     y:10
     text: sScoreText
     id: idNumberText
   }
+
+
 
   PathView
   {
@@ -106,6 +107,9 @@ Rectangle {
     onCurrentIndexChanged:
     {
 
+      var nI = (currentIndex+1) % 3
+
+      nQuizIndex = nI
 
       if (glosModelWorking.count<1)
       {
@@ -121,9 +125,7 @@ Rectangle {
         return;
       }
 
-      var nI = (currentIndex+1) % 3
 
-      nQuizIndex = nI
 
       var bDir = 0
 

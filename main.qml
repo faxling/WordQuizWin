@@ -34,7 +34,7 @@ Window {
   property string sQuizName : "-"
   property string sScoreText : "-"
   property int nDbNumber : 0;
-  property int nQuizIndex: 0
+  property int nQuizIndex: 1
   onSScoreTextChanged:
   {
     db.transaction(
@@ -87,7 +87,9 @@ Window {
   ListModel {
     id: glosModel
   }
-
+  ListModel {
+    id: glosModelWorkingRev
+  }
   ListModel {
     id: glosModelWorking
   }

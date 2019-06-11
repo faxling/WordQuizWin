@@ -332,35 +332,78 @@ Item {
 
       }
     }
-    ButtonQuiz
+    Row
     {
-      text : "Reset"
-      onClicked:
+      spacing:10
+      ButtonQuiz
       {
-        db.transaction(
-              function(tx) {
-                tx.executeSql('UPDATE Glosa'+nDbNumber+' SET state=0');
-              })
+        text : "Reset"
+        onClicked:
+        {
+          db.transaction(
+                function(tx) {
+                  tx.executeSql('UPDATE Glosa'+nDbNumber+' SET state=0');
+                })
 
 
-        glosModelWorking.clear()
-        var nC = glosModel.count
+          glosModelWorking.clear()
+          var nC = glosModel.count
 
-        sScoreText = nC + "/" + nC
-        for ( var i = 0; i < nC;++i) {
-          glosModel.get(i).state1=0;
-          glosModelWorking.append(glosModel.get(i))
+          sScoreText = nC + "/" + nC
+          for ( var i = 0; i < nC;++i) {
+            glosModel.get(i).state1=0;
+            glosModelWorking.append(glosModel.get(i))
+          }
+
+          var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
+
+          i =  nQuizIndex
+
+          idQuizModel.get(i).question = glosModelWorking.get(nIndexOwNewWord).question
+          idQuizModel.get(i).answer = glosModelWorking.get(nIndexOwNewWord).answer
+          idQuizModel.get(i).number = glosModelWorking.get(nIndexOwNewWord).number
+          idQuizModel.get(i).visible1 = false
+          idQuizModel.get(i).allok = false
+
         }
 
-        var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
+      }
 
-        i =  nQuizIndex
+      ButtonQuiz
+      {
+        text : "Reverse"
+        onClicked:
+        {
+          db.transaction(
+                function(tx) {
+                  tx.executeSql('UPDATE Glosa'+nDbNumber+' SET state=0');
+                })
 
-        idQuizModel.get(i).question = glosModelWorking.get(nIndexOwNewWord).question
-        idQuizModel.get(i).answer = glosModelWorking.get(nIndexOwNewWord).answer
-        idQuizModel.get(i).number = glosModelWorking.get(nIndexOwNewWord).number
-        idQuizModel.get(i).visible1 = false
-        idQuizModel.get(i).allok = false
+
+          glosModelWorking.clear()
+          var nC = glosModel.count
+
+          sScoreText = nC + "/" + nC
+          for ( var i = 0; i < nC;++i) {
+            glosModel.get(i).state1=0;
+
+            var squestion = glosModel.get(i).answer
+            var sanswer = glosModel.get(i).question
+            var nnC  = glosModel.get(i).number
+            glosModelWorking.append({"number": nnC, "question": squestion , "answer": sanswer, "state1":0})
+          }
+
+          var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
+
+          i =  nQuizIndex
+
+          idQuizModel.get(i).question = glosModelWorking.get(nIndexOwNewWord).question
+          idQuizModel.get(i).answer = glosModelWorking.get(nIndexOwNewWord).answer
+          idQuizModel.get(i).number = glosModelWorking.get(nIndexOwNewWord).number
+          idQuizModel.get(i).visible1 = false
+          idQuizModel.get(i).allok = false
+
+        }
 
       }
 
