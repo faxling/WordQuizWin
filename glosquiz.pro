@@ -1,15 +1,21 @@
 TEMPLATE = app
 
-QT += qml quick
+QT += qml quick multimedia
+
 CONFIG += c++11
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    speechdownloader.cpp \
+    filehelpers.cpp
 
 RESOURCES += qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
-F
 # Default rules for deployment.
 include(deployment.pri)
+
+HEADERS += \
+    speechdownloader.h \
+    filehelpers.h
 

@@ -13,5 +13,6 @@
         <file>ButtonQuiz.qml</file>
         <file>ListViewHi.qml</file>
         <file>thumb.png</file>
+        <file>horn.png</file>
     </qresource>
 </RCC>

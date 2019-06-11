@@ -182,12 +182,15 @@ Item {
 
           if (nLastSearch !== 1)
           {
-            insertGlosa(ndbnumber,nC, idTextInput.text, idText.text)
+            insertGlosa(nDbNumber,nC, idTextInput.text, idText.text)
           }
           else
           {
-            insertGlosa(ndbnumber, nC, idText.text, idTextInput.text)
+            insertGlosa(nDbNumber, nC, idText.text, idTextInput.text)
           }
+
+          if (sToLang=="ru")
+            MyDownloader.downloadWord(idText.text)
 
         }
       }
@@ -299,7 +302,7 @@ Item {
           {
             db.transaction(
                   function(tx) {
-                    tx.executeSql('DELETE FROM Glosa'+ndbnumber+' WHERE number = ?',[number]);
+                    tx.executeSql('DELETE FROM Glosa'+nDbNumber+' WHERE number = ?',[number]);
                   }
                   )
             glosModel.remove(index)
@@ -315,7 +318,7 @@ Item {
       {
         db.transaction(
               function(tx) {
-                tx.executeSql('UPDATE Glosa'+ndbnumber+' SET state=0');
+                tx.executeSql('UPDATE Glosa'+nDbNumber+' SET state=0');
               })
 
 
@@ -325,15 +328,18 @@ Item {
         sScoreText = nC + "/" + nC
         for ( var i = 0; i < nC;++i) {
           glosModel.get(i).state1=0;
-          glosModelWorking.append(glosModel.get(i))          
+          glosModelWorking.append(glosModel.get(i))
         }
 
         var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
-        idQuizModel.get(1).question = glosModelWorking.get(nIndexOwNewWord).question
-        idQuizModel.get(1).answer = glosModelWorking.get(nIndexOwNewWord).answer
-        idQuizModel.get(1).number = glosModelWorking.get(nIndexOwNewWord).number
-        idQuizModel.get(1).visible1 = false
-        idQuizModel.get(1).allok = false
+
+        i =  nQuizIndex
+
+        idQuizModel.get(i).question = glosModelWorking.get(nIndexOwNewWord).question
+        idQuizModel.get(i).answer = glosModelWorking.get(nIndexOwNewWord).answer
+        idQuizModel.get(i).number = glosModelWorking.get(nIndexOwNewWord).number
+        idQuizModel.get(i).visible1 = false
+        idQuizModel.get(i).allok = false
 
       }
 

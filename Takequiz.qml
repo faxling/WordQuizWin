@@ -57,9 +57,32 @@ Rectangle {
             text : answer
           }
         }
+        Image
+        {
+          anchors.horizontalCenter: parent.horizontalCenter
+          visible:(sToLang == "ru") && visible1
+          source:"qrc:horn.png"
+
+          MouseArea
+          {
+            anchors.fill: parent
+            onClicked: MyDownloader.playWord(answer)
+            onPressed: idRect.opacity = 0.6
+            onReleased: idRect.opacity  = 0.4
+          }
+          Rectangle
+          {
+            id:idRect
+            opacity:0.4
+            radius: 4
+            color: "steelblue"
+            anchors.fill: parent
+          }
+        }
+
         Image {
           visible:allok
-          source: "thumb.png"
+          source: "qrc:thumb.png"
         }
       }
       Image
@@ -68,7 +91,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.right:parent.right
         anchors.rightMargin: 20
-        source:"r.png"
+        source:"qrc:r.png"
       }
       Image
       {
@@ -76,7 +99,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.left:parent.left
         anchors.leftMargin: 20
-        source:"left.png"
+        source:"qrc:left.png"
       }
     }
   }
@@ -98,6 +121,7 @@ Rectangle {
     onCurrentIndexChanged:
     {
 
+
       if (glosModelWorking.count<1)
       {
         for (var j = 0; j < 3 ;++j)
@@ -113,6 +137,9 @@ Rectangle {
       }
 
       var nI = (currentIndex+1) % 3
+
+      nQuizIndex = nI
+
       var bDir = 0
 
       if (nLastIndex == 0 && nI === 1)

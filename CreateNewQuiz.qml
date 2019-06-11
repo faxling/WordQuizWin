@@ -197,11 +197,12 @@ Item
           return;
         sQuizName = glosModelIndex.get(currentIndex).quizname;
         sLangLang = glosModelIndex.get(currentIndex).langpair;
-        ndbnumber  = glosModelIndex.get(currentIndex).dbnumber;
+        nDbNumber  = glosModelIndex.get(currentIndex).dbnumber;
         sScoreText = glosModelIndex.get(currentIndex).state1;
 
         var res = sLangLang.split("-");
         sLangLangRev = res[1] + "-" + res[0];
+        sToLang = res[1]
         sLangLangEn = "en"+ "-" + res[1];
         sReqDictUrl = sReqDictUrlBase +  sLangLang + "&text=";
         sReqDictUrlRev = sReqDictUrlBase + sLangLangRev + "&text=";
@@ -215,10 +216,10 @@ Item
                 glosModel.clear();
 
 
-                tx.executeSql('CREATE TABLE IF NOT EXISTS Glosa' + ndbnumber + '( number INT , quizword TEXT, answer TEXT, state INT)');
+                tx.executeSql('CREATE TABLE IF NOT EXISTS Glosa' + nDbNumber + '( number INT , quizword TEXT, answer TEXT, state INT)');
 
 
-                var rs = tx.executeSql('SELECT * FROM Glosa' + ndbnumber );
+                var rs = tx.executeSql('SELECT * FROM Glosa' + nDbNumber );
 
                 for(var i = 0; i < rs.rows.length; i++) {
                   glosModel.append({"number": rs.rows.item(i).number, "question": rs.rows.item(i).quizword , "answer": rs.rows.item(i).answer, "state1" : rs.rows.item(i).state })

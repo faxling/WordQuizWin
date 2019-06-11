@@ -10,6 +10,8 @@ import QtQuick.LocalStorage 2.0 as Sql
 // https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20190526T164138Z.e99d5807bb2acb8d.d11f94738ea722cfaddf111d2e8f756cb3b71f4f&text=groda&lang=sv-ru
 // dict.1.1.20190526T201825Z.ad1b7fb5407a1478.20679d5d18a62fa88bd53b643af2dee64416b739
 
+// speaker=<jane|oksana|alyss|omazh|zahar|ermil>
+//http://tts.voicetech.yandex.net/generate?lang=ru_RU&format=wav&speaker=ermil&text=да&key=6372dda5-9674-4413-85ff-e9d0eb2f99a7
 
 //https://dictionary.yandex.net/api/v1/dicservice/getLangs?key=dict.1.1.20190526T201825Z.ad1b7fb5407a1478.20679d5d18a62fa88bd53b643af2dee64416b739
 Window {
@@ -26,11 +28,12 @@ Window {
   property string sLangLangSelected
   property string sLangLang
   property string sLangLangRev
+  property string sToLang
   property string sLangLangEn
   property string sQuizName : "-"
   property string sScoreText : "-"
-  property int ndbnumber : 0;
-
+  property int nDbNumber : 0;
+  property int nQuizIndex: 0
   onSScoreTextChanged:
   {
     db.transaction(
@@ -48,6 +51,9 @@ Window {
           }
           )
   }
+
+
+
 
   function loadQuiz()
   {
@@ -117,12 +123,15 @@ Window {
     }
   }
 
+
   Component.onCompleted:
   {
 
     db =  Sql.LocalStorage.openDatabaseSync("GlosDB", "1.0", "Glos Databas!", 1000000);
 
     Sql.LocalStorage.openDatabaseSync()
+
+
 
     db.transaction(
           function(tx) {
@@ -181,6 +190,7 @@ Window {
       title: "Quiz"
       TakeQuiz
       {
+        id:idTakeQuiz
         width : idTabMain.width
         height : idTabMain.width
       }
