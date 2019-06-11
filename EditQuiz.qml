@@ -98,17 +98,47 @@ Item {
       id: idTrMeanModel
       XmlRole { name: "mean"; query: "text/string()" }
     }
+    XmlListModel {
+      id: idTranslateModel
+      query: "/Translation"
+      XmlRole { name: "trans"; query: "text/string()" }
+      onStatusChanged:
+      {
+        if (status === XmlListModel.Ready)
+        {
+          if (idTranslateModel.count <= 0)
+          {
+            idTextTrans.text = "-"
+            return
+          }
+          idTextTrans.text =  idTranslateModel.get(0).trans
+        }
+      }
+    }
 
-
-    TextList
+    Row
     {
-      id:idText
-      text :"-"
+      TextList
+      {
+        width:idItemEdit.width / 2
+        id:idText
+        text :"-"
+      }
+      TextList
+      {
+        id:idTextTrans
+        text :"-"
+        MouseArea
+        {
+          anchors.fill: parent
+          onClicked: idText.text = idTextTrans.text
+        }
+      }
     }
 
     InputTextQuiz
     {
-      text:"tid"
+      text:""
       id:idTextInput
     }
 
@@ -123,6 +153,9 @@ Item {
         onClicked: {
           nLastSearch = 0
           downloadDictOnWord(sReqDictUrl , idTextInput.text)
+
+          idTranslateModel.source = sReqUrl + idTextInput.text
+
         }
       }
 
@@ -131,7 +164,7 @@ Item {
         text: "Find in Dict " + sLangLangRev
         onClicked: {
           nLastSearch = 1
-           downloadDictOnWord(sReqDictUrlRev , idTextInput.text)
+          downloadDictOnWord(sReqDictUrlRev , idTextInput.text)
         }
       }
 
@@ -274,7 +307,7 @@ Item {
         {
           height:26
           width:32
-       //    y:-5
+          //    y:-5
           source: "qrc:rm.png"
           onClicked:
           {
