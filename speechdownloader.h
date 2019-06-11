@@ -14,14 +14,14 @@ class Speechdownloader : public QObject
 public:
     explicit Speechdownloader(const QString& sStoragePath);
 
-    Q_INVOKABLE void downloadWord(QString sWord);
-    Q_INVOKABLE void playWord(QString sWord);
+    Q_INVOKABLE void downloadWord(QString sWord, QString sLang);
+    Q_INVOKABLE void playWord(QString sWord, QString sLang);
 
 signals:
     void downloaded();
 
 private slots:
-    void FileDownloaded(QNetworkReply* pReply);
+    void fileDownloaded(QNetworkReply* pReply);
 private:
     QString m_sWord;
     QString m_sStoragePath;

@@ -189,6 +189,7 @@ Item
       width:parent.width
       height:200
       model:glosModelIndex
+      spacing:3
 
 
       onCurrentIndexChanged:
@@ -264,11 +265,11 @@ Item
         width:100
         text:state1
       }
-      Button
+      ButtonQuizImg
       {
         height:26
         width:32
-        iconSource: "qrc:rm.png"
+        source: "qrc:rm.png"
         onClicked:
         {
           db.transaction(

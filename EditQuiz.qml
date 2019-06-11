@@ -5,6 +5,21 @@ import QtQuick.XmlListModel 2.0
 
 
 Item {
+  function downloadDictOnWord(sUrl, sWord)
+  {
+    var doc = new XMLHttpRequest();
+    doc.open("GET",sUrl+ sWord);
+
+    doc.onreadystatechange = function() {
+
+      if (doc.readyState === XMLHttpRequest.DONE) {
+        idTrSynModel.xml = doc.responseText
+        idTrTextModel.xml = doc.responseText
+        idTrMeanModel.xml = doc.responseText
+      }
+    }
+    doc.send()
+  }
 
   id:idItemEdit
   function insertGlosa(dbnumber, nC, question, answer)
@@ -97,51 +112,26 @@ Item {
       id:idTextInput
     }
 
+
+
     Row
     {
       spacing:10
 
-
       ButtonQuiz {
-
-
         text: "Find in Dict " + sLangLang
         onClicked: {
           nLastSearch = 0
-          var doc = new XMLHttpRequest();
-          doc.open("GET",sReqDictUrl + idTextInput.text);
-
-          doc.onreadystatechange = function() {
-
-            if (doc.readyState === XMLHttpRequest.DONE) {
-              idTrSynModel.xml = doc.responseText
-              idTrTextModel.xml = doc.responseText
-              idTrMeanModel.xml = doc.responseText
-            }
-          }
-          doc.send()
+          downloadDictOnWord(sReqDictUrl , idTextInput.text)
         }
       }
 
 
       ButtonQuiz {
-
-
         text: "Find in Dict " + sLangLangRev
         onClicked: {
           nLastSearch = 1
-          var doc = new XMLHttpRequest();
-          doc.open("GET",sReqDictUrlRev + idTextInput.text)
-
-          doc.onreadystatechange = function() {
-
-            if (doc.readyState === XMLHttpRequest.DONE) {
-              idTrSynModel.xml = doc.responseText
-              idTrTextModel.xml = doc.responseText
-              idTrMeanModel.xml = doc.responseText
-            }
-          }
-          doc.send()
+           downloadDictOnWord(sReqDictUrlRev , idTextInput.text)
         }
       }
 
@@ -150,22 +140,9 @@ Item {
         text: "Find in Dict " + sLangLangEn
         onClicked: {
           nLastSearch = 2
-          var doc = new XMLHttpRequest();
-          doc.open("GET",sReqDictUrlEn + idTextInput.text);
-
-          doc.onreadystatechange = function() {
-
-            if (doc.readyState === XMLHttpRequest.DONE) {
-              idTrSynModel.xml = doc.responseText
-              idTrTextModel.xml = doc.responseText
-              idTrMeanModel.xml = doc.responseText
-            }
-          }
-          doc.send()
+          downloadDictOnWord(sReqDictUrlEn , idTextInput.text)
         }
       }
-
-
 
       ButtonQuiz {
         text: "Add"
@@ -189,8 +166,8 @@ Item {
             insertGlosa(nDbNumber, nC, idText.text, idTextInput.text)
           }
 
-          if (sToLang=="ru")
-            MyDownloader.downloadWord(idText.text)
+          if (bHasSpeech)
+            MyDownloader.downloadWord(idText.text,sToLang)
 
         }
       }
@@ -267,7 +244,7 @@ Item {
     ListView {
       id:idGlosList
       clip: true
-      width:parent.width - 100
+      width:parent.width
       height:200
       spacing: 3
 
@@ -275,6 +252,7 @@ Item {
 
       model: glosModel
       delegate: Row {
+        spacing:5
         TextList {
           id:idNumberText
           width:50
@@ -292,12 +270,12 @@ Item {
           id:idAnswer
           text: answer
         }
-        Button
+        ButtonQuizImg
         {
           height:26
           width:32
-          y:-5
-          iconSource: "qrc:rm.png"
+       //    y:-5
+          source: "qrc:rm.png"
           onClicked:
           {
             db.transaction(
@@ -309,6 +287,16 @@ Item {
           }
 
         }
+
+        ButtonQuizImg
+        {
+          height:26
+          width:32
+          visible:bHasSpeech
+          source:"qrc:horn.png"
+          onClicked: MyDownloader.playWord(answer,sToLang)
+        }
+
       }
     }
     ButtonQuiz

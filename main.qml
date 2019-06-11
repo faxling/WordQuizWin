@@ -29,6 +29,7 @@ Window {
   property string sLangLang
   property string sLangLangRev
   property string sToLang
+  property bool bHasSpeech : sToLang ==="ru" || sToLang ==="en"
   property string sLangLangEn
   property string sQuizName : "-"
   property string sScoreText : "-"
@@ -38,11 +39,11 @@ Window {
   {
     db.transaction(
           function(tx) {
-            tx.executeSql('UPDATE GlosaDbIndex SET state1=? WHERE dbnumber=?',[sScoreText, ndbnumber]);
+            tx.executeSql('UPDATE GlosaDbIndex SET state1=? WHERE dbnumber=?',[sScoreText, nDbNumber]);
 
             var nC = glosModelIndex.count
             for ( var i = 0; i < nC;++i) {
-              if (glosModelIndex.get(i).dbnumber === ndbnumber)
+              if (glosModelIndex.get(i).dbnumber === nDbNumber)
               {
                 glosModelIndex.setProperty(i,"state1", sScoreText)
                 break;

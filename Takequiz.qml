@@ -57,27 +57,12 @@ Rectangle {
             text : answer
           }
         }
-        Image
+        ButtonQuizImg
         {
           anchors.horizontalCenter: parent.horizontalCenter
-          visible:(sToLang == "ru") && visible1
+          visible:bHasSpeech && visible1
           source:"qrc:horn.png"
-
-          MouseArea
-          {
-            anchors.fill: parent
-            onClicked: MyDownloader.playWord(answer)
-            onPressed: idRect.opacity = 0.6
-            onReleased: idRect.opacity  = 0.4
-          }
-          Rectangle
-          {
-            id:idRect
-            opacity:0.4
-            radius: 4
-            color: "steelblue"
-            anchors.fill: parent
-          }
+          onClicked: MyDownloader.playWord(answer,sToLang)
         }
 
         Image {
@@ -187,7 +172,7 @@ Rectangle {
 
                 db.transaction(
                       function(tx) {
-                        tx.executeSql("UPDATE Glosa"+ndbnumber+" SET state=1 WHERE number=?", nLastNumber);
+                        tx.executeSql("UPDATE Glosa"+nDbNumber+" SET state=1 WHERE number=?", nLastNumber);
                       })
 
                 break;
