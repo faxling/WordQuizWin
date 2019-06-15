@@ -139,14 +139,7 @@ Item
         model: idLangModel
         delegate: TextList {
           text:lang
-          MouseArea
-          {
-            anchors.fill: parent
-            onClicked:
-            {
-              idLangList1.currentIndex = index
-            }
-          }
+          onClick: idLangList1.currentIndex = index
         }
       }
 
@@ -164,14 +157,7 @@ Item
 
         delegate: TextList {
           text:lang
-          MouseArea
-          {
-            anchors.fill: parent
-            onClicked:
-            {
-              idLangList2.currentIndex = index
-            }
-          }
+          onClick:idLangList2.currentIndex = index
         }
       }
     }
@@ -260,28 +246,14 @@ Item
         id:idCol2
         width:100
         text:quizname
-        MouseArea
-        {
-          anchors.fill :  parent
-          onClicked:
-          {
-            idQuizList.currentIndex = index
-          }
-        }
+        onClick: idQuizList.currentIndex = index
       }
       TextList
       {
         id:idCol3
         width:100
         text:langpair
-        MouseArea
-        {
-          anchors.fill :  parent
-          onClicked:
-          {
-            idQuizList.currentIndex = index
-          }
-        }
+        onClick: idQuizList.currentIndex = index
       }
       TextList
       {
@@ -289,14 +261,8 @@ Item
         id:idCol4
         width:100
         text:state1
-        MouseArea
-        {
-          anchors.fill :  parent
-          onClicked:
-          {
-            idQuizList.currentIndex = index
-          }
-        }
+
+        onClick: idQuizList.currentIndex = index
       }
 
       ButtonQuizImg

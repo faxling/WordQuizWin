@@ -82,6 +82,8 @@ Item {
             return
           }
           idText.text =  idTrTextModel.get(0).text1
+          idTrSynModel.query = "/DicResult/def/tr[1]/syn"
+          idTrMeanModel.query = "/DicResult/def/tr[1]/mean"
         }
       }
 
@@ -113,6 +115,8 @@ Item {
             return
           }
           idTextTrans.text =  idTranslateModel.get(0).trans
+
+
         }
       }
     }
@@ -129,11 +133,7 @@ Item {
       {
         id:idTextTrans
         text :"-"
-        MouseArea
-        {
-          anchors.fill: parent
-          onClicked: idText.text = idTextTrans.text
-        }
+        onClick: idText.text = idTextTrans.text
       }
     }
 
@@ -266,10 +266,6 @@ Item {
         delegate: TextList {
           id:idSMeanText
           text:mean
-          MouseArea
-          {
-            anchors.fill: parent
-          }
         }
       }
     }
