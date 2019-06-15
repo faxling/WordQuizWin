@@ -13,9 +13,17 @@ Item {
     doc.onreadystatechange = function() {
 
       if (doc.readyState === XMLHttpRequest.DONE) {
-        idTrSynModel.xml = doc.responseText
-        idTrTextModel.xml = doc.responseText
-        idTrMeanModel.xml = doc.responseText
+        if (doc.status === 200) {
+          idErrorText.visible = false;
+          idTrSynModel.xml = doc.responseText
+          idTrTextModel.xml = doc.responseText
+          idTrMeanModel.xml = doc.responseText
+        }
+        else
+        {
+          idErrorText.text = "error from translation server"
+          idErrorText.visible = true;
+        }
       }
     }
     doc.send()
@@ -212,6 +220,15 @@ Item {
     {
       height:150
       width:parent.width - 100
+
+      Text
+      {
+        visible:false
+        id:idErrorText
+        color: "red"
+        font.pointSize: 16
+      }
+
       ListViewHi {
         id:idDicList
         width:parent.width - 100
