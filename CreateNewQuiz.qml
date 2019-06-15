@@ -185,6 +185,13 @@ Item
 
       onCurrentIndexChanged:
       {
+
+        db.transaction(
+              function(tx) {
+                tx.executeSql('UPDATE GlosaDbLastIndex SET dbindex=?',[currentIndex]);
+              }
+              )
+
         if (glosModelIndex.count === 0)
           return;
         sQuizName = glosModelIndex.get(currentIndex).quizname;
@@ -287,7 +294,7 @@ Item
     }
   }
   Component.onCompleted: {
-
+    idQuizList.currentIndex = nGlosaDbLastIndex
   }
 }
 }

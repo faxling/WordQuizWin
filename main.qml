@@ -35,6 +35,8 @@ Window {
   property string sScoreText : "-"
   property int nDbNumber : 0;
   property int nQuizIndex: 1
+  property int nGlosaDbLastIndex
+
   onSScoreTextChanged:
   {
     db.transaction(
@@ -138,10 +140,21 @@ Window {
 
             // tx.executeSql('DROP TABLE GlosaDbIndex');
 
+            tx.executeSql('CREATE TABLE IF NOT EXISTS GlosaDbLastIndex( dbindex INT )');
+            var rs = tx.executeSql('SELECT * FROM GlosaDbLastIndex')
+            if (rs.rows.length===0)
+            {
+              tx.executeSql('INSERT INTO GlosaDbLastIndex VALUES(0)')
+            }
+            else
+            {
+              nGlosaDbLastIndex = rs.rows.item(0).dbindex
+            }
+
 
             tx.executeSql('CREATE TABLE IF NOT EXISTS GlosaDbIndex( dbnumber INT , quizname TEXT, state1 TEXT, langpair TEXT )');
 
-            var rs = tx.executeSql('SELECT * FROM GlosaDbIndex');
+            rs = tx.executeSql('SELECT * FROM GlosaDbIndex');
 
             for(var i = 0; i < rs.rows.length; i++) {
               glosModelIndex.append({"dbnumber": rs.rows.item(i).dbnumber, "quizname": rs.rows.item(i).quizname , "state1": rs.rows.item(i).state1, "langpair" : rs.rows.item(i).langpair })

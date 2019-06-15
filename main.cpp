@@ -8,6 +8,8 @@
 
 
 
+// "sqlite3.exe .open c:/Users/fraxl/AppData/Local/glosquiz/QML/OfflineStorage/Databases/2db1346274c33ae632adc881bdcd2f8e.sqlite"
+
 
 int main(int argc, char *argv[])
 {
