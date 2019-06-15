@@ -157,7 +157,7 @@ Window {
   visible: true
   TextList
   {
-    text: sQuizName + " " + sLangLang
+    text: sQuizName + " " + sLangLang + " " + sScoreText
     anchors.horizontalCenter: parent.horizontalCenter
   }
 
@@ -168,6 +168,7 @@ Window {
     anchors.rightMargin : 50
     anchors.bottomMargin:  150
     anchors.topMargin : 50
+
     Tab
     {
       title: "Create"
@@ -200,7 +201,7 @@ Window {
       tab: Rectangle {
         color: styleData.selected ? "steelblue" :"lightsteelblue"
         border.color:  "steelblue"
-        implicitWidth: 100
+        implicitWidth: idTabMain.width / 3
         implicitHeight: 40
         radius: 2
         Text {

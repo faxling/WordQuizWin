@@ -89,16 +89,6 @@ Rectangle {
     }
   }
 
-
-  Text
-  {
-    y:10
-    text: sScoreText
-    id: idNumberText
-  }
-
-
-
   PathView
   {
     id:idView

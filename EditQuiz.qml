@@ -86,6 +86,7 @@ Item {
       }
 
       query: "/DicResult/def/tr"
+      XmlRole { name: "count1"; query: "count(syn)" }
       XmlRole { name: "text1"; query: "text/string()" }
     }
 
@@ -223,7 +224,7 @@ Item {
           TextList {
             id:idSearchItem
             width:idDicList.width
-            text:  text1
+            text:  text1 + " " + ( count1 > 0 ? "..." : "")
             MouseArea
             {
               anchors.fill: parent

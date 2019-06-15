@@ -51,6 +51,11 @@ Item
     TextList
     {
       id:idTextSelected
+      MouseArea
+      {
+        anchors.fill: parent
+        onClicked: idTextInputQuizName.text = parent.text
+      }
     }
     InputTextQuiz
     {
@@ -183,6 +188,7 @@ Item
       text:"Available Quiz's:"
     }
 
+
     ListViewHi
     {
       id:idQuizList
@@ -190,7 +196,6 @@ Item
       height:200
       model:glosModelIndex
       spacing:3
-
 
       onCurrentIndexChanged:
       {
@@ -234,18 +239,16 @@ Item
       delegate:
           Row
       {
+      id:idQuizListRow
+
       TextList
       {
+        id:idCol1
         width:50
         text:dbnumber
-      }
-      TextList
-      {
-        width:100
-        text:quizname
         MouseArea
         {
-          anchors.fill: parent
+          anchors.fill :  parent
           onClicked:
           {
             idQuizList.currentIndex = index
@@ -254,14 +257,48 @@ Item
       }
       TextList
       {
+        id:idCol2
         width:100
-        text:langpair
+        text:quizname
+        MouseArea
+        {
+          anchors.fill :  parent
+          onClicked:
+          {
+            idQuizList.currentIndex = index
+          }
+        }
       }
       TextList
       {
+        id:idCol3
+        width:100
+        text:langpair
+        MouseArea
+        {
+          anchors.fill :  parent
+          onClicked:
+          {
+            idQuizList.currentIndex = index
+          }
+        }
+      }
+      TextList
+      {
+
+        id:idCol4
         width:100
         text:state1
+        MouseArea
+        {
+          anchors.fill :  parent
+          onClicked:
+          {
+            idQuizList.currentIndex = index
+          }
+        }
       }
+
       ButtonQuizImg
       {
         height:26
@@ -280,7 +317,6 @@ Item
 
           glosModelIndex.remove(index)
         }
-
       }
     }
   }
