@@ -5,12 +5,25 @@ Button
 {
   height:32
   width:100
+  property bool bProgVisible
+
   style: ButtonStyle {
           background: Rectangle {
               border.width: control.activeFocus ? 2 : 1
               border.color: "#888"
               radius: 4
-              color: control.pressed ? "steelblue" :"lightsteelblue"
+              color:
+              {
+
+                if (control.pressed)
+                  return "steelblue"
+
+                if (bProgVisible)
+                  return "Orange"
+
+                return "lightsteelblue"
+
+              }
           }
       }
 }

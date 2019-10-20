@@ -2,9 +2,11 @@ import QtQuick 2.0
 
 Rectangle
 {
+  property alias displayText : idTextInput.displayText
   property alias text : idTextInput.text
   color:"grey"
-  width: parent.width
+  width: parent.width -10
+  x:5
   height: 23
   TextInput
   {

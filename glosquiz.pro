@@ -19,3 +19,17 @@ HEADERS += \
     speechdownloader.h \
     filehelpers.h
 
+
+
+DISTFILES += \
+    main.qml \
+ButtonQuiz.qml \
+ButtonQuizImg.qml \
+CreateNewQuiz.qml \
+EditQuiz.qml \
+InputTextQuiz.qml \
+ListViewHi.qml \
+main.qml \
+MakeQuiz.qml \
+TakeQuiz.qml \
+TextList.qml \

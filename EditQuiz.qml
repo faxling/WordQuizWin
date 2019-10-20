@@ -21,7 +21,7 @@ Item {
         }
         else
         {
-          idErrorText.text = "error from translation server"
+          idErrorText.text = "-"
           idErrorText.visible = true;
         }
       }
@@ -49,9 +49,9 @@ Item {
   property int nLastSearch : 0
   Column
   {
+    id:idGlosListHeader
     spacing:20
     anchors.topMargin: 20
-    anchors.rightMargin: 50
     anchors.bottomMargin: 50
     anchors.fill: parent
     Component
@@ -59,14 +59,10 @@ Item {
       id:idHeaderGlos
 
       Row {
+
         TextList {
           color: "steelblue"
-          width:50
-          text:  "No"
-        }
-        TextList {
-          color: "steelblue"
-          width:100
+          width:150
           text:  "word"
         }
 
@@ -90,6 +86,7 @@ Item {
             return
           }
           idText.text =  idTrTextModel.get(0).text1
+          idTextInput2.text = idText.text;
           idTrSynModel.query = "/DicResult/def/tr[1]/syn"
           idTrMeanModel.query = "/DicResult/def/tr[1]/mean"
         }
@@ -131,27 +128,40 @@ Item {
 
     Row
     {
+      spacing:20
       TextList
       {
-        width:idItemEdit.width / 2
         id:idText
+        width:idItemEdit.width / 2
         text :"-"
+        onClick: idTextInput2.text = text
       }
       TextList
       {
         id:idTextTrans
         text :"-"
-        onClick: idText.text = idTextTrans.text
+        onClick: {
+          idTextInput2.text = idTextTrans.text
+        }
       }
     }
 
-    InputTextQuiz
+    Row
     {
-      text:""
-      id:idTextInput
+      spacing:20
+      InputTextQuiz
+      {
+        width:idItemEdit.width / 2
+        text:""
+        id:idTextInput
+      }
+      InputTextQuiz
+      {
+        width:idItemEdit.width / 2
+        text:""
+        id:idTextInput2
+      }
     }
-
-
 
     Row
     {
@@ -201,15 +211,15 @@ Item {
 
           if (nLastSearch !== 1)
           {
-            insertGlosa(nDbNumber,nC, idTextInput.text, idText.text)
+            insertGlosa(nDbNumber,nC, idTextInput.text, idTextInput2.text)
           }
           else
           {
-            insertGlosa(nDbNumber, nC, idText.text, idTextInput.text)
+            insertGlosa(nDbNumber, nC, idTextInput2.text, idTextInput.text)
           }
 
           if (bHasSpeech)
-            MyDownloader.downloadWord(idText.text,sToLang)
+            MyDownloader.downloadWord(idTextInput2.text,sToLang)
 
         }
       }
@@ -218,6 +228,7 @@ Item {
 
     Row
     {
+      id:idDictionaryResultRow
       height:150
       width:parent.width - 100
 
@@ -249,6 +260,7 @@ Item {
               {
                 idDicList.currentIndex = index
                 idText.text = idSearchItem.text;
+                idTextInput2.text = idSearchItem.text;
                 idTrSynModel.query = "/DicResult/def/tr["  +(index + 1) + "]/syn"
                 idTrMeanModel.query = "/DicResult/def/tr["  +(index + 1) + "]/mean"
               }
@@ -270,8 +282,8 @@ Item {
             onClicked:
             {
               idText.text = idSynText.text;
+              idTextInput2.text = idSynText.text;
             }
-
           }
         }
       }
@@ -300,20 +312,15 @@ Item {
       model: glosModel
       delegate: Row {
         spacing:5
-        TextList {
-          id:idNumberText
-          width:50
-          text:  number
-        }
 
         TextList {
-          width:100
+          width:150
           text:  question
-          color: state1 === 0 ? idNumberText.color : "green"
+          color: state1 === 0 ? "black" : "green"
         }
 
         TextList {
-          width:100
+          width:125
           id:idAnswer
           text: answer
         }
@@ -332,7 +339,16 @@ Item {
                   )
             glosModel.remove(index)
           }
+        }
 
+
+        ButtonQuizImg
+        {
+          height:26
+          width:32
+          visible:bHasSpeech
+          source:"qrc:horn.png"
+          onClicked: MyDownloader.playWord(question,sFromLang)
         }
 
         ButtonQuizImg
@@ -343,7 +359,6 @@ Item {
           source:"qrc:horn.png"
           onClicked: MyDownloader.playWord(answer,sToLang)
         }
-
       }
     }
     Row
@@ -422,6 +437,7 @@ Item {
       }
 
     }
+
   }
 }
 

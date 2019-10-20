@@ -1,4 +1,4 @@
-import QtQuick 2.3
+﻿import QtQuick 2.3
 import QtQuick.Window 2.2
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
@@ -6,7 +6,7 @@ import QtQuick.LocalStorage 2.0 as Sql
 
 /// Faxling     Raggo100 trnsl.1.1.20190526T164138Z.e99d5807bb2acb8d.d11f94738ea722cfaddf111d2e8f756cb3b71f4f
 
-
+// https://cloud.yandex.com/docs/speechkit/tts/request
 // https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20190526T164138Z.e99d5807bb2acb8d.d11f94738ea722cfaddf111d2e8f756cb3b71f4f&text=groda&lang=sv-ru
 // dict.1.1.20190526T201825Z.ad1b7fb5407a1478.20679d5d18a62fa88bd53b643af2dee64416b739
 
@@ -14,6 +14,8 @@ import QtQuick.LocalStorage 2.0 as Sql
 //http://tts.voicetech.yandex.net/generate?lang=ru_RU&format=wav&speaker=ermil&text=да&key=6372dda5-9674-4413-85ff-e9d0eb2f99a7
 
 //https://dictionary.yandex.net/api/v1/dicservice/getLangs?key=dict.1.1.20190526T201825Z.ad1b7fb5407a1478.20679d5d18a62fa88bd53b643af2dee64416b739
+
+
 Window {
 
   id:idWindow
@@ -29,7 +31,9 @@ Window {
   property string sLangLang
   property string sLangLangRev
   property string sToLang
-  property bool bHasSpeech : sToLang ==="ru" || sToLang ==="en"
+  property string sFromLang
+  property bool bHasSpeech : sToLang !=="hu"
+ //  property bool bHasFromSpeech : sToLang ==="ru" || sToLang ==="en" ||  sToLang ==="sv" ||  sToLang ==="fr"||  sToLang ==="pl"||  sToLang ==="de"||  sToLang ==="it"
   property string sLangLangEn
   property string sQuizName : "-"
   property string sScoreText : "-"
@@ -87,6 +91,7 @@ Window {
   }
 
   ListModel {
+    objectName:"glosModel"
     id: glosModel
   }
   ListModel {
@@ -133,8 +138,6 @@ Window {
 
     Sql.LocalStorage.openDatabaseSync()
 
-
-
     db.transaction(
           function(tx) {
 
@@ -162,7 +165,6 @@ Window {
 
           }
           )
-
   }
 
   width:500
