@@ -317,13 +317,16 @@ Item {
           width:150
           text:  question
           color: state1 === 0 ? "black" : "green"
+          onClick: idTextInput1.text = question
         }
 
         TextList {
           width:125
           id:idAnswer
           text: answer
+          onClick: idTextInput2.text = answer
         }
+
         ButtonQuizImg
         {
           height:26

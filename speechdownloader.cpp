@@ -20,9 +20,7 @@ Speechdownloader::Speechdownloader(const QString& sStoragePath) : QObject(nullpt
   QObject::connect(&m_oWordNetMgr, &QNetworkAccessManager::finished,this, &Speechdownloader::wordDownloaded);
   QObject::connect(&m_oQuizNetMgr, &QNetworkAccessManager::finished,this, &Speechdownloader::quizDownloaded);
   QObject::connect(&m_oListQuizNetMgr, &QNetworkAccessManager::finished, this, &Speechdownloader::listDownloaded);
-
   QObject::connect(&m_oDeleteQuizNetMgr, &QNetworkAccessManager::finished,this, &Speechdownloader::quizDeleted);
-
   m_sStoragePath = sStoragePath;
 }
 
@@ -198,7 +196,15 @@ void Speechdownloader::importQuiz(QString sName)
   m_oQuizNetMgr.get(request);
 }
 
-// "number": rs.rows.item(i).number, "question" : rs.rows.item(i).quizword, "answer" : rs.rows.item(i).answer, "state1"
+
+/*
+answer
+extra
+number
+question
+state1
+*/
+
 
 void Speechdownloader::exportCurrentQuiz(QVariant p, QString sName, QString sLang, QString sPwd,QString sDesc )
 {
@@ -213,7 +219,7 @@ void Speechdownloader::exportCurrentQuiz(QVariant p, QString sName, QString sLan
   {
     for (int j = 0; j <= 3; ++j)
     {
-      if (j == 1 || j == 3) // SKIP  state1 and number
+      if (j == 1 || j == 2) // SKIP  state1 and number
         continue;
       ss << pp->data(pp->index(i), j);
     }

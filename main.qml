@@ -93,6 +93,31 @@ Window {
   ListModel {
     objectName:"glosModel"
     id: glosModel
+
+    function sortModel()
+    {
+
+      db.transaction(
+            function(tx) {
+              glosModel.clear();
+
+              var rs = tx.executeSql("SELECT * FROM Glosa" + nDbNumber + " ORDER BY " + sQSort);
+
+              for(var i = 0; i < rs.rows.length; i++) {
+
+                var sA;
+                var sE = "";
+                var ocA = rs.rows.item(i).answer.split("###")
+                sA = ocA[0]
+                if (ocA.length > 1)
+                  sE = ocA[1]
+
+                glosModel.append({"number": rs.rows.item(i).number, "question": rs.rows.item(i).quizword , "answer": sA, "extra": sE,  "state1" : rs.rows.item(i).state })
+
+              }
+            }
+            )
+    }
   }
   ListModel {
     id: glosModelWorkingRev
@@ -154,13 +179,32 @@ Window {
               nGlosaDbLastIndex = rs.rows.item(0).dbindex
             }
 
-
+            tx.executeSql('CREATE TABLE IF NOT EXISTS GlosaDbDesc( dbnumber INT , desc1 TEXT)');
             tx.executeSql('CREATE TABLE IF NOT EXISTS GlosaDbIndex( dbnumber INT , quizname TEXT, state1 TEXT, langpair TEXT )');
 
-            rs = tx.executeSql('SELECT * FROM GlosaDbIndex');
+            rs = tx.executeSql('SELECT * FROM GlosaDbDesc');
+            var oc = [];
 
             for(var i = 0; i < rs.rows.length; i++) {
-              glosModelIndex.append({"dbnumber": rs.rows.item(i).dbnumber, "quizname": rs.rows.item(i).quizname , "state1": rs.rows.item(i).state1, "langpair" : rs.rows.item(i).langpair })
+              var oDescription = {dbnumber:rs.rows.item(i).dbnumber, desc1:rs.rows.item(i).desc1}
+              oc.push(oDescription)
+            }
+
+            rs = tx.executeSql('SELECT * FROM GlosaDbIndex');
+            function check(oDescription) {
+              return oDescription.dbnumber === rs.rows.item(i).dbnumber;
+            }
+
+
+            for(i = 0; i < rs.rows.length; i++) {
+              var nN = oc.indexOf(check)
+              var sDesc = "-"
+              if (nN >= 0)
+              {
+                sDesc = oc[nN].desc1
+              }
+
+              glosModelIndex.append({"dbnumber": rs.rows.item(i).dbnumber, "quizname": rs.rows.item(i).quizname , "state1": rs.rows.item(i).state1, "langpair" : rs.rows.item(i).langpair,"desc1" : sDesc  })
             }
 
           }

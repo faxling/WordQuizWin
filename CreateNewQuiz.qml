@@ -61,13 +61,21 @@ Item
     anchors.bottomMargin: 50
     anchors.fill: parent
 
-    TextList
+    Row
     {
-      id:idTextSelected
-      MouseArea
+      TextList
       {
-        anchors.fill: parent
-        onClicked: idTextInputQuizName.text = parent.text
+        width: 100
+        id:idTextSelected
+        MouseArea
+        {
+          anchors.fill: parent
+          onClicked: idTextInputQuizName.text = parent.text
+        }
+      }
+      TextList
+      {
+        id:idDescriptionText
       }
     }
     InputTextQuiz
@@ -96,7 +104,7 @@ Item
                   }
                   tx.executeSql('INSERT INTO GlosaDbIndex VALUES(?,?,?,?)',[nNr, idTextInputQuizName.text,"0/0",sLangLangSelected  ]);
 
-                  glosModelIndex.append({"dbnumber": nNr, "quizname": idTextInputQuizName.text , "state1": "0/0", "langpair" : sLangLangSelected })
+                  glosModelIndex.append({"dbnumber": nNr, "quizname": idTextInputQuizName.text , "state1": "0/0", "langpair" : sLangLangSelected,"desc1":"" })
                 }
                 )
 
@@ -168,7 +176,6 @@ Item
         {
           idLangListRow.doCurrentIndexChanged()
         }
-
 
         width:100
         height:parent.height
@@ -278,13 +285,13 @@ Item
 
                 nDbNumber = nNr;
 
-                tx.executeSql('CREATE TABLE IF NOT EXISTS Glosa' + nNr + '( number INT , quizword TEXT, answer TEXT, state INT)');
+                tx.executeSql('CREATE TABLE IF NOT EXISTS Glosa' + nNr + '( number INT , quizword TEXT, answer TEXT, state INT )');
 
                 var sState1 = nCount/2 + "/" +nCount/2
-
+                tx.executeSql('INSERT INTO GlosaDbDesc VALUES(?,?)', [nDbNumber,idDescText.text]);
                 tx.executeSql('INSERT INTO GlosaDbIndex VALUES(?,?,?,?)',[nDbNumber, idTextInputQuizName.text,sState1,sLangLoaded  ]);
 
-                glosModelIndex.append({"dbnumber": nNr, "quizname": idTextInputQuizName.text , "state1": sState1 , "langpair" : sLangLoaded })
+                glosModelIndex.append({"dbnumber": nNr, "quizname": idTextInputQuizName.text , "state1": sState1 , "langpair" : sLangLoaded,"desc1":idDescText.text })
                 // answer, question , state
 
                 for(var i = 0; i < nCount; i+=2) {
@@ -319,7 +326,7 @@ Item
         sLangLang = glosModelIndex.get(currentIndex).langpair;
         nDbNumber  = glosModelIndex.get(currentIndex).dbnumber;
         sScoreText = glosModelIndex.get(currentIndex).state1;
-
+        idDescriptionText.text  = glosModelIndex.get(currentIndex).desc1;
         var res = sLangLang.split("-");
         sLangLangRev = res[1] + "-" + res[0];
         sToLang = res[1]
@@ -341,7 +348,15 @@ Item
                 var rs = tx.executeSql('SELECT * FROM Glosa' + nDbNumber );
 
                 for(var i = 0; i < rs.rows.length; i++) {
-                  glosModel.append({"number": rs.rows.item(i).number, "question": rs.rows.item(i).quizword , "answer": rs.rows.item(i).answer, "state1" : rs.rows.item(i).state })
+                  var sA;
+                  var sE = "";
+
+                  var ocA = rs.rows.item(i).answer.split("###")
+                  sA = ocA[0]
+                  if (ocA.length > 1)
+                    sE = ocA[1]
+
+                  glosModel.append({"number": rs.rows.item(i).number, "question": rs.rows.item(i).quizword , "answer": sA, "extra": sE, "state1" : rs.rows.item(i).state })
                 }
                 loadQuiz();
 
@@ -610,6 +625,7 @@ Item
         {
           idPwdDialog.visible = false;
           MyDownloader.deleteQuiz(idImport.sSelectedQ, idPwdTextInput.displayText)
+          idPwdTextInput.text = ""
         }
         else
           idPwdDialog.visible = true
