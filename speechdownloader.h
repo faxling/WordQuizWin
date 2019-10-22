@@ -19,7 +19,7 @@ public:
   Q_INVOKABLE void exportCurrentQuiz(QVariant p, QString sName, QString sLang,  QString sPwd, QString sDesc );
   Q_INVOKABLE void importQuiz(QString sName);
   Q_INVOKABLE void listQuiz();
-  Q_INVOKABLE void deleteQuiz(QString sName, QString sPwd);
+  Q_INVOKABLE void deleteQuiz(QString sName, QString sPwd, QString sId);
 
 
 signals:

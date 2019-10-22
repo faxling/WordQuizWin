@@ -30,6 +30,13 @@ Rectangle {
           font.pointSize: 25
           text : question
         }
+        ButtonQuizImg
+        {
+          anchors.horizontalCenter: parent.horizontalCenter
+          visible:bHasSpeech
+          source:"qrc:horn.png"
+          onClicked: MyDownloader.playWord(question,sFromLang)
+        }
 
         ButtonQuiz
         {
@@ -111,7 +118,6 @@ Rectangle {
           idQuizModel.get(j).visible1 = false
           idQuizModel.get(j).allok = false
         }
-
         return;
       }
 
@@ -184,7 +190,6 @@ Rectangle {
         idQuizModel.get(nI).visible1 = false
         idQuizModel.get(nI).allok = false
       }
-
     }
 
 
@@ -200,8 +205,5 @@ Rectangle {
       PathLine  { relativeX:  idView.width*3 + 300; relativeY: 0}
     }
   }
-
-
-
 }
 

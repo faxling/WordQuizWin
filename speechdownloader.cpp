@@ -180,9 +180,9 @@ void Speechdownloader::quizDownloaded(QNetworkReply* pReply)
 
 }
 
-void Speechdownloader::deleteQuiz(QString sName, QString sPwd)
+void Speechdownloader::deleteQuiz(QString sName, QString sPwd, QString nDbId)
 {
-  QString sUrl = GLOS_SERVER2 ^ "deletequiz.php?qname="+sName+"&qpwd="+sPwd;
+  QString sUrl = GLOS_SERVER2 ^ "deletequiz.php?qname="+sName+"&qpwd="+sPwd+"&dbid="+ nDbId;
   QNetworkRequest request(sUrl);
   m_oDeleteQuizNetMgr.get(request);
 }
@@ -229,7 +229,6 @@ void Speechdownloader::exportCurrentQuiz(QVariant p, QString sName, QString sLan
     sFileName = pp->data(pp->index(i), 2).toString();
     if (QFile::exists(AudioPath(sFileName)))
       ocAudio.append(sFileName);
-
   }
 
   ss << ocAudio.size();

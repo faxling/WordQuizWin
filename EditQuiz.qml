@@ -317,7 +317,7 @@ Item {
           width:150
           text:  question
           color: state1 === 0 ? "black" : "green"
-          onClick: idTextInput1.text = question
+          onClick: idTextInput.text = question
         }
 
         TextList {

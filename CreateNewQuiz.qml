@@ -233,6 +233,17 @@ Item
       */
       function loadFromServerList(nCount, oDD) {
         idServerQModel.clear()
+
+        if (nCount===0)
+        {
+          idDescText.text = ""
+          idImport.sSelectedQ = "";
+          return;
+        }
+
+        idDescText.text = oDD[1];
+        idImport.sSelectedQ = oDD[0];
+
         for(var i = 0; i < nCount; i+=4) {
           idServerQModel.append({"qname":oDD[i], "desc1":oDD[i+1],  "code":oDD[i+2],  "state1":oDD[i+3]});
         }
@@ -241,7 +252,20 @@ Item
       {
         idDeleteQuiz.bProgVisible = false
         idDescText.text = ""
-        idImportMsg.text = nResponce + " quiz removed"
+
+        if (nResponce>=0)
+        {
+          idServerQModel.remove(nResponce);
+          if (nResponce>0)
+          {
+            idServerListView.currentIndex = nResponce - 1
+            idDescText.text = idServerQModel.get(nResponce - 1).desc1;
+            idImport.sSelectedQ = idServerQModel.get(nResponce - 1).qname;
+            idImportMsg.text = ""
+          }
+        }
+        else
+          idImportMsg.text = "Not deleted"
       }
 
 
@@ -298,9 +322,10 @@ Item
                   tx.executeSql('INSERT INTO Glosa' +nNr+' VALUES(?, ?, ?, ?)', [i/2,  oDD[i+1], oDD[i], 0 ]);
 
                 }
+                idLoadQuiz.bProgVisible = false
+                idImport.visible = false
               }
               );
-        idImport.visible = false
 
       }
 
@@ -408,14 +433,19 @@ Item
           {
             db.transaction(
                   function(tx) {
-
                     tx.executeSql('DELETE FROM GlosaDbIndex WHERE dbnumber = ?',[dbnumber]);
                     tx.executeSql('DROP TABLE Glosa'+dbnumber);
-
+                    tx.executeSql('DELETE FROM GlosaDbDesc WHERE dbnumber = ?',[dbnumber]);
                   }
                   )
 
             glosModelIndex.remove(index)
+            if (index ===idQuizList.currentIndex)
+            {
+              if (index>0)
+                idQuizList.currentIndex = idQuizList.currentIndex -1
+            }
+
           }
         }
       }
@@ -624,7 +654,7 @@ Item
         if (idPwdTextInput.displayText.length > 0)
         {
           idPwdDialog.visible = false;
-          MyDownloader.deleteQuiz(idImport.sSelectedQ, idPwdTextInput.displayText)
+          MyDownloader.deleteQuiz(idImport.sSelectedQ, idPwdTextInput.displayText,idServerListView.currentIndex)
           idPwdTextInput.text = ""
         }
         else

@@ -168,7 +168,7 @@ Window {
 
             // tx.executeSql('DROP TABLE GlosaDbIndex');
 
-            tx.executeSql('CREATE TABLE IF NOT EXISTS GlosaDbLastIndex( dbindex INT )');
+             tx.executeSql('CREATE TABLE IF NOT EXISTS GlosaDbLastIndex( dbindex INT )');
             var rs = tx.executeSql('SELECT * FROM GlosaDbLastIndex')
             if (rs.rows.length===0)
             {
@@ -191,20 +191,28 @@ Window {
             }
 
             rs = tx.executeSql('SELECT * FROM GlosaDbIndex');
-            function check(oDescription) {
-              return oDescription.dbnumber === rs.rows.item(i).dbnumber;
+
+
+            Array.prototype.indexOfObject = function arrayObjectIndexOf(property, value) {
+                for (var i = 0, len = this.length; i < len; i++) {
+                    if (this[i][property] === value) return i;
+                }
+                return -1;
             }
 
+            var nRowLen = rs.rows.length
 
-            for(i = 0; i < rs.rows.length; i++) {
-              var nN = oc.indexOf(check)
+
+            for(i = 0; i < nRowLen; i++) {
+              var nDbnumber = rs.rows.item(i).dbnumber
+              var nN = oc.indexOfObject("dbnumber",nDbnumber)
               var sDesc = "-"
               if (nN >= 0)
               {
                 sDesc = oc[nN].desc1
               }
 
-              glosModelIndex.append({"dbnumber": rs.rows.item(i).dbnumber, "quizname": rs.rows.item(i).quizname , "state1": rs.rows.item(i).state1, "langpair" : rs.rows.item(i).langpair,"desc1" : sDesc  })
+              glosModelIndex.append({"dbnumber": nDbnumber, "quizname": rs.rows.item(i).quizname , "state1": rs.rows.item(i).state1, "langpair" : rs.rows.item(i).langpair,"desc1" : sDesc  })
             }
 
           }
