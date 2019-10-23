@@ -141,7 +141,10 @@ Item {
         id:idTextTrans
         text :"-"
         onClick: {
-          idTextInput2.text = idTextTrans.text
+          if (nLastSearch === 2)
+            idTextInput2.text = idTextTrans.text
+          else
+            idTextInput.text = idTextTrans.text
         }
       }
     }
@@ -171,7 +174,8 @@ Item {
         text: "Find in Dict " + sLangLang
         onClicked: {
           nLastSearch = 0
-          downloadDictOnWord(sReqDictUrl , idTextInput.text)
+          if (bHasDictTo)
+            downloadDictOnWord(sReqDictUrl , idTextInput.text)
 
           idTranslateModel.source = sReqUrl + idTextInput.text
 
@@ -183,7 +187,9 @@ Item {
         text: "Find in Dict " + sLangLangRev
         onClicked: {
           nLastSearch = 1
-          downloadDictOnWord(sReqDictUrlRev , idTextInput.text)
+          if (bHasDictFrom)
+            downloadDictOnWord(sReqDictUrlRev , idTextInput2.text)
+          idTranslateModel.source = sReqUrlBase +  sLangLangRev + "&text=" + idTextInput2.text
         }
       }
 
@@ -192,7 +198,8 @@ Item {
         text: "Find in Dict " + sLangLangEn
         onClicked: {
           nLastSearch = 2
-          downloadDictOnWord(sReqDictUrlEn , idTextInput.text)
+          if (bHasDictTo)
+            downloadDictOnWord(sReqDictUrlEn , idTextInput.text)
         }
       }
 
@@ -209,14 +216,10 @@ Item {
 
           nC += 1;
 
-          if (nLastSearch !== 1)
-          {
-            insertGlosa(nDbNumber,nC, idTextInput.text, idTextInput2.text)
-          }
-          else
-          {
-            insertGlosa(nDbNumber, nC, idTextInput2.text, idTextInput.text)
-          }
+
+
+          insertGlosa(nDbNumber, nC, idTextInput.text, idTextInput2.text)
+
 
           if (bHasSpeech)
             MyDownloader.downloadWord(idTextInput2.text,sToLang)
@@ -338,9 +341,13 @@ Item {
             db.transaction(
                   function(tx) {
                     tx.executeSql('DELETE FROM Glosa'+nDbNumber+' WHERE number = ?',[number]);
+
                   }
                   )
             glosModel.remove(index)
+            var nC = glosModel.count
+            sScoreText = nC + "/" + nC
+
           }
         }
 

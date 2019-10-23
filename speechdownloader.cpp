@@ -73,22 +73,31 @@ void Speechdownloader::quizExported(QNetworkReply* pReply)
 
 }
 
+
+
 void Speechdownloader::listDownloaded(QNetworkReply* pReply)
 {
   QByteArray oc = pReply->readAll();
   QJsonDocument oJ = QJsonDocument::fromJson(oc);
-
+  
   QJsonArray ocJson = oJ.array();
   QStringList ocL;
   m_ocIndexMap.clear();
   for ( auto oI : ocJson)
   {
-    auto oJJ = oI.toObject();
-    ocL.append(oJJ["qname"].toString());
-    ocL.append(oJJ["desc1"].toString());
-    ocL.append(oJJ["slang"].toString());
-    ocL.append(oJJ["qcount"].toString());
-    m_ocIndexMap.append(oJJ["id"].toInt());
+    // `ID`,  desc1`, `slang`,  `qcount`,  `pwd`,  `qname`
+    QJsonArray oJJ = oI.toArray();
+    ocL.append(oJJ[4].toString());
+    ocL.append(oJJ[1].toString());
+    ocL.append(oJJ[2].toString());
+    ocL.append(oJJ[3].toString());
+/*
+    "qname"
+    "desc1"
+    "slang"
+    "qcount
+    */
+    m_ocIndexMap.append(oJJ[0].toInt());  
   }
 
   emit quizListDownloadedSignal(ocL.size(), ocL);

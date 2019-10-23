@@ -30,10 +30,12 @@ Window {
   property string sLangLangSelected
   property string sLangLang
   property string sLangLangRev
+  property bool bHasDictTo : sToLang ==="ru" || sToLang ==="en"
+  property bool bHasDictFrom : sFromLang ==="ru" || sFromLang ==="en"
   property string sToLang
   property string sFromLang
   property bool bHasSpeech : sToLang !=="hu"
- //  property bool bHasFromSpeech : sToLang ==="ru" || sToLang ==="en" ||  sToLang ==="sv" ||  sToLang ==="fr"||  sToLang ==="pl"||  sToLang ==="de"||  sToLang ==="it"
+  //  property bool bHasFromSpeech : sToLang ==="ru" || sToLang ==="en" ||  sToLang ==="sv" ||  sToLang ==="fr"||  sToLang ==="pl"||  sToLang ==="de"||  sToLang ==="it"
   property string sLangLangEn
   property string sQuizName : "-"
   property string sScoreText : "-"
@@ -168,7 +170,7 @@ Window {
 
             // tx.executeSql('DROP TABLE GlosaDbIndex');
 
-             tx.executeSql('CREATE TABLE IF NOT EXISTS GlosaDbLastIndex( dbindex INT )');
+            tx.executeSql('CREATE TABLE IF NOT EXISTS GlosaDbLastIndex( dbindex INT )');
             var rs = tx.executeSql('SELECT * FROM GlosaDbLastIndex')
             if (rs.rows.length===0)
             {
@@ -194,10 +196,10 @@ Window {
 
 
             Array.prototype.indexOfObject = function arrayObjectIndexOf(property, value) {
-                for (var i = 0, len = this.length; i < len; i++) {
-                    if (this[i][property] === value) return i;
-                }
-                return -1;
+              for (var i = 0, len = this.length; i < len; i++) {
+                if (this[i][property] === value) return i;
+              }
+              return -1;
             }
 
             var nRowLen = rs.rows.length
