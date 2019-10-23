@@ -221,7 +221,7 @@ Window {
           )
   }
 
-  width:500
+  width:555
   height:700
   visible: true
   TextList

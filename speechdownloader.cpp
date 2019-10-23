@@ -12,15 +12,15 @@
 #include <QJsonValue>
 
 
-static const QString GLOS_SERVER1("http://212.112.183.157");
-static const QString GLOS_SERVER2("http://127.0.0.1");
+static const QString GLOS_SERVER2("http://212.112.183.157");
+static const QString GLOS_SERVER1("http://192.168.2.1");
+
 Speechdownloader::Speechdownloader(const QString& sStoragePath) : QObject(nullptr)
 {
-  QObject::connect(&m_oQuizExpNetMgr, &QNetworkAccessManager::finished,this, &Speechdownloader::quizExported);
-  QObject::connect(&m_oWordNetMgr, &QNetworkAccessManager::finished,this, &Speechdownloader::wordDownloaded);
-  QObject::connect(&m_oQuizNetMgr, &QNetworkAccessManager::finished,this, &Speechdownloader::quizDownloaded);
+  QObject::connect(&m_oQuizExpNetMgr, &QNetworkAccessManager::finished, this, &Speechdownloader::quizExported);
+  QObject::connect(&m_oQuizNetMgr, &QNetworkAccessManager::finished, this, &Speechdownloader::quizDownloaded);
   QObject::connect(&m_oListQuizNetMgr, &QNetworkAccessManager::finished, this, &Speechdownloader::listDownloaded);
-  QObject::connect(&m_oDeleteQuizNetMgr, &QNetworkAccessManager::finished,this, &Speechdownloader::quizDeleted);
+  QObject::connect(&m_oDeleteQuizNetMgr, &QNetworkAccessManager::finished, this, &Speechdownloader::quizDeleted);
   m_sStoragePath = sStoragePath;
 }
 
@@ -30,26 +30,35 @@ QString Speechdownloader::AudioPath(const QString& s)
   return m_sStoragePath ^ s + ".wav";
 }
 
-
-
-void Speechdownloader::wordDownloaded(QNetworkReply* pReply)
+class WordDownloadRecv : public QObject
 {
-  m_oDownloadedData = pReply->readAll();
-
-  if (m_oDownloadedData.size() < 1000)
-    return;
-  QString sFileName = AudioPath(m_sWord);
-  QFile oWav(sFileName);
-  oWav.open(QIODevice::ReadWrite);
-  oWav.write(m_oDownloadedData);
-  oWav.close();
-  emit downloadedSignal();
-
-  if (m_bPlayAfterDownload == true)
+public:
+  WordDownloadRecv(const QString& sWordPath, bool bPlayAfterDownload)
   {
-    QSound::play(sFileName);
+    m_sWordPath = sWordPath;
+    m_bPlayAfterDownload = bPlayAfterDownload;
   }
-}
+  void wordDownloaded(QNetworkReply* pReply)
+  {
+    QByteArray oDownloadedData = pReply->readAll();
+
+    if (oDownloadedData.size() < 1000)
+      return;
+    QFile oWav(m_sWordPath);
+    oWav.open(QIODevice::ReadWrite);
+    oWav.write(oDownloadedData);
+    oWav.close();
+
+    if (m_bPlayAfterDownload == true)
+    {
+      QSound::play(m_sWordPath);
+    }
+    delete this;
+  }
+  QString m_sWordPath;
+  bool m_bPlayAfterDownload;
+};
+
 
 
 void Speechdownloader::quizDeleted(QNetworkReply* pReply)
@@ -67,7 +76,7 @@ void Speechdownloader::quizExported(QNetworkReply* pReply)
   int nRet = pReply->error();
 
   if (nRet == QNetworkReply::NoError)
-    emit exportedSignal(pReply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt());
+    emit exportedSignal(pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt());
   else
     emit exportedSignal(0);
 
@@ -79,11 +88,11 @@ void Speechdownloader::listDownloaded(QNetworkReply* pReply)
 {
   QByteArray oc = pReply->readAll();
   QJsonDocument oJ = QJsonDocument::fromJson(oc);
-  
+
   QJsonArray ocJson = oJ.array();
   QStringList ocL;
   m_ocIndexMap.clear();
-  for ( auto oI : ocJson)
+  for (auto oI : ocJson)
   {
     // `ID`,  desc1`, `slang`,  `qcount`,  `pwd`,  `qname`
     QJsonArray oJJ = oI.toArray();
@@ -91,13 +100,13 @@ void Speechdownloader::listDownloaded(QNetworkReply* pReply)
     ocL.append(oJJ[1].toString());
     ocL.append(oJJ[2].toString());
     ocL.append(oJJ[3].toString());
-/*
-    "qname"
-    "desc1"
-    "slang"
-    "qcount
-    */
-    m_ocIndexMap.append(oJJ[0].toInt());  
+    /*
+        "qname"
+        "desc1"
+        "slang"
+        "qcount
+        */
+    m_ocIndexMap.append(oJJ[0].toInt());
   }
 
   emit quizListDownloadedSignal(ocL.size(), ocL);
@@ -129,16 +138,18 @@ void Speechdownloader::playWord(QString sWord, QString sLang)
   }
   else
   {
-    downloadWord(sWord,sLang);
     m_bPlayAfterDownload = true;
+    downloadWord(sWord, sLang);
+
   }
 }
 
 void Speechdownloader::downloadWord(QString sWord, QString sLang)
 {
-  m_sWord = sWord;
   static QMap<QString, QString> ocUrlMap{ { "ru", sVoicetechRu }, { "en", sVoicetechEn }, { "sv", sVoicetechSe }, { "fr", sVoicetechFr }, { "pl", sVoicetechPl }, { "de", sVoicetechDe }, { "es", sVoicetechEs } };
-  // QString sUrl = ocUrlMapd[sLang] ;
+
+  QObject::connect(&m_oWordNetMgr, &QNetworkAccessManager::finished, new WordDownloadRecv(AudioPath(sWord),m_bPlayAfterDownload), &WordDownloadRecv::wordDownloaded);
+
   QNetworkRequest request(ocUrlMap[sLang] + sWord);
   m_oWordNetMgr.get(request);
 }
@@ -149,22 +160,31 @@ void  Speechdownloader::listQuiz()
   m_oListQuizNetMgr.get(request);
 }
 
+/*
+answer
+extra
+question
+*/
 void Speechdownloader::quizDownloaded(QNetworkReply* pReply)
 {
   m_oDownloadedData = pReply->readAll();
 
+  QVariantList oDataDownloaded;
   if (m_oDownloadedData.size() < 1000)
+  {
+    emit quizDownloadedSignal(-1, oDataDownloaded, "");
     return;
+  }
   QDataStream  ss(&m_oDownloadedData, QIODevice::ReadOnly);
   int nC;
   ss >> nC;
   QString sLang;
   ss >> sLang;
-  QVariantList oDataDownloaded;
+
 
   for (int i = 0; i < nC; i++)
   {
-    for (int j = 0; j < 2; ++j)
+    for (int j = 0; j <= 2; ++j)
     {
       QVariant v;
       ss >> v;
@@ -191,7 +211,7 @@ void Speechdownloader::quizDownloaded(QNetworkReply* pReply)
 
 void Speechdownloader::deleteQuiz(QString sName, QString sPwd, QString nDbId)
 {
-  QString sUrl = GLOS_SERVER2 ^ "deletequiz.php?qname="+sName+"&qpwd="+sPwd+"&dbid="+ nDbId;
+  QString sUrl = GLOS_SERVER2 ^ "deletequiz.php?qname=" + sName + "&qpwd=" + sPwd + "&dbid=" + nDbId;
   QNetworkRequest request(sUrl);
   m_oDeleteQuizNetMgr.get(request);
 }
@@ -199,7 +219,7 @@ void Speechdownloader::deleteQuiz(QString sName, QString sPwd, QString nDbId)
 void Speechdownloader::importQuiz(QString sName)
 {
   // pp = qvariant_cast<QAbstractListModel*>(p);
-  QString sUrl = GLOS_SERVER2 ^ sName + ".txt";
+  QString sUrl = GLOS_SERVER2 ^ "quizload.php?qname="  + sName + ".txt";
   //QNetworkRequest request(sUrl + "lang=" + sLang + "&desc=" + "&name=nytt");
   QNetworkRequest request(sUrl);
   m_oQuizNetMgr.get(request);
@@ -215,7 +235,7 @@ state1
 */
 
 
-void Speechdownloader::exportCurrentQuiz(QVariant p, QString sName, QString sLang, QString sPwd,QString sDesc )
+void Speechdownloader::exportCurrentQuiz(QVariant p, QString sName, QString sLang, QString sPwd, QString sDesc)
 {
   QAbstractListModel* pp = qvariant_cast<QAbstractListModel*>(p);
   QByteArray ocArray;
@@ -249,8 +269,9 @@ void Speechdownloader::exportCurrentQuiz(QVariant p, QString sName, QString sLan
     ss << oF.readAll();
     oF.close();
   }
+
   QString sFmt = GLOS_SERVER2 ^ "store.php?qname=%ls&slang=%ls&qcount=%d&desc1=%ls&pwd=%ls";
-  QString sUrl = QString::asprintf(sFmt.toLatin1(), sName.utf16(), sLang.utf16(), nC,sDesc.utf16(), sPwd.utf16() );
+  QString sUrl = QString::asprintf(sFmt.toLatin1(), sName.utf16(), sLang.utf16(), nC, sDesc.utf16(), sPwd.utf16());
 
   QNetworkRequest request(sUrl);
   request.setRawHeader("Content-Type", "application/octet-stream");

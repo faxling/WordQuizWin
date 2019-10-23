@@ -7,8 +7,8 @@ Item
   ListModel {
     id:idServerQModel
     ListElement {
-      qname: "testfile"
-      code:"sv"
+      qname: "-"
+      code:""
       state1:""
       desc1:""
     }
@@ -67,11 +67,7 @@ Item
       {
         width: 100
         id:idTextSelected
-        MouseArea
-        {
-          anchors.fill: parent
-          onClicked: idTextInputQuizName.text = parent.text
-        }
+        onClick: idTextInputQuizName.text = parent.text
       }
       TextList
       {
@@ -298,7 +294,17 @@ Item
       }
 
       function loadFromList(nCount, oDD, sLangLoaded) {
+
+        if (nCount < 0)
+        {
+          idLoadQuiz.bProgVisible = false
+          idImportMsg.text = "error importing"
+          return
+        }
+
+
         db.transaction(
+
               function(tx) {
                 var rs = tx.executeSql('SELECT MAX(dbnumber) as newnr FROM GlosaDbIndex');
                 var nNr = 1
@@ -311,16 +317,21 @@ Item
 
                 tx.executeSql('CREATE TABLE IF NOT EXISTS Glosa' + nNr + '( number INT , quizword TEXT, answer TEXT, state INT )');
 
-                var sState1 = nCount/2 + "/" +nCount/2
+                var sState1 = nCount/3 + "/" +nCount/3
                 tx.executeSql('INSERT INTO GlosaDbDesc VALUES(?,?)', [nDbNumber,idDescText.text]);
                 tx.executeSql('INSERT INTO GlosaDbIndex VALUES(?,?,?,?)',[nDbNumber, idTextInputQuizName.text,sState1,sLangLoaded  ]);
 
-                glosModelIndex.append({"dbnumber": nNr, "quizname": idTextInputQuizName.text , "state1": sState1 , "langpair" : sLangLoaded,"desc1":idDescText.text })
+                glosModelIndex.append({"dbnumber": nNr, "quizname": idTextInputQuizName.text , "state1": sState1 , "langpair" : sLangLoaded, "desc1":idDescText.text })
+
                 // answer, question , state
-
-                for(var i = 0; i < nCount; i+=2) {
-                  tx.executeSql('INSERT INTO Glosa' +nNr+' VALUES(?, ?, ?, ?)', [i/2,  oDD[i+1], oDD[i], 0 ]);
-
+                /*
+                answer
+                extra
+                question
+                */
+                for(var i = 0; i < nCount; i+=3) {
+                  var sAnswString =oDD[i]+"###"+oDD[i+1]
+                  tx.executeSql('INSERT INTO Glosa' +nNr+' VALUES(?, ?, ?, ?)', [i/2,  oDD[i+2], sAnswString, 0 ]);
                 }
                 idLoadQuiz.bProgVisible = false
                 idImport.visible = false
@@ -371,8 +382,9 @@ Item
                 tx.executeSql('CREATE TABLE IF NOT EXISTS Glosa' + nDbNumber + '( number INT , quizword TEXT, answer TEXT, state INT)');
 
                 var rs = tx.executeSql('SELECT * FROM Glosa' + nDbNumber );
+                var nLen = rs.rows.length
 
-                for(var i = 0; i < rs.rows.length; i++) {
+                for(var i = 0; i < nLen; i++) {
                   var sA;
                   var sE = "";
 
@@ -403,7 +415,7 @@ Item
         TextList
         {
           id:idCol2
-          width:100
+          width:130
           text:quizname
           onClick: idQuizList.currentIndex = index
         }
@@ -538,7 +550,7 @@ Item
     height:200
     TextList {
       id:idImportMsg
-      x:30
+      x:70
       y:25
       color:"red"
       text:""
@@ -552,16 +564,18 @@ Item
 
     Text
     {
+      id:idDescText
       anchors.top :idImportTitle.bottom
       x:20
-      id:idDescText
       text:"---"
     }
+
     TextList {
       anchors.right: parent.right
       anchors.rightMargin:30
       text:"Questions"
     }
+
     property string sSelectedQ : ""
     ListViewHi
     {
@@ -579,7 +593,7 @@ Item
         Row
         {
           TextList {
-            width: nW *3
+            width: nW *4
             id:idTextQname
             text:qname
             onClick:

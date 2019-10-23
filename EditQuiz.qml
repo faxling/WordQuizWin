@@ -142,9 +142,9 @@ Item {
         text :"-"
         onClick: {
           if (nLastSearch === 2)
-            idTextInput2.text = idTextTrans.text
-          else
             idTextInput.text = idTextTrans.text
+          else
+            idTextInput2.text = idTextTrans.text
         }
       }
     }

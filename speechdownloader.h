@@ -31,7 +31,6 @@ signals:
 
 private:
 
-  void wordDownloaded(QNetworkReply* pReply);
   void quizDownloaded(QNetworkReply* pReply);
   void listDownloaded(QNetworkReply* pReply);
   void quizExported(QNetworkReply* pReply);
@@ -41,7 +40,7 @@ private:
 
   QVector<int> m_ocIndexMap;
   QString AudioPath(const QString&s);
-  QString m_sWord;
+  // QString m_sWord;
   QString m_sStoragePath;
   QNetworkAccessManager m_oQuizExpNetMgr;
   QNetworkAccessManager m_oWordNetMgr;
