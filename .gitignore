@@ -1,29 +1,4 @@
-CVS
-.#*
 
-.hg
-.hgignore
-*.ipch
-*.sdf
-*.opensdf
-*.aps
-*.scc
-*.depend
-*.wri
-*.bin
-*.lst
-*.s
-vxWorks*
-bootrom
-README
-
-
-bin
-obj
-TestResults
-*.pbxuser
-*.perspectivev3
-.DS_Store
 
 *.old
 *.log
@@ -43,6 +18,8 @@ Makefile*
 *.exp
 *.out
 *.orig
+*.sdf
+*.aps
 
 #vc files
 *.dep
@@ -69,53 +46,20 @@ Makefile*
 /lib*
 Debug
 Release
-MinSizeRel
 *.Debug
 *.Release
 
 *.fuse*
 
 #qt
-*.prl
-*moc_*
-*moc.*
-*.moc
-*qrc_res.cpp
-
-#delphi
-*.~*
-*.dcu
-*.dsk
-*.oil
-*.sur
-*.wpf
-*.fin
-*.slf
-*.seq
-*.dat
-
+*.opensdf
 */GeneratedFiles/*
 
 
-*/*/GeneratedFiles/*
-Customer/SSC/MssMission/GeneratedFiles/*
 
 
-Devtest/AIScounter/AIScounter/GeneratedFiles/*
-Emulators/SDPE/Emulator/*.ini
-Emulators/SDPE/Emulator/*.cfg
-Emulators/SDPE/Emulator/*.dof
-Emulators/SDPE/Emulator/*.dproj
-Emulators/SDPE/Emulator/*.local
-Emulators/SDPE/Emulator/*.identcache
-Emulators/SDPE/Emulator/*.stat
-Emulators/SDPE/Emulator/*.ico
-Emulators/SDPE/Emulator/*.txt
-Emulators/SDPE/TGlobe/*.ini
-Emulators/SDPE/WPedit/*.dproj
-Emulators/SDPE/WPedit/*.local
-Emulators/SDPE/WPedit/*.identcache
-Emulators/SDPE/WPedit/*.stat
+
+
 
 
 

@@ -1,4 +1,4 @@
-<UI version="4.0" >
+<UI version="4.0" > 
  <class>glosquizClass</class>
  <widget class="QMainWindow" name="glosquizClass" >
   <property name="objectName" >
@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>glosquiz</string>
+   <string>WordQuiz</string>
   </property>
   <widget class="QMenuBar" name="menuBar" />
   <widget class="QToolBar" name="mainToolBar" />

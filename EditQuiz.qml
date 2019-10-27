@@ -215,9 +215,6 @@ Item {
           }
 
           nC += 1;
-
-
-
           insertGlosa(nDbNumber, nC, idTextInput.text, idTextInput2.text)
 
 
@@ -344,7 +341,12 @@ Item {
 
                   }
                   )
+            var sQuestion = question
+            var sAnswer = answer
+
             glosModel.remove(index)
+            MyDownloader.deleteWord(sAnswer,sToLang)
+            MyDownloader.deleteWord(sAnswer,sFromLang)
             var nC = glosModel.count
             sScoreText = nC + "/" + nC
 

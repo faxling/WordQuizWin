@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glosquiz", "glosquiz.vcxproj", "{68FBE05C-64B9-482C-B809-F77D7D1310B7}"
 EndProject
-Project("{040ECBDE-118F-47B7-BE98-E6E3FFCE59D0}") = "glosquizInstall", "..\glosquizInstall\glosquizInstall.nsisproj", "{ACB81505-35E4-4F18-935A-FE7697D01015}"
+Project("{040ECBDE-118F-47B7-BE98-E6E3FFCE59D0}") = "WordQuizInstal", "..\glosquizInstall\WordQuizInstal.nsisproj", "{ACB81505-35E4-4F18-935A-FE7697D01015}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,8 +27,8 @@ Global
 		{68FBE05C-64B9-482C-B809-F77D7D1310B7}.Debug|x64.Build.0 = Debug|x64
 		{68FBE05C-64B9-482C-B809-F77D7D1310B7}.Debug|x86.ActiveCfg = Debug|Win32
 		{68FBE05C-64B9-482C-B809-F77D7D1310B7}.Debug|x86.Build.0 = Debug|Win32
-		{68FBE05C-64B9-482C-B809-F77D7D1310B7}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{68FBE05C-64B9-482C-B809-F77D7D1310B7}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{68FBE05C-64B9-482C-B809-F77D7D1310B7}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{68FBE05C-64B9-482C-B809-F77D7D1310B7}.Release|Mixed Platforms.Build.0 = Release|x64
 		{68FBE05C-64B9-482C-B809-F77D7D1310B7}.Release|Win32.ActiveCfg = Release|Win32
 		{68FBE05C-64B9-482C-B809-F77D7D1310B7}.Release|Win32.Build.0 = Release|Win32
 		{68FBE05C-64B9-482C-B809-F77D7D1310B7}.Release|x64.ActiveCfg = Release|x64
