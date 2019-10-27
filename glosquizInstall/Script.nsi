@@ -94,7 +94,6 @@ Section "WordQuiz" SecDummy
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\qml\QtQuick\Window.2\windowplugin.dll				
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\qml\QtQuick\XmlListModel\qmlxmllistmodelplugin.dll
   File C:\Users\fraxl\Documents\qt\glosquiz\glosquiz\x64\Release\glosquiz.exe	
-
   CreateShortCut "$DESKTOP\WordQuiz.lnk" "$INSTDIR\glosquiz.exe" 
    
   ; Store installation folder
