@@ -35,22 +35,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_glosquiz.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_glosquiz.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\qrc_glosquiz.cpp">
+    <ClCompile Include="GeneratedFiles\qrc_qml.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\filehelpers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\speechdownloader.cpp">
+    <ClCompile Include="..\..\harbour-wordquiz\src\speechdownloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_speechdownloader.cpp">
@@ -58,6 +52,12 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_speechdownloader.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\harbour-wordquiz\src\filehelpers.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -67,10 +67,10 @@
     <CustomBuild Include="glosquiz.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="glosquiz.qrc">
+    <CustomBuild Include="..\qml.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\speechdownloader.h">
+    <CustomBuild Include="..\..\harbour-wordquiz\src\speechdownloader.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -78,14 +78,62 @@
     <ClInclude Include="GeneratedFiles\ui_glosquiz.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\filehelpers.h">
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="..\..\harbour-wordquiz\src\filehelpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resource.rc" />
+    <None Include="..\main.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\TextList.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\TakeQuiz.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\EditQuiz.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\CreateNewQuiz.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\InputTextQuiz.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\ButtonQuiz.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\ListViewHi.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\ButtonQuizImg.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\tid.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\rm.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\r.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\thumb.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\horn.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

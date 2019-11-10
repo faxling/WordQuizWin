@@ -5,7 +5,7 @@
 ; #######################################################################################
 
 ; NSIS Modern User Interface
-!define VERSION 2.0.0.0
+!define VERSION 2.0.0.2
 
 VIAddVersionKey "ProductName" "WordQuiz"
 VIAddVersionKey "Comments" "WordQuiz"
@@ -59,9 +59,6 @@ Section "WordQuiz" SecDummy
 
   SetOutPath "$INSTDIR"
   
-  ; ADD YOUR OWN FILES HERE...
-  File "Script.nsi"
- 
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Core.dll
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Gui.dll
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Multimedia.dll	
@@ -72,8 +69,22 @@ Section "WordQuiz" SecDummy
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Svg.dll									
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Widgets.dll					     	
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5XmlPatterns.dll					
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\bearer\qgenericbearer.dll			
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\bearer\qnativewifibearer.dll	
+
+  File c:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\libeay32.dll 
+  File c:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\ssleay32.dll  
+
+ 	
+  File /r C:\Qt\Deploy\QtQuick.2		
+  File /r C:\Qt\Deploy\Controls	
+  File /r C:\Qt\Deploy\LocalStorage
+  File /r C:\Qt\Deploy\Window.2
+  File /r C:\Qt\Deploy\XmlListModel
+             
+ 
+
+  File C:\Users\fraxl\Documents\qt\glosquiz\glosquiz\x64\Release\glosquiz.exe	
+
+  SetOutPath "$INSTDIR\imageformats"
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qdds.dll						
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qgif.dll						
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qicns.dll					
@@ -86,14 +97,22 @@ Section "WordQuiz" SecDummy
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qtiff.dll					
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qwbmp.dll					
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qwebp.dll				
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\platforms\qwindows.dll			
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\sqldrivers\qsqlite.dll				
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\qml\QtQuick.2\qtquick2plugin.dll		            
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\qml\QtQuick\Controls\qtquickcontrolsplugin.dll	
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\qml\QtQuick\LocalStorage\qmllocalstorageplugin.dll
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\qml\QtQuick\Window.2\windowplugin.dll				
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\qml\QtQuick\XmlListModel\qmlxmllistmodelplugin.dll
-  File C:\Users\fraxl\Documents\qt\glosquiz\glosquiz\x64\Release\glosquiz.exe	
+	
+  SetOutPath "$INSTDIR\platforms"
+
+  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\platforms\qwindows.dll		
+
+  SetOutPath "$INSTDIR\audio"
+
+  File 	"C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\audio\qtaudio_windows.dll"
+
+  SetOutPath "$INSTDIR\sqldrivers"
+  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\sqldrivers\qsqlite.dll		
+  SetOutPath "$INSTDIR\bearer"
+  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\bearer\qgenericbearer.dll			
+  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\bearer\qnativewifibearer.dll	
+
+
   CreateShortCut "$DESKTOP\WordQuiz.lnk" "$INSTDIR\glosquiz.exe" 
    
   ; Store installation folder
@@ -103,22 +122,14 @@ Section "WordQuiz" SecDummy
 
 SectionEnd
 
-; --------------------------------
-; Descriptions
-
-
-
-; --------------------------------
 ; Uninstaller Section
 
 Section "Uninstall"
 
-  ; ADD YOUR OWN FILES HERE...
-
-  Delete "$INSTDIR\Uninstall.exe"
-
-  RMDir "$INSTDIR"
+  RMDir /r /REBOOTOK "$LOCALAPPDATA\WordQuiz"
 
   DeleteRegKey /ifempty HKCU "Software\WordQuiz"
+  Delete "$DESKTOP\WordQuiz.lnk"
+
 
 SectionEnd

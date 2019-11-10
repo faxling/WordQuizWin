@@ -200,6 +200,8 @@ Item {
           nLastSearch = 2
           if (bHasDictTo)
             downloadDictOnWord(sReqDictUrlEn , idTextInput.text)
+
+          idTranslateModel.source = sReqUrlBase +  sLangLangEn + "&text=" + idTextInput.text
         }
       }
 
@@ -444,6 +446,16 @@ Item {
           idQuizModel.get(i).visible1 = false
           idQuizModel.get(i).allok = false
 
+        }
+
+      }
+
+      ButtonQuiz
+      {
+        text : "Download All Audio"
+        onClicked:
+        {
+          MyDownloader.downLoadAllSpeech(glosModel, sLangLang);
         }
 
       }

@@ -10,6 +10,7 @@ Rectangle
   height: 23
   TextInput
   {
+    selectByMouse : true
     anchors.leftMargin: 5
     font.pointSize: 12
     anchors.fill: parent

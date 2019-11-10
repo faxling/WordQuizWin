@@ -4,7 +4,7 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 
-#include "speechdownloader.h"
+#include "..\harbour-wordquiz\src\speechdownloader.h"
 
 
 
@@ -13,14 +13,16 @@
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
+  QGuiApplication app(argc, argv);
 
-    QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty("MyDownloader", new Speechdownloader(engine.offlineStoragePath()));
+  QQmlApplicationEngine engine;
+  engine.rootContext()->setContextProperty("MyDownloader", new Speechdownloader(engine.offlineStoragePath(), nullptr));
 
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+  engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
-    //     qDebug() << engine.offlineStoragePath();
-    return app.exec();
+
+  qDebug() <<  "start wordquiz";
+  qDebug() << engine.offlineStoragePath();
+  return app.exec();
 }
 

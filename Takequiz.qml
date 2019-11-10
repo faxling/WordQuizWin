@@ -23,6 +23,7 @@ Rectangle {
         height:200
         spacing: 20
         anchors.centerIn: parent
+        visible:!allok
         Text
         {
           anchors.horizontalCenter: parent.horizontalCenter
@@ -72,26 +73,38 @@ Rectangle {
           onClicked: MyDownloader.playWord(answer,sToLang)
         }
 
-        Image {
-          visible:allok
-          source: "qrc:thumb.png"
-        }
+
       }
-      Image
+      Image {
+        visible:allok
+        anchors.centerIn: parent
+        source: "qrc:thumb.png"
+      }
+      ButtonQuizImg
       {
         anchors.bottomMargin: 20
         anchors.bottom: parent.bottom
         anchors.right:parent.right
         anchors.rightMargin: 20
         source:"qrc:r.png"
+        onClicked:
+        {
+          var nI = (idView.currentIndex-1) % 3
+          idView.currentIndex = nI
+        }
       }
-      Image
+      ButtonQuizImg
       {
         anchors.bottomMargin: 20
         anchors.bottom: parent.bottom
         anchors.left:parent.left
         anchors.leftMargin: 20
         source:"qrc:left.png"
+        onClicked:
+        {
+          var nI = (idView.currentIndex+1) % 3
+          idView.currentIndex = nI
+        }
       }
     }
   }

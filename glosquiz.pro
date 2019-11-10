@@ -5,8 +5,8 @@ QT += qml quick multimedia
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    speechdownloader.cpp \
-    filehelpers.cpp
+    ../harbour-wordquiz/src/speechdownloader.cpp \
+    ../harbour-wordquiz/src/filehelpers.cpp
 
 RESOURCES += qml.qrc
 
@@ -15,9 +15,10 @@ QML_IMPORT_PATH =
 # Default rules for deployment.
 include(deployment.pri)
 
+
 HEADERS += \
-    speechdownloader.h \
-    filehelpers.h
+    ../harbour-wordquiz/src/speechdownloader.h \
+    ../harbour-wordquiz/src/filehelpers.h
 
 
 
