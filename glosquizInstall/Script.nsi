@@ -5,7 +5,7 @@
 ; #######################################################################################
 
 ; NSIS Modern User Interface
-!define VERSION 2.0.0.2
+!define VERSION 2.0.0.3
 
 VIAddVersionKey "ProductName" "WordQuiz"
 VIAddVersionKey "Comments" "WordQuiz"
@@ -24,7 +24,7 @@ VIAddVersionKey "PrivateBuild" "${VERSION} ${__DATE__} ${__TIME__}"
 
   ; Name and output file
   Name "WordQuiz"
-  OutFile "WordQuiz.exe"
+  OutFile "WordQuiz_${VERSION}.exe"
 
   ; Default installation folder
   InstallDir "$LOCALAPPDATA\WordQuiz"

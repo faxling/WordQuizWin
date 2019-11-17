@@ -33,3 +33,4 @@ ListViewHi.qml \
 main.qml \
 TakeQuiz.qml \
 TextList.qml \
+../harbour-wordquiz/qml/QuizFunctions.js

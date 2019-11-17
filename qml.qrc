@@ -1,18 +1,19 @@
 <RCC>
-  <qresource prefix="/">
-    <file>main.qml</file>
-    <file>TextList.qml</file>
-    <file>ButtonQuiz.qml</file>
-    <file>ListViewHi.qml</file>
-    <file>TakeQuiz.qml</file>
-    <file>EditQuiz.qml</file>
-    <file>CreateNewQuiz.qml</file>
-    <file>InputTextQuiz.qml</file>
-    <file>ButtonQuizImg.qml</file>   
-    <file>rm.png</file>
-    <file>left.png</file>
-    <file>r.png</file>
-    <file>thumb.png</file>
-    <file>horn.png</file>
-  </qresource>
+<qresource prefix="/">
+<file>main.qml</file>
+<file>TextList.qml</file>
+<file>../harbour-wordquiz/Qml/QuizFunctions.js</file>
+<file>ButtonQuiz.qml</file>
+<file>ListViewHi.qml</file>
+<file>TakeQuiz.qml</file>
+<file>EditQuiz.qml</file>
+<file>CreateNewQuiz.qml</file>
+<file>InputTextQuiz.qml</file>
+<file>ButtonQuizImg.qml</file>
+<file>rm.png</file>
+<file>left.png</file>
+<file>r.png</file>
+<file>thumb.png</file>
+<file>horn.png</file>
+</qresource>
 </RCC>

@@ -72,8 +72,6 @@ Rectangle {
           source:"qrc:horn.png"
           onClicked: MyDownloader.playWord(answer,sToLang)
         }
-
-
       }
       Image {
         visible:allok
@@ -116,25 +114,19 @@ Rectangle {
     property int nLastIndex : 1
     onCurrentIndexChanged:
     {
-
       var nI = (currentIndex+1) % 3
 
       nQuizIndex = nI
 
-      if (glosModelWorking.count<1)
+      if (glosModelWorking.count === 0 )
       {
         for (var j = 0; j < 3 ;++j)
         {
-          idQuizModel.get(j).question =  "-"
-          idQuizModel.get(j).answer =  "-"
-          idQuizModel.get(j).number =  -1
-          idQuizModel.get(j).visible1 = false
-          idQuizModel.get(j).allok = false
+          idQuizModel.get(j).allok = true
         }
+
         return;
       }
-
-
 
       var bDir = 0
 
@@ -170,6 +162,8 @@ Rectangle {
               for ( i = 0; i < 3 ;++i)
               {
                 idQuizModel.get(i).question =  ""
+                idQuizModel.get(i).answer =  ""
+                idQuizModel.get(i).extra =  ""
                 idQuizModel.get(i).allok = true
               }
             }
@@ -200,8 +194,19 @@ Rectangle {
         idQuizModel.get(nI).question = glosModelWorking.get(nIndexOwNewWord).question
         idQuizModel.get(nI).answer = glosModelWorking.get(nIndexOwNewWord).answer
         idQuizModel.get(nI).number = glosModelWorking.get(nIndexOwNewWord).number
+        idQuizModel.get(nI).extra = glosModelWorking.get(nIndexOwNewWord).extra
         idQuizModel.get(nI).visible1 = false
         idQuizModel.get(nI).allok = false
+
+        var nCurrentGlosNumber = idQuizModel.get(nI).number
+        nC = glosModel.count
+        for (  i = 0; i < nC;++i) {
+          if (glosModel.get(i).number === nCurrentGlosNumber)
+          {
+            idWindow.glosListView.currentIndex = i
+            break;
+          }
+        }
       }
     }
 

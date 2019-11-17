@@ -2,51 +2,13 @@ import QtQuick 2.3
 import QtQuick.Window 2.2
 import QtQuick.Controls 1.4
 import QtQuick.XmlListModel 2.0
-
+import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
 Item {
-  function downloadDictOnWord(sUrl, sWord)
-  {
-    var doc = new XMLHttpRequest();
-    doc.open("GET",sUrl+ sWord);
-
-    doc.onreadystatechange = function() {
-
-      if (doc.readyState === XMLHttpRequest.DONE) {
-        if (doc.status === 200) {
-          idErrorText.visible = false;
-          idTrSynModel.xml = doc.responseText
-          idTrTextModel.xml = doc.responseText
-          idTrMeanModel.xml = doc.responseText
-        }
-        else
-        {
-          idErrorText.text = "-"
-          idErrorText.visible = true;
-        }
-      }
-    }
-    doc.send()
-  }
-
   id:idItemEdit
-  function insertGlosa(dbnumber, nC, question, answer)
-  {
-    db.transaction(
-          function(tx) {
-            tx.executeSql('INSERT INTO Glosa'+dbnumber+' VALUES(?, ?, ?, ?)', [nC,  question, answer, 0 ]);
-          })
-
-
-    glosModel.append({"number": nC, "question": question , "answer": answer, "state1":0})
-
-    glosModelWorking.append({"number": nC, "question": question , "answer": answer, "state1":0})
-    idGlosList.positionViewAtEnd()
-    sScoreText = glosModelWorking.count + "/" + glosModel.count
-  }
-
-
+  property alias glosListView : idGlosList
   property int nLastSearch : 0
+
   Column
   {
     id:idGlosListHeader
@@ -175,7 +137,7 @@ Item {
         onClicked: {
           nLastSearch = 0
           if (bHasDictTo)
-            downloadDictOnWord(sReqDictUrl , idTextInput.text)
+            QuizLib.downloadDictOnWord(sReqDictUrl , idTextInput.text)
 
           idTranslateModel.source = sReqUrl + idTextInput.text
 
@@ -188,7 +150,7 @@ Item {
         onClicked: {
           nLastSearch = 1
           if (bHasDictFrom)
-            downloadDictOnWord(sReqDictUrlRev , idTextInput2.text)
+            QuizLib.downloadDictOnWord(sReqDictUrlRev , idTextInput2.text)
           idTranslateModel.source = sReqUrlBase +  sLangLangRev + "&text=" + idTextInput2.text
         }
       }
@@ -199,7 +161,7 @@ Item {
         onClicked: {
           nLastSearch = 2
           if (bHasDictTo)
-            downloadDictOnWord(sReqDictUrlEn , idTextInput.text)
+            QuizLib.downloadDictOnWord(sReqDictUrlEn , idTextInput.text)
 
           idTranslateModel.source = sReqUrlBase +  sLangLangEn + "&text=" + idTextInput.text
         }
@@ -217,8 +179,7 @@ Item {
           }
 
           nC += 1;
-          insertGlosa(nDbNumber, nC, idTextInput.text, idTextInput2.text)
-
+          QuizLib.insertGlosa(nDbNumber, nC, idTextInput.text, idTextInput2.text)
 
           if (bHasSpeech)
             MyDownloader.downloadWord(idTextInput2.text,sToLang)
@@ -302,7 +263,7 @@ Item {
     }
 
 
-    ListView {
+    ListViewHi {
       id:idGlosList
       clip: true
       width:parent.width

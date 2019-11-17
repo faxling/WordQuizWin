@@ -86,54 +86,11 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\main.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\TextList.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\TakeQuiz.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\EditQuiz.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\CreateNewQuiz.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\InputTextQuiz.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\ButtonQuiz.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\ListViewHi.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\ButtonQuizImg.qml">
-      <Filter>Resource Files</Filter>
-    </None>
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\tid.xml">
+    <None Include="..\..\harbour-wordquiz\qml\QuizFunctions.js">
       <Filter>Resource Files</Filter>
-    </Xml>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\rm.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\left.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\r.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\thumb.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\horn.png">
-      <Filter>Resource Files</Filter>
-    </Image>
+    </None>
   </ItemGroup>
 </Project>
