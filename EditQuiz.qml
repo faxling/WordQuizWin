@@ -5,7 +5,7 @@ import QtQuick.XmlListModel 2.0
 import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
 Item {
-  id:idItemEdit
+  id:idEditQuiz
   property alias glosListView : idGlosList
   property int nLastSearch : 0
 
@@ -94,7 +94,7 @@ Item {
       TextList
       {
         id:idText
-        width:idItemEdit.width / 2
+        width:idEditQuiz.width / 2
         text :"-"
         onClick: idTextInput2.text = text
       }
@@ -116,13 +116,13 @@ Item {
       spacing:20
       InputTextQuiz
       {
-        width:idItemEdit.width / 2
+        width:idEditQuiz.width / 2
         text:""
         id:idTextInput
       }
       InputTextQuiz
       {
-        width:idItemEdit.width / 2
+        width:idEditQuiz.width / 2
         text:""
         id:idTextInput2
       }
