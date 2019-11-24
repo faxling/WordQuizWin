@@ -2,11 +2,11 @@ import QtQuick 2.3
 import QtQuick.Window 2.2
 import QtQuick.Controls 1.4
 import QtQuick.XmlListModel 2.0
+import QtQuick.LocalStorage 2.0 as Sql
 import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
 Item {
   id:idEditQuiz
-  property alias glosListView : idGlosList
   property int nLastSearch : 0
 
   Column
@@ -269,6 +269,10 @@ Item {
       width:parent.width
       height:200
       spacing: 3
+      Component.onCompleted:
+      {
+        idWindow.glosListView = idGlosList
+      }
 
       header:idHeaderGlos
 

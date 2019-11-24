@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
+import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
 Rectangle {
   id:idRectTakeQuiz
@@ -190,23 +191,9 @@ Rectangle {
 
       if (glosModelWorking.count>0)
       {
+            console.log("take assignQuizModel")
         var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
-        idQuizModel.get(nI).question = glosModelWorking.get(nIndexOwNewWord).question
-        idQuizModel.get(nI).answer = glosModelWorking.get(nIndexOwNewWord).answer
-        idQuizModel.get(nI).number = glosModelWorking.get(nIndexOwNewWord).number
-        idQuizModel.get(nI).extra = glosModelWorking.get(nIndexOwNewWord).extra
-        idQuizModel.get(nI).visible1 = false
-        idQuizModel.get(nI).allok = false
-
-        var nCurrentGlosNumber = idQuizModel.get(nI).number
-        nC = glosModel.count
-        for (  i = 0; i < nC;++i) {
-          if (glosModel.get(i).number === nCurrentGlosNumber)
-          {
-            idWindow.glosListView.currentIndex = i
-            break;
-          }
-        }
+        QuizLib.assignQuizModel(nIndexOwNewWord)
       }
     }
 

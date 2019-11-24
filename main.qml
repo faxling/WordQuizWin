@@ -42,7 +42,8 @@ Window {
   property bool bQSort : true
   property string sQSort : bQSort ? "UPPER(quizword)" : "UPPER(answer)"
   property variant glosListView
-  property int nGlosaDbLastIndex;
+  property variant quizListView
+
   onSScoreTextChanged:
   {
 
@@ -50,64 +51,13 @@ Window {
           function(tx) {
             tx.executeSql('UPDATE GlosaDbIndex SET state1=? WHERE dbnumber=?',[sScoreText, nDbNumber]);
 
-            var nC = glosModelIndex.count
-            for ( var i = 0; i < nC;++i) {
-              if (glosModelIndex.get(i).dbnumber === nDbNumber)
-              {
-                glosModelIndex.setProperty(i,"state1", sScoreText)
-                break;
-              }
-            }
+            var i = QuizLib.findDbNumberInModel(glosModelIndex, nDbNumber)
+            glosModelIndex.setProperty(i,"state1", sScoreText)
+
           }
           )
   }
 
-  function loadQuiz()
-  {
-    glosModelWorking.clear();
-    if (glosModel.count < 1)
-    {
-      for (var  i = 0; i < 3;++i) {
-        idQuizModel.get(i).allok = false;
-        idQuizModel.get(i).question = "-";
-        idQuizModel.get(i).answer = "-";
-        idQuizModel.get(i).number = "-";
-        idQuizModel.get(i).visible1 = false
-      }
-      return;
-    }
-
-    var nC = glosModel.count
-
-    bIsReverse = false
-
-    for (  i = 0; i < nC;++i) {
-      if (glosModel.get(i).state1 === 0)
-        glosModelWorking.append(glosModel.get(i))
-    }
-
-    var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
-
-    // sScoreText =  glosModelWorking.count + "/" + nC
-
-    if (glosModelWorking.count === 0)
-    {
-      for (  i = 0; i < 3;++i) {
-        idQuizModel.get(i).allok = true;
-      }
-    }
-    else
-    {
-      for (  i = 0; i < 3;++i) {
-        idQuizModel.get(i).allok = false;
-      }
-      idQuizModel.get(nQuizIndex).question = glosModelWorking.get(nIndexOwNewWord).question;
-      idQuizModel.get(nQuizIndex).answer = glosModelWorking.get(nIndexOwNewWord).answer;
-      idQuizModel.get(nQuizIndex).number = glosModelWorking.get(nIndexOwNewWord).number;
-      idQuizModel.get(nQuizIndex).visible1 = false
-    }
-
-  }
   ListModel {
     objectName:"glosModel"
     id: glosModel
@@ -199,30 +149,23 @@ Window {
     Tab
     {
       title: "Create"
+      active: true
+      id:idTab1
       CreateNewQuiz
       {
-        id:idTab1
-        Component.onCompleted:
-        {
-          idTab1.nQuizListCurrentIndex = idWindow.nGlosaDbLastIndex
-        }
-
         anchors.fill: parent
       }
     }
     Tab
     {
       title: "Edit"
+      active: true
       EditQuiz
       {
         id:idTab2
-        Component.onCompleted:
-        {
-          idWindow.glosListView = idTab2.glosListView
-        }
-
         anchors.fill: parent
       }
+
     }
     Tab
     {
