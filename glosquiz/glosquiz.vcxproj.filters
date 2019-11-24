@@ -64,9 +64,6 @@
     <CustomBuild Include="glosquiz.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="glosquiz.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\qml.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
@@ -75,9 +72,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GeneratedFiles\ui_glosquiz.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -90,6 +84,33 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\harbour-wordquiz\qml\QuizFunctions.js">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\ButtonQuiz.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\ButtonQuizImg.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\CreateNewQuiz.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\EditQuiz.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\InputTextQuiz.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\ListViewHi.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\main.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\TakeQuiz.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\TextList.qml">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

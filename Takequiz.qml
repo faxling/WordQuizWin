@@ -191,7 +191,6 @@ Rectangle {
 
       if (glosModelWorking.count>0)
       {
-            console.log("take assignQuizModel")
         var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
         QuizLib.assignQuizModel(nIndexOwNewWord)
       }

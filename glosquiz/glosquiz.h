@@ -2,7 +2,7 @@
 #define GLOSQUIZ_H
 
 #include <QtWidgets/QMainWindow>
-#include "ui_glosquiz.h"
+// #include "ui_glosquiz.h"
 
 class glosquiz : public QMainWindow
 {
@@ -13,7 +13,7 @@ public:
     ~glosquiz();
 
 private:
-    Ui::glosquizClass ui;
+  //   Ui::glosquizClass ui;
 };
 
 #endif // GLOSQUIZ_H

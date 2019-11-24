@@ -43,7 +43,7 @@ Window {
   property string sQSort : bQSort ? "UPPER(quizword)" : "UPPER(answer)"
   property variant glosListView
   property variant quizListView
-
+  property int nGlosaDbLastIndex:  -1
   onSScoreTextChanged:
   {
 
