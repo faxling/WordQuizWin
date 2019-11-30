@@ -132,11 +132,34 @@ Window {
   width:555
   height:700
   visible: true
+  Item
+  {
+    width:parent.width
+    height: idTitle.height
+    TextList {
+      id: idTitle
+      anchors.horizontalCenter: parent.horizontalCenter
+      text: sQuizName + " " + sFromLang + (bIsReverse ? "<-" : "->") +  sToLang + " " + sScoreText
+    }
+
+    ButtonQuizImg
+    {
+      id: idBtnHelp
+      anchors.right: parent.right
+    //  anchors.topMargin : -40
+      anchors.rightMargin : 40
+      anchors.top : parent.top
+      source:"qrc:help.png"
+      onClicked: Qt.openUrlExternally("https://faxling.github.io/WordQuizWin/index.html");
+    }
+  }
+  /*
   TextList
   {
     text: sQuizName + " " + sLangLang + " " + sScoreText
     anchors.horizontalCenter: parent.horizontalCenter
   }
+  */
 
   TabView {
     id:idTabMain

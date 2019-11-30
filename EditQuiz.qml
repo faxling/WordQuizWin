@@ -116,13 +116,13 @@ Item {
       spacing:20
       InputTextQuiz
       {
-        width:idEditQuiz.width / 2
+        width:idEditQuiz.width / 2 -10
         text:""
         id:idTextInput
       }
       InputTextQuiz
       {
-        width:idEditQuiz.width / 2
+        width:idEditQuiz.width / 2 -10
         text:""
         id:idTextInput2
       }
@@ -266,7 +266,7 @@ Item {
     ListViewHi {
       id:idGlosList
       clip: true
-      width:parent.width
+      width:idEditQuiz.width  -20
       height:200
       spacing: 3
       Component.onCompleted:
@@ -281,14 +281,14 @@ Item {
         spacing:5
 
         TextList {
-          width:150
+          width:idGlosList.width  / 3
           text:  question
           color: state1 === 0 ? "black" : "green"
           onClick: idTextInput.text = question
         }
 
         TextList {
-          width:125
+          width:idGlosList.width  / 3
           id:idAnswer
           text: answer
           onClick: idTextInput2.text = answer
@@ -299,7 +299,7 @@ Item {
           height:26
           width:32
           //    y:-5
-          source: "qrc:rm.png"
+          source: "qrc:edit.png"
           onClicked:
           {
             db.transaction(
@@ -316,7 +316,6 @@ Item {
             MyDownloader.deleteWord(sAnswer,sFromLang)
             var nC = glosModel.count
             sScoreText = nC + "/" + nC
-
           }
         }
 
@@ -365,13 +364,7 @@ Item {
 
           var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
 
-          i =  nQuizIndex
-
-          idQuizModel.get(i).question = glosModelWorking.get(nIndexOwNewWord).question
-          idQuizModel.get(i).answer = glosModelWorking.get(nIndexOwNewWord).answer
-          idQuizModel.get(i).number = glosModelWorking.get(nIndexOwNewWord).number
-          idQuizModel.get(i).visible1 = false
-          idQuizModel.get(i).allok = false
+          QuizLib.assignQuizModel(nIndexOwNewWord)
 
         }
 
@@ -403,13 +396,7 @@ Item {
 
           var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
 
-          i =  nQuizIndex
-
-          idQuizModel.get(i).question = glosModelWorking.get(nIndexOwNewWord).question
-          idQuizModel.get(i).answer = glosModelWorking.get(nIndexOwNewWord).answer
-          idQuizModel.get(i).number = glosModelWorking.get(nIndexOwNewWord).number
-          idQuizModel.get(i).visible1 = false
-          idQuizModel.get(i).allok = false
+          QuizLib.assignQuizModel(nIndexOwNewWord)
 
         }
 
