@@ -103,6 +103,7 @@ Window {
     ListElement {
       question: "-"
       answer:"-"
+      extra:""
       number:0
       visible1:false
       allok:false
@@ -110,6 +111,7 @@ Window {
     ListElement {
       question: "-"
       answer:"-"
+      extra:""
       number:1
       visible1:false
       allok:false
@@ -117,6 +119,7 @@ Window {
     ListElement {
       question: "-"
       answer:"-"
+      extra:""
       number:2
       visible1:false
       allok:false
@@ -146,7 +149,7 @@ Window {
     {
       id: idBtnHelp
       anchors.right: parent.right
-    //  anchors.topMargin : -40
+      //  anchors.topMargin : -40
       anchors.rightMargin : 40
       anchors.top : parent.top
       source:"qrc:help.png"

@@ -107,7 +107,6 @@ Item
                   tx.executeSql('UPDATE GlosaDbIndex SET quizname=? WHERE dbnumber=?',[idTextInputQuizName.text, nId]);
                   idTextSelected.text = idTextInputQuizName.text
                 }
-
                 )
         }
       }
@@ -119,6 +118,7 @@ Item
         {
           idExport.visible = true
           idExportError.visible = false
+
         }
       }
       ButtonQuiz
@@ -335,11 +335,26 @@ Item
       color:"red"
       text:"error"
     }
+    ButtonQuiz
+    {
+      id:idUpdateBtn
+      text: "Update"
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: 20
+      anchors.right: idExportBtn.left
+      anchors.rightMargin: 20
+      onClicked:
+      {
+        bProgVisible = true
+        QuizLib.updateDesc1(idTextInputQuizDesc.displayText)
+        MyDownloader.updateCurrentQuiz( glosModel, sQuizName,sLangLang, idTextInputQuizPwd.displayText, idTextInputQuizDesc.displayText )
+      }
+    }
 
     ButtonQuiz
     {
       id:idExportBtn
-      text: "Export"
+      text: "Upload"
       anchors.bottom: parent.bottom
       anchors.bottomMargin: 20
       anchors.right: idCancelExport.left
@@ -347,7 +362,7 @@ Item
       onClicked:
       {
         bProgVisible = true
-        MyDownloader.exportCurrentQuiz( glosModel, sQuizName,sLangLang, idTextInputQuizPwd.text, idTextInputQuizDesc.text )
+        MyDownloader.exportCurrentQuiz( glosModel, sQuizName,sLangLang, idTextInputQuizPwd.displayText, idTextInputQuizDesc.displayText )
       }
     }
 
@@ -366,11 +381,11 @@ Item
     }
   }
 
-  Rectangle{
+  RectRounded
+  {
     id:idImport
     y:20
     visible: false;
-    color: "steelblue"
     width:parent.width
     height:200
     TextList {
@@ -497,7 +512,6 @@ Item
         }
         else
           idPwdDialog.visible = true
-
       }
     }
 

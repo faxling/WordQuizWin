@@ -17,5 +17,8 @@
         <file>horn.png</file>
         <file>edit.png</file>
         <file>help.png</file>
+        <file>quit.png</file>
+        <file>RectRounded.qml</file>
+        <file>info.png</file>
     </qresource>
 </RCC>

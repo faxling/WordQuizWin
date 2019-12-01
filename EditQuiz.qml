@@ -70,6 +70,7 @@ Item {
     }
     XmlListModel {
       id: idTranslateModel
+      property var oBtn
       query: "/Translation"
       XmlRole { name: "trans"; query: "text/string()" }
       onStatusChanged:
@@ -83,7 +84,6 @@ Item {
           }
           idTextTrans.text =  idTranslateModel.get(0).trans
 
-
         }
       }
     }
@@ -94,7 +94,7 @@ Item {
       TextList
       {
         id:idText
-        width:idEditQuiz.width / 2
+        width:idEditQuiz.width / 2 -10
         text :"-"
         onClick: idTextInput2.text = text
       }
@@ -133,37 +133,44 @@ Item {
       spacing:10
 
       ButtonQuiz {
+        id:idBtn1
         text: "Find in Dict " + sLangLang
         onClicked: {
           nLastSearch = 0
+          var oInText  = QuizLib.getTextFromInput(idTextInput)
           if (bHasDictTo)
-            QuizLib.downloadDictOnWord(sReqDictUrl , idTextInput.text)
+            QuizLib.downloadDictOnWord(sReqDictUrl , oInText)
 
-          idTranslateModel.source = sReqUrl + idTextInput.text
-
+          idTranslateModel.oBtn = idBtn1
+          idTranslateModel.source = sReqUrl + oInText
         }
       }
 
-
       ButtonQuiz {
+        id:idBtn2
         text: "Find in Dict " + sLangLangRev
         onClicked: {
           nLastSearch = 1
+          var oInText  = QuizLib.getTextFromInput(idTextInput2)
           if (bHasDictFrom)
-            QuizLib.downloadDictOnWord(sReqDictUrlRev , idTextInput2.text)
-          idTranslateModel.source = sReqUrlBase +  sLangLangRev + "&text=" + idTextInput2.text
+            QuizLib.downloadDictOnWord(sReqDictUrlRev , oInText)
+
+          idTranslateModel.oBtn = idBtn2
+          idTranslateModel.source = sReqUrlBase +  sLangLangRev + "&text=" + oInText
         }
       }
 
-
       ButtonQuiz {
+        id:idBtn3
         text: "Find in Dict " + sLangLangEn
         onClicked: {
           nLastSearch = 2
+          var oInText  = QuizLib.getTextFromInput(idTextInput)
           if (bHasDictTo)
-            QuizLib.downloadDictOnWord(sReqDictUrlEn , idTextInput.text)
+            QuizLib.downloadDictOnWord(sReqDictUrlEn , oInText)
 
-          idTranslateModel.source = sReqUrlBase +  sLangLangEn + "&text=" + idTextInput.text
+          idTranslateModel.oBtn = idBtn3
+          idTranslateModel.source = sReqUrlBase +  sLangLangEn + "&text=" + oInText
         }
       }
 
@@ -302,20 +309,12 @@ Item {
           source: "qrc:edit.png"
           onClicked:
           {
-            db.transaction(
-                  function(tx) {
-                    tx.executeSql('DELETE FROM Glosa'+nDbNumber+' WHERE number = ?',[number]);
-
-                  }
-                  )
-            var sQuestion = question
-            var sAnswer = answer
-
-            glosModel.remove(index)
-            MyDownloader.deleteWord(sAnswer,sToLang)
-            MyDownloader.deleteWord(sAnswer,sFromLang)
-            var nC = glosModel.count
-            sScoreText = nC + "/" + nC
+            idEditDlg.visible = true
+            idEditDlg.visible = true
+            idTextEdit1.text = question
+            idTextEdit2.text = answer
+            idTextEdit3.text = extra
+            idGlosList.currentIndex = index
           }
         }
 
@@ -347,27 +346,8 @@ Item {
         text : "Reset"
         onClicked:
         {
-          db.transaction(
-                function(tx) {
-                  tx.executeSql('UPDATE Glosa'+nDbNumber+' SET state=0');
-                })
-
-
-          glosModelWorking.clear()
-          var nC = glosModel.count
-
-          sScoreText = nC + "/" + nC
-          for ( var i = 0; i < nC;++i) {
-            glosModel.get(i).state1=0;
-            glosModelWorking.append(glosModel.get(i))
-          }
-
-          var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
-
-          QuizLib.assignQuizModel(nIndexOwNewWord)
-
+          QuizLib.resetQuiz()
         }
-
       }
 
       ButtonQuiz
@@ -375,29 +355,7 @@ Item {
         text : "Reverse"
         onClicked:
         {
-          db.transaction(
-                function(tx) {
-                  tx.executeSql('UPDATE Glosa'+nDbNumber+' SET state=0');
-                })
-
-
-          glosModelWorking.clear()
-          var nC = glosModel.count
-
-          sScoreText = nC + "/" + nC
-          for ( var i = 0; i < nC;++i) {
-            glosModel.get(i).state1=0;
-
-            var squestion = glosModel.get(i).answer
-            var sanswer = glosModel.get(i).question
-            var nnC  = glosModel.get(i).number
-            glosModelWorking.append({"number": nnC, "question": squestion , "answer": sanswer, "state1":0})
-          }
-
-          var nIndexOwNewWord = Math.floor(Math.random() * glosModelWorking.count);
-
-          QuizLib.assignQuizModel(nIndexOwNewWord)
-
+          QuizLib.reverseQuiz()
         }
 
       }
@@ -409,9 +367,96 @@ Item {
         {
           MyDownloader.downLoadAllSpeech(glosModel, sLangLang);
         }
-
       }
 
+    }
+  }
+
+
+
+  RectRounded
+  {
+    id:idEditDlg
+    visible : false
+    width:parent.width
+    height:190
+    onCloseClicked: idEditDlg.visible = false
+    onVisibleChanged:
+    {
+      if (!visible)
+        idGlosList.positionViewAtIndex(idGlosList.currentIndex, ListView.Center)
+    }
+
+    Column
+    {
+      x:20
+      anchors.top: idEditDlg.bottomClose
+      anchors.topMargin : 10
+      spacing : 20
+      Row
+      {
+        spacing : 20
+        width:idEditDlg.width - 40
+        height: idTextEdit3.height
+
+        Label
+        {
+          color:"white"
+          id:idAddInfo
+          text: "Additional Info"
+        }
+
+        InputTextQuiz
+        {
+          id:idTextEdit3
+          width: parent.width - idAddInfo.width - 20
+        }
+      }
+
+
+      Row
+      {
+        spacing : 20
+        width:parent.width
+        height: idTextEdit3.height
+        InputTextQuiz
+        {
+          id:idTextEdit1
+          width: parent.width / 2 - 10
+        }
+        InputTextQuiz
+        {
+          id:idTextEdit2
+          width: parent.width / 2 - 10
+        }
+      }
+
+    }
+
+
+    ButtonQuiz {
+      id:idBtnUpdate
+      width:n3BtnWidth
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: 20
+      anchors.right: idBtnDelete.left
+      anchors.rightMargin: 20
+      text:  "Update"
+      onClicked: {
+        QuizLib.updateQuiz()
+      }
+    }
+    ButtonQuiz {
+      id:idBtnDelete
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: 20
+      anchors.right: parent.right
+      anchors.rightMargin: 20
+      width:n3BtnWidth
+      text:  "Delete"
+      onClicked: {
+        QuizLib.deleteWordInQuiz()
+      }
     }
 
   }
