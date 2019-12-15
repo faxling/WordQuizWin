@@ -16,24 +16,6 @@ Item {
     anchors.topMargin: 20
     anchors.bottomMargin: 50
     anchors.fill: parent
-    Component
-    {
-      id:idHeaderGlos
-
-      Row {
-
-        TextList {
-          color: "steelblue"
-          width:150
-          text:  "word"
-        }
-
-        TextList {
-          color: "steelblue"
-          text: "answer"
-        }
-      }
-    }
 
 
     XmlListModel {
@@ -103,7 +85,7 @@ Item {
         id:idTextTrans
         text :"-"
         onClick: {
-          if (nLastSearch === 2)
+          if (nLastSearch === 1)
             idTextInput.text = idTextTrans.text
           else
             idTextInput2.text = idTextTrans.text
@@ -193,7 +175,6 @@ Item {
 
         }
       }
-
     }
 
     Row
@@ -269,6 +250,33 @@ Item {
       }
     }
 
+    Row {
+      id:idTableHeaderRow
+      spacing: 5
+      TextList {
+        id:idHeader1Text
+        color:"steelblue"
+        font.bold:bQSort
+        width:n25BtnWidth
+        text:  "Question"
+        onClick: {
+          bQSort = true
+          glosModel.sortModel()
+        }
+      }
+
+      TextList {
+        color:"steelblue"
+        font.bold:!bQSort
+        width:n25BtnWidth
+        text: "Answer"
+        onClick: {
+          bQSort = false
+          glosModel.sortModel()
+        }
+      }
+    }
+
 
     ListViewHi {
       id:idGlosList
@@ -281,8 +289,6 @@ Item {
         idWindow.glosListView = idGlosList
       }
 
-      header:idHeaderGlos
-
       model: glosModel
       delegate: Row {
         spacing:5
@@ -292,13 +298,17 @@ Item {
           text:  question
           color: state1 === 0 ? "black" : "green"
           onClick: idTextInput.text = question
+          onPressAndHold: idTextInput.text = question
         }
 
         TextList {
-          width:idGlosList.width  / 3
           id:idAnswer
+          width:idGlosList.width  / 3
           text: answer
+          font.bold: extra.length > 0
+          color: state1 === 0 ? "black" : "green"
           onClick: idTextInput2.text = answer
+          onPressAndHold: idTextInput2.text = answer
         }
 
         ButtonQuizImg
@@ -357,7 +367,6 @@ Item {
         {
           QuizLib.reverseQuiz()
         }
-
       }
 
       ButtonQuiz
@@ -368,7 +377,6 @@ Item {
           MyDownloader.downLoadAllSpeech(glosModel, sLangLang);
         }
       }
-
     }
   }
 
@@ -422,15 +430,14 @@ Item {
         InputTextQuiz
         {
           id:idTextEdit1
-          width: parent.width / 2 - 10
+          width: parent.width / 2 - 20
         }
         InputTextQuiz
         {
           id:idTextEdit2
-          width: parent.width / 2 - 10
+          width: parent.width / 2 - 20
         }
       }
-
     }
 
 

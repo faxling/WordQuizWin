@@ -13,6 +13,7 @@ Item
       code:""
       state1:""
       desc1:""
+      date1:""
     }
   }
 
@@ -293,17 +294,18 @@ Item
     }
 
   }
-  Rectangle{
+  RectRounded{
     id:idExport
     y:20
     visible: false;
-    color: "steelblue"
     width:parent.width
     height:170
 
+    onCloseClicked:  idExport.visible = false
 
-    TextList {
+    WhiteText {
       x:20
+      y:30
       id:idExportTitle
       text:"Add a description off the quiz '" +sQuizName + "'"
     }
@@ -314,7 +316,7 @@ Item
       anchors.top :idExportTitle.bottom
     }
 
-    TextList {
+    WhiteText {
       id:idExportPwd
       x:20
       anchors.top :idTextInputQuizDesc.bottom
@@ -340,9 +342,9 @@ Item
       id:idUpdateBtn
       text: "Update"
       anchors.bottom: parent.bottom
-      anchors.bottomMargin: 20
+      anchors.bottomMargin: 10
       anchors.right: idExportBtn.left
-      anchors.rightMargin: 20
+      anchors.rightMargin: 10
       onClicked:
       {
         bProgVisible = true
@@ -356,27 +358,13 @@ Item
       id:idExportBtn
       text: "Upload"
       anchors.bottom: parent.bottom
-      anchors.bottomMargin: 20
-      anchors.right: idCancelExport.left
-      anchors.rightMargin: 20
+      anchors.bottomMargin: 10
+      anchors.right: parent.right
+      anchors.rightMargin: 10
       onClicked:
       {
         bProgVisible = true
         MyDownloader.exportCurrentQuiz( glosModel, sQuizName,sLangLang, idTextInputQuizPwd.displayText, idTextInputQuizDesc.displayText )
-      }
-    }
-
-    ButtonQuiz
-    {
-      id:idCancelExport
-      text: "Cancel"
-      anchors.bottom: parent.bottom
-      anchors.right: parent.right
-      anchors.bottomMargin: 20
-      anchors.rightMargin: 20
-      onClicked:
-      {
-        idExport.visible = false
       }
     }
   }
@@ -387,7 +375,30 @@ Item
     y:20
     visible: false;
     width:parent.width
-    height:200
+    height:250
+    onCloseClicked:  {
+      idPwdDialog.visible = false;
+      idDeleteQuiz.bProgVisible = false
+      idImport.visible = false
+      idPwdTextInput.text = ""
+    }
+    WhiteText
+    {
+      id:idDescText
+      anchors.top :idImportTitle.bottom
+      x:20
+      text:"---"
+    }
+
+    WhiteText
+    {
+      id:idDescDate
+      font.pointSize: 9
+      anchors.top :idDescText.bottom
+      x:20
+      text:"-"
+    }
+
     TextList {
       id:idImportMsg
       x:70
@@ -402,14 +413,6 @@ Item
       text:"Available Quiz"
     }
 
-    Text
-    {
-      id:idDescText
-      anchors.top :idImportTitle.bottom
-      x:20
-      text:"---"
-    }
-
     TextList {
       anchors.right: parent.right
       anchors.rightMargin:30
@@ -420,10 +423,10 @@ Item
     ListViewHi
     {
       id:idServerListView
-      y:50
+      y:70
       x:10
       width:idImport.width - 20
-      height:parent.height - 90
+      height:parent.height - 115
       model: idServerQModel
       delegate: Item {
         height :25
@@ -431,7 +434,7 @@ Item
         width:idServerListView.width
         Row
         {
-          TextList {
+          WhiteText {
             width: nW *4
             id:idTextQname
             text:qname
@@ -439,25 +442,22 @@ Item
             {
               idImportMsg.text = ""
               idDescText.text = desc1
+              idDescDate.text = date1
               idImport.sSelectedQ = qname;
               idServerListView.currentIndex = index
             }
           }
 
-          Text
+          WhiteText
           {
             width:nW
             text:code
-            font.pointSize: idTextQname.font.pointSize
-            height:parent.height
           }
 
-          Text
+          WhiteText
           {
             width:nW
             text:state1
-            font.pointSize: idTextQname.font.pointSize
-            height:parent.height
           }
         }
       }
@@ -518,7 +518,7 @@ Item
     ButtonQuiz
     {
       id:idLoadQuiz
-      text: "Load"
+      text: "Download"
       anchors.bottom: parent.bottom
       anchors.bottomMargin: 10
       anchors.right: idCancelLoad.left
@@ -528,22 +528,6 @@ Item
         bProgVisible = true
         idTextInputQuizName.text = idImport.sSelectedQ
         MyDownloader.importQuiz(idImport.sSelectedQ)
-      }
-    }
-
-    ButtonQuiz
-    {
-      id:idCancelLoad
-      text: "Cancel"
-      anchors.bottom: parent.bottom
-      anchors.right: parent.right
-      anchors.bottomMargin: 10
-      anchors.rightMargin: 20
-      onClicked:
-      {
-        idPwdDialog.visible = false;
-        idDeleteQuiz.bProgVisible = false
-        idImport.visible = false
       }
     }
   }

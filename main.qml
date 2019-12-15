@@ -34,6 +34,7 @@ Window {
   property string sQuizName : "-"
   property string sScoreText : "-"
   property int nDbNumber : 0;
+
   property int nQuizIndex: 1
   property int n3BtnWidth: idTabMain.width / 3 - 8
   property int n4BtnWidth: idTabMain.width / 4 - 7
@@ -65,27 +66,13 @@ Window {
     function sortModel()
     {
 
+
       db.transaction(
-            function(tx) {
-              glosModel.clear();
-
-              var rs = tx.executeSql("SELECT * FROM Glosa" + nDbNumber + " ORDER BY " + sQSort);
-
-              for(var i = 0; i < rs.rows.length; i++) {
-
-                var sA;
-                var sE = "";
-                var ocA = rs.rows.item(i).answer.split("###")
-                sA = ocA[0]
-                if (ocA.length > 1)
-                  sE = ocA[1]
-
-                glosModel.append({"number": rs.rows.item(i).number, "question": rs.rows.item(i).quizword , "answer": sA, "extra": sE,  "state1" : rs.rows.item(i).state })
-
-              }
-            }
+            function(tx) {QuizLib.loadFromDb(tx)}
             )
+
     }
+
   }
   ListModel {
     id: glosModelWorkingRev

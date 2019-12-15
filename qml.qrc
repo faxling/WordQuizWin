@@ -20,5 +20,6 @@
         <file>quit.png</file>
         <file>RectRounded.qml</file>
         <file>info.png</file>
+        <file>WhiteText.qml</file>
     </qresource>
 </RCC>

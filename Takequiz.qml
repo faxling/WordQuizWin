@@ -19,6 +19,30 @@ Rectangle {
       width:idView.width
       height:idView.height
       color:"mediumspringgreen"
+
+      ButtonQuizImg
+      {
+        id:idInfoBtn
+        anchors.left:  parent.left
+        anchors.leftMargin:  20
+        anchors.top:  parent.top
+        anchors.topMargin:  20
+        source:"qrc:info.png"
+        visible :extra.length > 0
+        onClicked: idTextExtra.visible = !idTextExtra.visible
+      }
+
+      Text
+      {
+        anchors.left: idInfoBtn.right
+        anchors.leftMargin:  20
+        anchors.verticalCenter: idInfoBtn.verticalCenter
+        id:idTextExtra
+        visible:false
+        font.pointSize: 12
+        text: extra
+      }
+
       Column
       {
         height:200
@@ -33,22 +57,7 @@ Rectangle {
           text : question
         }
 
-        ButtonQuizImg
-        {
-          anchors.horizontalCenter: parent.horizontalCenter
-          source:"qrc:info.png"
-          visible :extra.length > 0
-          onClicked: idTextExtra.visible = !idTextExtra.visible
-        }
 
-        Text
-        {
-          anchors.horizontalCenter: parent.horizontalCenter
-          id:idTextExtra
-          visible:false
-          font.pointSize: 12
-          text: extra
-        }
         ButtonQuizImg
         {
           anchors.horizontalCenter: parent.horizontalCenter
