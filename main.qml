@@ -119,8 +119,8 @@ Window {
     QuizLib.getAndInitDb()
   }
 
-  width:555
-  height:700
+  width:570
+  height:730
   visible: true
   Item
   {

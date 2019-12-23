@@ -98,13 +98,13 @@ Item {
       spacing:20
       InputTextQuiz
       {
-        width:idEditQuiz.width / 2 -10
+        width:idEditQuiz.width / 2 -15
         text:""
         id:idTextInput
       }
       InputTextQuiz
       {
-        width:idEditQuiz.width / 2 -10
+        width:idEditQuiz.width / 2 -15
         text:""
         id:idTextInput2
       }
@@ -324,6 +324,7 @@ Item {
             idTextEdit1.text = question
             idTextEdit2.text = answer
             idTextEdit3.text = extra
+            idGlosState.checked = state1 != 0
             idGlosList.currentIndex = index
           }
         }
@@ -430,16 +431,31 @@ Item {
         InputTextQuiz
         {
           id:idTextEdit1
-          width: parent.width / 2 - 20
+          width: parent.width / 2 - 10
         }
         InputTextQuiz
         {
           id:idTextEdit2
-          width: parent.width / 2 - 20
+          width: parent.width / 2 - 10
         }
       }
     }
+    Label
+    {
 
+      anchors.verticalCenter: idBtnUpdate.verticalCenter
+      anchors.right: idGlosState.left
+      anchors.rightMargin: 20
+      color:"white"
+      text: "Done:"
+    }
+    CheckBox
+    {
+      id:idGlosState
+      anchors.verticalCenter: idBtnUpdate.verticalCenter
+      anchors.right: idBtnUpdate.left
+      anchors.rightMargin: 20
+    }
 
     ButtonQuiz {
       id:idBtnUpdate
@@ -465,7 +481,6 @@ Item {
         QuizLib.deleteWordInQuiz()
       }
     }
-
   }
 }
 

@@ -5,6 +5,7 @@ import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
 Rectangle {
   id:idRectTakeQuiz
+  property bool bExtraInfoVisible : false
   width:400
   height:400
   // May be the filler is calculated (PathLen - NoElem*sizeElem) /  (NoElem )
@@ -29,7 +30,7 @@ Rectangle {
         anchors.topMargin:  20
         source:"qrc:info.png"
         visible :extra.length > 0
-        onClicked: idTextExtra.visible = !idTextExtra.visible
+        onClicked: bExtraInfoVisible = true
       }
 
       Text
@@ -38,7 +39,7 @@ Rectangle {
         anchors.leftMargin:  20
         anchors.verticalCenter: idInfoBtn.verticalCenter
         id:idTextExtra
-        visible:false
+        visible:bExtraInfoVisible
         font.pointSize: 12
         text: extra
       }

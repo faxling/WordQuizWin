@@ -498,7 +498,7 @@ Item
       text: "Remove"
       anchors.bottom: parent.bottom
       anchors.bottomMargin: 10
-      anchors.right: idLoadQuiz.left
+      anchors.right: parent.right
       anchors.rightMargin: 20
       onClicked:
       {
@@ -521,7 +521,7 @@ Item
       text: "Download"
       anchors.bottom: parent.bottom
       anchors.bottomMargin: 10
-      anchors.right: idCancelLoad.left
+      anchors.right: idDeleteQuiz.left
       anchors.rightMargin: 20
       onClicked:
       {
