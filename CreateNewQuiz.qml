@@ -104,7 +104,7 @@ Item
           glosModelIndex.setProperty(idQuizList.currentIndex,"quizname", idTextInputQuizName.text)
           db.transaction(
                 function(tx) {
-                  var nId = glosModelIndex.get(idQuizList.currentIndex).dbnumber;
+                  var nId = glosModelIndex.get(idQuizList.currentIndex).number;
                   tx.executeSql('UPDATE GlosaDbIndex SET quizname=? WHERE dbnumber=?',[idTextInputQuizName.text, nId]);
                   idTextSelected.text = idTextInputQuizName.text
                 }
@@ -271,9 +271,9 @@ Item
           {
             db.transaction(
                   function(tx) {
-                    tx.executeSql('DELETE FROM GlosaDbIndex WHERE dbnumber = ?',[dbnumber]);
-                    tx.executeSql('DROP TABLE Glosa'+dbnumber);
-                    tx.executeSql('DELETE FROM GlosaDbDesc WHERE dbnumber = ?',[dbnumber]);
+                    tx.executeSql('DELETE FROM GlosaDbIndex WHERE dbnumber = ?',[number]);
+                    tx.executeSql('DROP TABLE Glosa'+number);
+                    tx.executeSql('DELETE FROM GlosaDbDesc WHERE dbnumber = ?',[number]);
                   }
                   )
 

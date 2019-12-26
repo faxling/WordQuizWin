@@ -6,6 +6,7 @@ import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 Rectangle {
   id:idRectTakeQuiz
   property bool bExtraInfoVisible : false
+  property bool bAnswerVisible : false
   width:400
   height:400
   // May be the filler is calculated (PathLen - NoElem*sizeElem) /  (NoElem )
@@ -74,7 +75,7 @@ Rectangle {
           text:"Show Answer"
           onClicked:
           {
-            idQuizModel.setProperty(index,"visible1",true)
+            bAnswerVisible = true
           }
         }
         Item
@@ -85,7 +86,7 @@ Rectangle {
           Text
           {
             id:idTextAnswer
-            visible:visible1
+            visible:bAnswerVisible
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 25
@@ -95,7 +96,7 @@ Rectangle {
         ButtonQuizImg
         {
           anchors.horizontalCenter: parent.horizontalCenter
-          visible:bHasSpeech && visible1
+          visible:bHasSpeech && bAnswerVisible
           source:"qrc:horn.png"
           onClicked: MyDownloader.playWord(answer,sToLang)
         }

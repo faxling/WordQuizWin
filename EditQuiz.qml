@@ -8,6 +8,14 @@ import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 Item {
   id:idEditQuiz
   property int nLastSearch : 0
+  onVisibleChanged:
+  {
+    if (visible)
+    {
+      idGlosList.currentIndex = idWindow.nGlosaTakeQuizIndex
+      idGlosList.positionViewAtIndex(idWindow.nGlosaTakeQuizIndex, ListView.Center)
+    }
+  }
 
   Column
   {
@@ -261,7 +269,7 @@ Item {
         text:  "Question"
         onClick: {
           bQSort = true
-          glosModel.sortModel()
+          QuizLib.sortModel()
         }
       }
 
@@ -272,7 +280,7 @@ Item {
         text: "Answer"
         onClick: {
           bQSort = false
-          glosModel.sortModel()
+          QuizLib.sortModel()
         }
       }
     }
@@ -392,8 +400,8 @@ Item {
     onCloseClicked: idEditDlg.visible = false
     onVisibleChanged:
     {
-      if (!visible)
-        idGlosList.positionViewAtIndex(idGlosList.currentIndex, ListView.Center)
+
+
     }
 
     Column
@@ -467,6 +475,7 @@ Item {
       text:  "Update"
       onClicked: {
         QuizLib.updateQuiz()
+        idGlosList.positionViewAtIndex(idGlosList.currentIndex, ListView.Center)
       }
     }
     ButtonQuiz {

@@ -45,14 +45,14 @@ Window {
   property variant glosListView
   property variant quizListView
   property int nGlosaDbLastIndex:  -1
+  property int nGlosaTakeQuizIndex : -1
   onSScoreTextChanged:
   {
 
     db.transaction(
           function(tx) {
             tx.executeSql('UPDATE GlosaDbIndex SET state1=? WHERE dbnumber=?',[sScoreText, nDbNumber]);
-
-            var i = QuizLib.findDbNumberInModel(glosModelIndex, nDbNumber)
+            var i = MyDownloader.indexFromGlosNr(glosModelIndex, nDbNumber)
             glosModelIndex.setProperty(i,"state1", sScoreText)
 
           }
@@ -60,26 +60,17 @@ Window {
   }
 
   ListModel {
-    objectName:"glosModel"
     id: glosModel
-
-    function sortModel()
-    {
-
-
-      db.transaction(
-            function(tx) {QuizLib.loadFromDb(tx)}
-            )
-
-    }
-
   }
+
   ListModel {
     id: glosModelWorkingRev
   }
+
   ListModel {
     id: glosModelWorking
   }
+
   ListModel {
     id: glosModelIndex
   }
@@ -92,7 +83,6 @@ Window {
       answer:"-"
       extra:""
       number:0
-      visible1:false
       allok:false
     }
     ListElement {
@@ -100,7 +90,6 @@ Window {
       answer:"-"
       extra:""
       number:1
-      visible1:false
       allok:false
     }
     ListElement {
@@ -108,7 +97,6 @@ Window {
       answer:"-"
       extra:""
       number:2
-      visible1:false
       allok:false
     }
   }
@@ -178,7 +166,6 @@ Window {
         id:idTab2
         anchors.fill: parent
       }
-
     }
     Tab
     {
