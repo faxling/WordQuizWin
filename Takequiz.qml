@@ -9,6 +9,7 @@ Rectangle {
   property bool bAnswerVisible : false
   width:400
   height:400
+  Component.onCompleted: idWindow.oTakeQuiz = idRectTakeQuiz
   // May be the filler is calculated (PathLen - NoElem*sizeElem) /  (NoElem )
   Component
   {
