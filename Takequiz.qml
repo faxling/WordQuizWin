@@ -3,7 +3,7 @@ import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
-Rectangle {
+Item {
   id:idRectTakeQuiz
   property bool bExtraInfoVisible : false
   property bool bAnswerVisible : false
@@ -144,8 +144,6 @@ Rectangle {
     {
       QuizLib.calcAndAssigNextQuizWord(currentIndex)
     }
-
-    y:100
     clip:true
     width:idRectTakeQuiz.width
     height:idRectTakeQuiz.height

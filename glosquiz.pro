@@ -15,6 +15,7 @@ QML_IMPORT_PATH =
 # Default rules for deployment.
 include(deployment.pri)
 
+RC_FILE = ./glosquiz/Resource.rc
 
 HEADERS += \
     ../harbour-wordquiz/src/speechdownloader.h \

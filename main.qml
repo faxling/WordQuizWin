@@ -48,6 +48,7 @@ Window {
 
   property int nGlosaDbLastIndex:  -1
 
+  color: "#E5E7E9"
 
   property int nGlosaTakeQuizIndex : -1
   onSScoreTextChanged:
@@ -148,16 +149,18 @@ Window {
     anchors.fill : parent
     anchors.leftMargin : 50
     anchors.rightMargin : 50
-    anchors.bottomMargin:  150
+    anchors.bottomMargin:  50
     anchors.topMargin : 50
 
     Tab
     {
       title: "Create"
+
       active: true
       id:idTab1
       CreateNewQuiz
       {
+
         anchors.fill: parent
       }
     }
@@ -186,8 +189,8 @@ Window {
     style: TabViewStyle {
 
       tab: Rectangle {
-        color: styleData.selected ? "steelblue" :"lightsteelblue"
-        border.color:  "steelblue"
+        color: styleData.selected ? "#626567" :"#BDC3C7"
+        border.color:  "#797D7F"
         implicitWidth: idTabMain.width / 3
         implicitHeight: 40
         radius: 2
@@ -198,7 +201,7 @@ Window {
           color: styleData.selected ? "white" : "black"
         }
       }
-      frame: Rectangle { color: "white" }
+      frame: Rectangle { color: "#E5E7E9" }
     }
   }
 
