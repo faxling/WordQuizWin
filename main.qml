@@ -88,21 +88,18 @@ Window {
       answer:"-"
       extra:""
       number:0
-      allok:false
     }
     ListElement {
       question: "-"
       answer:"-"
       extra:""
       number:1
-      allok:false
     }
     ListElement {
       question: "-"
       answer:"-"
       extra:""
       number:2
-      allok:false
     }
   }
 

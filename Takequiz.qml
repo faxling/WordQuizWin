@@ -7,9 +7,17 @@ Item {
   id:idRectTakeQuiz
   property bool bExtraInfoVisible : false
   property bool bAnswerVisible : false
+  property bool bAllok : false
+
   width:400
   height:400
-  Component.onCompleted: idWindow.oTakeQuiz = idRectTakeQuiz
+  Component.onCompleted:
+  {
+    if (glosModelWorking.count === 0)
+      bAllok = true
+
+    idWindow.oTakeQuiz = idRectTakeQuiz
+  }
   // May be the filler is calculated (PathLen - NoElem*sizeElem) /  (NoElem )
   Component
   {
@@ -51,7 +59,7 @@ Item {
         height:200
         spacing: 20
         anchors.centerIn: parent
-        visible:!allok
+        visible:!bAllok
         Text
         {
           anchors.horizontalCenter: parent.horizontalCenter
@@ -103,7 +111,7 @@ Item {
         }
       }
       Image {
-        visible:allok
+        visible:bAllok
         anchors.centerIn: parent
         source: "qrc:thumb.png"
       }

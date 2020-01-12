@@ -332,11 +332,10 @@ Item {
             idTextEdit1.text = question
             idTextEdit2.text = answer
             idTextEdit3.text = extra
-            idGlosState.checked = state1 != 0
+            idGlosState.checked = state1 !== 0
             idGlosList.currentIndex = index
           }
         }
-
 
         ButtonQuizImg
         {
