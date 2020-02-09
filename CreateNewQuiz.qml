@@ -58,7 +58,7 @@ Item
   }
   Column
   {
-    spacing:20
+    spacing:10
     anchors.topMargin: 20
     anchors.rightMargin: 0
     anchors.bottomMargin: 50
@@ -165,7 +165,7 @@ Item
         }
 
         width:100
-        height:parent.height
+        height:parent.height + 2
         model: idLangModel
         delegate: TextList {
           text:lang
@@ -178,7 +178,7 @@ Item
       {
         id:idLangList2
         width:100
-        height:parent.height
+        height:parent.height + 2
         model: idLangModel
         onCurrentIndexChanged:
         {
@@ -194,22 +194,17 @@ Item
 
     TextList
     {
-      text:" "
-    }
-
-    TextList
-    {
-      height:5
+      id:idAvailableQuizText
+      height:10
       color: "steelblue"
       text:glosModelIndex.count + " Available Quiz's:"
     }
-
 
     ListViewHi
     {
       id:idQuizList
       width:parent.width
-      height:200
+      height:parent.height -idAvailableQuizText.y + 60
       model:glosModelIndex
       spacing:3
 

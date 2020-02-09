@@ -1,6 +1,6 @@
 
 ; NSIS Modern User Interface
-!define VERSION 2.0.0.5
+!define VERSION 2.0.0.6
 
 VIAddVersionKey "ProductName" "WordQuiz"
 VIAddVersionKey "Comments" "WordQuiz"
@@ -107,7 +107,7 @@ Section "WordQuiz" SecDummy
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\bearer\qgenericbearer.dll			
   File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\bearer\qnativewifibearer.dll	
 
-
+  CreateShortCut "$SMPROGRAMS\WordQuiz.lnk" "$INSTDIR\glosquiz.exe" 
   CreateShortCut "$DESKTOP\WordQuiz.lnk" "$INSTDIR\glosquiz.exe" 
    
   ; Store installation folder

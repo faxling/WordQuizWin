@@ -20,7 +20,7 @@ Item {
   Column
   {
     id:idGlosListHeader
-    spacing:20
+    spacing:10
     anchors.topMargin: 20
     anchors.bottomMargin: 50
     anchors.fill: parent
@@ -188,7 +188,7 @@ Item {
     Row
     {
       id:idDictionaryResultRow
-      height:150
+      height:100
       width:parent.width - 100
 
       Text
@@ -259,6 +259,7 @@ Item {
     }
 
     Row {
+      height :10
       id:idTableHeaderRow
       spacing: 5
       TextList {
@@ -285,12 +286,11 @@ Item {
       }
     }
 
-
     ListViewHi {
       id:idGlosList
       clip: true
       width:idEditQuiz.width  -20
-      height:200
+      height:parent.height - idTableHeaderRow.y
       spacing: 3
       Component.onCompleted:
       {
@@ -388,8 +388,6 @@ Item {
     }
   }
 
-
-
   RectRounded
   {
     id:idEditDlg
@@ -397,11 +395,6 @@ Item {
     width:parent.width
     height:190
     onCloseClicked: idEditDlg.visible = false
-    onVisibleChanged:
-    {
-
-
-    }
 
     Column
     {

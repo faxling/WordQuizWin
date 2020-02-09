@@ -13,10 +13,11 @@ Item {
   height:400
   Component.onCompleted:
   {
+
+    idWindow.oTakeQuiz = idRectTakeQuiz
     if (glosModelWorking.count === 0)
       bAllok = true
 
-    idWindow.oTakeQuiz = idRectTakeQuiz
   }
   // May be the filler is calculated (PathLen - NoElem*sizeElem) /  (NoElem )
   Component
@@ -74,7 +75,7 @@ Item {
           anchors.horizontalCenter: parent.horizontalCenter
           visible:bHasSpeech
           source:"qrc:horn.png"
-          onClicked: MyDownloader.playWord(question,sFromLang)
+          onClicked: MyDownloader.playWord(question,bIsReverse ? sToLang : sFromLang)
         }
 
         ButtonQuiz
@@ -107,7 +108,7 @@ Item {
           anchors.horizontalCenter: parent.horizontalCenter
           visible:bHasSpeech && bAnswerVisible
           source:"qrc:horn.png"
-          onClicked: MyDownloader.playWord(answer,sToLang)
+          onClicked: MyDownloader.playWord(answer,bIsReverse ? sFromLang : sToLang)
         }
       }
       Image {
@@ -136,7 +137,7 @@ Item {
         source:"qrc:left.png"
         onClicked:
         {
-           idView.incrementCurrentIndex()
+          idView.incrementCurrentIndex()
         }
       }
     }
@@ -145,7 +146,7 @@ Item {
   PathView
   {
     id:idView
-     property int nPreviousCurrentIndex
+    property int nPreviousCurrentIndex
     property int nLastIndex : 1
     onCurrentIndexChanged:
     {
