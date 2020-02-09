@@ -124,8 +124,7 @@ Item {
         source:"qrc:r.png"
         onClicked:
         {
-          var nI = (idView.currentIndex-1) % 3
-          idView.currentIndex = nI
+          idView.decrementCurrentIndex()
         }
       }
       ButtonQuizImg
@@ -137,8 +136,7 @@ Item {
         source:"qrc:left.png"
         onClicked:
         {
-          var nI = (idView.currentIndex+1) % 3
-          idView.currentIndex = nI
+           idView.incrementCurrentIndex()
         }
       }
     }
@@ -147,9 +145,13 @@ Item {
   PathView
   {
     id:idView
+     property int nPreviousCurrentIndex
     property int nLastIndex : 1
     onCurrentIndexChanged:
     {
+      if (currentIndex === nPreviousCurrentIndex)
+        return;
+      nPreviousCurrentIndex = currentIndex
       QuizLib.calcAndAssigNextQuizWord(currentIndex)
     }
     clip:true
