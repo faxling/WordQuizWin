@@ -21,5 +21,7 @@
         <file>RectRounded.qml</file>
         <file>info.png</file>
         <file>WhiteText.qml</file>
+        <file>thumb_small.png</file>
+        <file>horn_small.png</file>
     </qresource>
 </RCC>

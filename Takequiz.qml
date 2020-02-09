@@ -8,15 +8,18 @@ Item {
   property bool bExtraInfoVisible : false
   property bool bAnswerVisible : false
   property bool bAllok : false
-
+  property bool bTextMode : false
+  property bool bTextAnswerOk : false
+  property bool bMoving : false
   width:400
   height:400
   Component.onCompleted:
   {
+
+    idWindow.oTakeQuiz = idRectTakeQuiz
     if (glosModelWorking.count === 0)
       bAllok = true
 
-    idWindow.oTakeQuiz = idRectTakeQuiz
   }
   // May be the filler is calculated (PathLen - NoElem*sizeElem) /  (NoElem )
   Component
@@ -40,18 +43,64 @@ Item {
         anchors.topMargin:  20
         source:"qrc:info.png"
         visible :extra.length > 0
-        onClicked: bExtraInfoVisible = true
+        onClicked: bExtraInfoVisible = !bExtraInfoVisible
+      }
+
+      ButtonQuizImg
+      {
+        id:idTextBtn
+        anchors.right:  parent.right
+        anchors.rightMargin:  20
+        anchors.top:  parent.top
+        anchors.topMargin:  20
+        source:"qrc:edit.png"
+        onClicked: bTextMode = !bTextMode
+      }
+
+      ButtonQuizImg
+      {
+        id:idSoundBtn
+        visible : bTextAnswerOk && bTextMode
+        anchors.right:  parent.right
+        anchors.rightMargin:  20
+        anchors.top:  idTextBtn.bottom
+        anchors.topMargin:  20
+        source:"qrc:horn_small.png"
+        onClicked: MyDownloader.playWord(answer,bIsReverse ? sFromLang : sToLang )
       }
 
       Text
       {
+        id:idTextExtra
         anchors.left: idInfoBtn.right
         anchors.leftMargin:  20
         anchors.verticalCenter: idInfoBtn.verticalCenter
-        id:idTextExtra
         visible:bExtraInfoVisible
         font.pointSize: 12
         text: extra
+      }
+
+      Image {
+        anchors.left:  parent.left
+        anchors.leftMargin:  10
+        anchors.top:  idTextBtn.bottom
+        anchors.topMargin:  20
+        visible : bTextAnswerOk && bTextMode
+        source: "qrc:thumb_small.png"
+      }
+
+      TextField
+      {
+        id:idTextEditYourAnswer
+        y:50
+        anchors.horizontalCenter: parent.horizontalCenter
+        visible:bTextMode
+        width:parent.width  - 150
+        placeholderText : "your answer"
+        onTextChanged:
+        {
+          bTextAnswerOk =  QuizLib.isAnswerOk(text, answer)
+        }
       }
 
       Column
@@ -62,10 +111,11 @@ Item {
         visible:!bAllok
         Text
         {
-          anchors.horizontalCenter: parent.horizontalCenter
           id:idTextQuestion
+          anchors.horizontalCenter: parent.horizontalCenter
           font.pointSize: 25
           text : question
+          onTextChanged: idTextEditYourAnswer.text = ""
         }
 
 
@@ -74,7 +124,7 @@ Item {
           anchors.horizontalCenter: parent.horizontalCenter
           visible:bHasSpeech
           source:"qrc:horn.png"
-          onClicked: MyDownloader.playWord(question,sFromLang)
+          onClicked: MyDownloader.playWord(question,bIsReverse ? sToLang : sFromLang)
         }
 
         ButtonQuiz
@@ -87,6 +137,7 @@ Item {
             bAnswerVisible = true
           }
         }
+
         Item
         {
           height:50
@@ -102,13 +153,15 @@ Item {
             text : answer
           }
         }
+
         ButtonQuizImg
         {
           anchors.horizontalCenter: parent.horizontalCenter
           visible:bHasSpeech && bAnswerVisible
           source:"qrc:horn.png"
-          onClicked: MyDownloader.playWord(answer,sToLang)
+          onClicked: MyDownloader.playWord(answer,bIsReverse ? sFromLang : sToLang)
         }
+
       }
       Image {
         visible:bAllok
@@ -117,6 +170,7 @@ Item {
       }
       ButtonQuizImg
       {
+        enabled: idView.interactive
         anchors.bottomMargin: 20
         anchors.bottom: parent.bottom
         anchors.right:parent.right
@@ -124,19 +178,22 @@ Item {
         source:"qrc:r.png"
         onClicked:
         {
+          bMoving = true
           idView.decrementCurrentIndex()
         }
       }
       ButtonQuizImg
       {
+        enabled: idView.interactive
         anchors.bottomMargin: 20
         anchors.bottom: parent.bottom
         anchors.left:parent.left
-        anchors.leftMargin: 20
+        anchors.leftMargin: 10
         source:"qrc:left.png"
         onClicked:
         {
-           idView.incrementCurrentIndex()
+          bMoving = true
+          idView.incrementCurrentIndex()
         }
       }
     }
@@ -145,14 +202,30 @@ Item {
   PathView
   {
     id:idView
-     property int nPreviousCurrentIndex
+    property int nPreviousCurrentIndex
     property int nLastIndex : 1
+
+    interactive: bTextAnswerOk || !bTextMode || bAnswerVisible || bMoving || moving
+
+
+    Timer {
+      id:idTimer
+      interval: 500;
+      onTriggered: bMoving = false
+    }
+
     onCurrentIndexChanged:
     {
       if (currentIndex === nPreviousCurrentIndex)
+      {
+        // When klicking on buttons
+        console.log("currentIndex === ")
         return;
+      }
+      idTimer.start()
       nPreviousCurrentIndex = currentIndex
       QuizLib.calcAndAssigNextQuizWord(currentIndex)
+      bTextAnswerOk = false
     }
     clip:true
     width:idRectTakeQuiz.width

@@ -9,15 +9,15 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="128"
-   height="128"
+   width="64"
+   height="64"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="thumb.svg"
-   inkscape:export-filename="c:\Users\fraxl\Documents\qt\harbour-wordquiz\qml\pages\thumb.png"
-   inkscape:export-xdpi="281.25"
-   inkscape:export-ydpi="281.25">
+   inkscape:export-filename="c:\Users\fraxl\Documents\qt\glosquiz\thumb_small.png"
+   inkscape:export-xdpi="48"
+   inkscape:export-ydpi="48">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="6.796875"
-     inkscape:cx="41.048276"
-     inkscape:cy="66.832184"
+     inkscape:zoom="3.8290691"
+     inkscape:cx="44.055511"
+     inkscape:cy="62.565324"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -38,7 +38,9 @@
      inkscape:window-height="1057"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
-     inkscape:window-maximized="1">
+     inkscape:window-maximized="1"
+     units="px"
+     width="64mm">
     <inkscape:grid
        type="xygrid"
        id="grid2987"
@@ -63,17 +65,16 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-924.36218)">
+     transform="translate(0,-988.36217)">
     <path
-       style="fill:#008000;stroke:#008000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:0.62765956"
-       d="m 45,43 5,0 5,-5 5,-10 c 0,0 2.904573,-16.237108 8.23908,-17.057471 4.89459,-0.752711 4.887906,0.461635 6.616092,5.294253 1.368195,3.825955 -0.441379,7.206896 -0.441379,7.206896 L 70,48 c 0,0 20.761205,-3.826834 30,0 2.1776,0.901994 5,2.642977 5,5 0,2.357023 -5,5 -5,5 0,0 4.71697,1.034675 5,5 0.29425,4.12254 -5,5 -5,5 0,0 5,0.436081 5,5 0,3.681161 -5,5 -5,5 0,0 6.17603,1.208254 5,5 -3.99353,12.875943 -50,0 -50,0 L 45,78 z"
+       style="fill:#008000;fill-opacity:0.62765958;stroke:#008000;stroke-width:2.13986325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 21.651407,1013.3222 h 2.674829 l 2.674829,-2.6748 2.674829,-5.3496 c 0,0 1.553848,-8.68634 4.407626,-9.12521 2.618439,-0.40267 2.614863,0.24696 3.539384,2.83225 0.731937,2.04676 -0.236123,3.85546 -0.236123,3.85546 l -2.361229,13.1368 c 0,0 11.106535,-2.0472 16.048975,0 1.164941,0.4825 2.674829,1.4139 2.674829,2.6748 0,1.2609 -2.674829,2.6748 -2.674829,2.6748 0,0 2.523417,0.5536 2.674829,2.6749 0.157414,2.2054 -2.674829,2.6748 -2.674829,2.6748 0,0 2.674829,0.2333 2.674829,2.6748 0,1.9693 -2.674829,2.6749 -2.674829,2.6749 0,0 3.303965,0.6463 2.674829,2.6748 -2.136402,6.8882 -26.748291,0 -26.748291,0 l -5.349658,-2.6748 z"
        id="path2991"
        inkscape:connector-curvature="0"
-       transform="translate(0,924.36218)"
        sodipodi:nodetypes="ccccssccsscscscsccc" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 24.852874,962.21505 0,45.00005 20,0 0,-45.00005 c -6.748469,0 -16.066786,0 -20,0 z"
+       style="fill:none;stroke:#000000;stroke-width:2.13986325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 10.873384,1010.5687 v 24.0735 H 21.5727 v -24.0735 c -3.6102,0 -8.595181,0 -10.699316,0 z"
        id="path2985"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
