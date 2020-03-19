@@ -25,6 +25,8 @@ Window {
   property string sLangLangRev
   property string sToLang
   property string sFromLang
+  property string sQuestonLang : bIsReverse ? sToLang : sFromLang
+  property string sAnswerLang : bIsReverse ? sFromLang : sToLang
   property bool bIsReverse
   property bool bHasSpeech : sToLang !== "hu"
   property bool bHasSpeechFrom : sFromLang !=="hu"
@@ -45,7 +47,7 @@ Window {
   property variant glosListView
   property variant quizListView
   property variant oTakeQuiz
-
+  property bool bAllok : false
   property int nGlosaDbLastIndex:  -1
 
   color: "#E5E7E9"
@@ -80,29 +82,26 @@ Window {
     id: glosModelIndex
   }
 
+
   ListModel {
     id:idQuizModel
+    property string question
+    property string extra
+    property string answer
+    property int number
+
+    onQuestionChanged: MyDownloader.setImgWord(question,sQuestonLang )
 
     ListElement {
-      question: "-"
-      answer:"-"
-      extra:""
       number:0
     }
     ListElement {
-      question: "-"
-      answer:"-"
-      extra:""
       number:1
     }
     ListElement {
-      question: "-"
-      answer:"-"
-      extra:""
       number:2
     }
   }
-
 
   Component.onCompleted:
   {
@@ -157,7 +156,6 @@ Window {
       id:idTab1
       CreateNewQuiz
       {
-
         anchors.fill: parent
       }
     }

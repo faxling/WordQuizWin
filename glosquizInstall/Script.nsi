@@ -1,6 +1,6 @@
 
 ; NSIS Modern User Interface
-!define VERSION 2.0.0.6
+!define VERSION 2.0.0.7
 
 VIAddVersionKey "ProductName" "WordQuiz"
 VIAddVersionKey "Comments" "WordQuiz"

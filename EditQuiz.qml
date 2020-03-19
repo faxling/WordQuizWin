@@ -328,10 +328,10 @@ Item {
           onClicked:
           {
             idEditDlg.visible = true
-            idEditDlg.visible = true
             idTextEdit1.text = question
             idTextEdit2.text = answer
             idTextEdit3.text = extra
+            idWordImage.visible =  MyDownloader.hasImage(idTextEdit1.text,  sQuestonLang)
             idGlosState.checked = state1 !== 0
             idGlosList.currentIndex = index
           }
@@ -440,9 +440,18 @@ Item {
         }
       }
     }
-    Label
+    Image
     {
+      id:idWordImage
+      anchors.verticalCenter: idBtnUpdate.verticalCenter
+      anchors.left: parent.left
+      anchors.leftMargin: 20
+      source: "qrc:img.png"
 
+    }
+    Label
+
+    {
       anchors.verticalCenter: idBtnUpdate.verticalCenter
       anchors.right: idGlosState.left
       anchors.rightMargin: 20
@@ -480,6 +489,16 @@ Item {
       text:  "Delete"
       onClicked: {
         QuizLib.deleteWordInQuiz()
+      }
+    }
+
+    DropArea
+    {
+      anchors.fill: parent
+      onDropped:
+      {
+        MyDownloader.downloadImage(drop.urls, idTextEdit1.text, sFromLang , idTextEdit2.text,sToLang)
+        idWordImage.visible = true
       }
     }
   }

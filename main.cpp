@@ -62,7 +62,6 @@ int main(int argc, char *argv[])
   QObject::connect(&app,&QGuiApplication::aboutToQuit,&oLS, &LayoutSaver::aboutToQuit);
 
   qDebug() <<  "start wordquiz";
-  qDebug() << engine.offlineStoragePath();
 
   oLS.LoadLast();
 

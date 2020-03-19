@@ -7,7 +7,6 @@ Item {
   id:idRectTakeQuiz
   property bool bExtraInfoVisible : false
   property bool bAnswerVisible : false
-  property bool bAllok : false
   property bool bTextMode : false
   property bool bTextAnswerOk : false
   property bool bMoving : false
@@ -15,11 +14,7 @@ Item {
   height:400
   Component.onCompleted:
   {
-
     idWindow.oTakeQuiz = idRectTakeQuiz
-    if (glosModelWorking.count === 0)
-      bAllok = true
-
   }
   // May be the filler is calculated (PathLen - NoElem*sizeElem) /  (NoElem )
   Component
@@ -42,7 +37,7 @@ Item {
         anchors.top:  parent.top
         anchors.topMargin:  20
         source:"qrc:info.png"
-        visible :extra.length > 0
+        visible :idQuizModel.extra.length > 0
         onClicked: bExtraInfoVisible = !bExtraInfoVisible
       }
 
@@ -66,7 +61,7 @@ Item {
         anchors.top:  idTextBtn.bottom
         anchors.topMargin:  20
         source:"qrc:horn_small.png"
-        onClicked: MyDownloader.playWord(answer,bIsReverse ? sFromLang : sToLang )
+        onClicked: MyDownloader.playWord(answer,sAnswerLang )
       }
 
       Text
@@ -77,7 +72,7 @@ Item {
         anchors.verticalCenter: idInfoBtn.verticalCenter
         visible:bExtraInfoVisible
         font.pointSize: 12
-        text: extra
+        text: idQuizModel.extra
       }
 
       Image {
@@ -93,28 +88,49 @@ Item {
       {
         id:idTextEditYourAnswer
         y:50
+        z:2
         anchors.horizontalCenter: parent.horizontalCenter
         visible:bTextMode
         width:parent.width  - 150
         placeholderText : "your answer"
         onTextChanged:
         {
-          bTextAnswerOk =  QuizLib.isAnswerOk(text, answer)
+          bTextAnswerOk =  QuizLib.isAnswerOk(text, idQuizModel.answer)
+        }
+      }
+
+      DropArea
+      {
+        anchors.fill: parent
+        onDropped:
+        {
+          MyDownloader.downloadImage(drop.urls, idQuizModel.question, sQuestonLang , idQuizModel.answer,sAnswerLang)
         }
       }
 
       Column
       {
-        height:200
+        id:idQuizColumn
         spacing: 20
-        anchors.centerIn: parent
-        visible:!bAllok
+        anchors.horizontalCenter:  parent.horizontalCenter
+        y : parent.height / 4
+        visible:!idWindow.bAllok
+
+        Image
+        {
+          id:idWordImage
+          anchors.horizontalCenter: parent.horizontalCenter
+          visible : MyDownloader.hasImg
+          source : MyDownloader.urlImg
+        }
+
+
         Text
         {
           id:idTextQuestion
           anchors.horizontalCenter: parent.horizontalCenter
           font.pointSize: 25
-          text : question
+          text : idQuizModel.question
           onTextChanged: idTextEditYourAnswer.text = ""
         }
 
@@ -124,7 +140,7 @@ Item {
           anchors.horizontalCenter: parent.horizontalCenter
           visible:bHasSpeech
           source:"qrc:horn.png"
-          onClicked: MyDownloader.playWord(question,bIsReverse ? sToLang : sFromLang)
+          onClicked: MyDownloader.playWord(question,sQuestonLang)
         }
 
         ButtonQuiz
@@ -134,7 +150,7 @@ Item {
           text:"Show Answer"
           onClicked:
           {
-            bAnswerVisible = true
+            bAnswerVisible = !bAnswerVisible
           }
         }
 
@@ -150,7 +166,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 25
-            text : answer
+            text : idQuizModel.answer
           }
         }
 
@@ -159,12 +175,12 @@ Item {
           anchors.horizontalCenter: parent.horizontalCenter
           visible:bHasSpeech && bAnswerVisible
           source:"qrc:horn.png"
-          onClicked: MyDownloader.playWord(answer,bIsReverse ? sFromLang : sToLang)
+          onClicked: MyDownloader.playWord(answer,sAnswerLang)
         }
 
       }
       Image {
-        visible:bAllok
+        visible:idWindow.bAllok
         anchors.centerIn: parent
         source: "qrc:thumb.png"
       }
@@ -219,7 +235,6 @@ Item {
       if (currentIndex === nPreviousCurrentIndex)
       {
         // When klicking on buttons
-        console.log("currentIndex === ")
         return;
       }
       idTimer.start()
