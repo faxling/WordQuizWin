@@ -119,6 +119,7 @@ Item {
         Image
         {
           id:idWordImage
+          cache:false
           anchors.horizontalCenter: parent.horizontalCenter
           visible : MyDownloader.hasImg
           source : MyDownloader.urlImg

@@ -180,7 +180,6 @@ Window {
       }
     }
 
-
     style: TabViewStyle {
 
       tab: Rectangle {

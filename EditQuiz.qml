@@ -422,24 +422,24 @@ Item {
         }
       }
 
-
       Row
       {
         spacing : 20
-        width:parent.width
+        width:idEditDlg.width
         height: idTextEdit3.height
         InputTextQuiz
         {
           id:idTextEdit1
-          width: parent.width / 2 - 10
+          width: idEditDlg.width / 2 - 30
         }
         InputTextQuiz
         {
           id:idTextEdit2
-          width: parent.width / 2 - 10
+          width: idEditDlg.width / 2 - 30
         }
       }
     }
+
     Image
     {
       id:idWordImage
