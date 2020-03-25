@@ -331,7 +331,8 @@ Item {
             idTextEdit1.text = question
             idTextEdit2.text = answer
             idTextEdit3.text = extra
-            idWordImage.visible =  MyDownloader.hasImage(idTextEdit1.text,  sQuestonLang)
+            idEditWordImage.visible =  MyDownloader.hasImage(idTextEdit1.text,  sFromLang)
+            idEditWordImage.source = idEditWordImage.visible ? MyDownloader.imageSrc(idTextEdit1.text,  sFromLang) : ""
             idGlosState.checked = state1 !== 0
             idGlosList.currentIndex = index
           }
@@ -442,12 +443,14 @@ Item {
 
     Image
     {
-      id:idWordImage
+      id:idEditWordImage
+      cache:false
+      fillMode: Image.PreserveAspectFit
       anchors.verticalCenter: idBtnUpdate.verticalCenter
       anchors.left: parent.left
-      anchors.leftMargin: 20
-      source: "qrc:img.png"
-
+      anchors.leftMargin: 5
+      height:64
+      width:64
     }
     Label
 
@@ -492,13 +495,23 @@ Item {
       }
     }
 
+    function imgDownloaded()
+    {
+      idEditWordImage.visible = true
+      idEditWordImage.source = ""
+      idEditWordImage.source = MyDownloader.imageSrc(idTextEdit1.text,  sFromLang)
+    }
+
     DropArea
     {
+      Component.onCompleted:
+      {
+        MyDownloader.downloadedImgSignal.connect(idEditDlg.imgDownloaded)
+      }
       anchors.fill: parent
       onDropped:
       {
-        MyDownloader.downloadImage(drop.urls, idTextEdit1.text, sFromLang , idTextEdit2.text,sToLang)
-        idWordImage.visible = true
+        MyDownloader.downloadImage(drop.urls, idTextEdit1.text, sFromLang , idTextEdit2.text,sToLang,true)
       }
     }
   }

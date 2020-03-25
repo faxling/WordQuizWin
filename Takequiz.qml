@@ -9,6 +9,7 @@ Item {
   property bool bAnswerVisible : false
   property bool bTextMode : false
   property bool bTextAnswerOk : false
+  property bool bImageMode : false
   property bool bMoving : false
   width:400
   height:400
@@ -44,6 +45,7 @@ Item {
       ButtonQuizImg
       {
         id:idTextBtn
+        visible : !idWindow.bAllok
         anchors.right:  parent.right
         anchors.rightMargin:  20
         anchors.top:  parent.top
@@ -54,11 +56,24 @@ Item {
 
       ButtonQuizImg
       {
-        id:idSoundBtn
-        visible : bTextAnswerOk && bTextMode
+        id:idImgBtn
+        visible : !idWindow.bAllok
         anchors.right:  parent.right
         anchors.rightMargin:  20
         anchors.top:  idTextBtn.bottom
+        anchors.topMargin:  20
+        opacity : bImageMode ? 1 : 0.5
+        source:"qrc:img.png"
+        onClicked: bImageMode = !bImageMode
+      }
+
+      ButtonQuizImg
+      {
+        id:idSoundBtn
+        visible : bTextAnswerOk && bTextMode &&  !idWindow.bAllok
+        anchors.right:  parent.right
+        anchors.rightMargin:  20
+        anchors.top:  idImgBtn.bottom
         anchors.topMargin:  20
         source:"qrc:horn_small.png"
         onClicked: MyDownloader.playWord(answer,sAnswerLang )
@@ -113,15 +128,16 @@ Item {
         id:idQuizColumn
         spacing: 20
         anchors.horizontalCenter:  parent.horizontalCenter
-        y : parent.height / 4
+        y : parent.height / 5
         visible:!idWindow.bAllok
 
         Image
         {
           id:idWordImage
           cache:false
+          fillMode: Image.PreserveAspectFit
           anchors.horizontalCenter: parent.horizontalCenter
-          visible : MyDownloader.hasImg
+          visible : bImageMode && MyDownloader.hasImg
           source : MyDownloader.urlImg
         }
 
@@ -141,7 +157,7 @@ Item {
           anchors.horizontalCenter: parent.horizontalCenter
           visible:bHasSpeech
           source:"qrc:horn.png"
-          onClicked: MyDownloader.playWord(question,sQuestonLang)
+          onClicked: MyDownloader.playWord(idQuizModel.question,sQuestonLang)
         }
 
         ButtonQuiz
@@ -176,7 +192,7 @@ Item {
           anchors.horizontalCenter: parent.horizontalCenter
           visible:bHasSpeech && bAnswerVisible
           source:"qrc:horn.png"
-          onClicked: MyDownloader.playWord(answer,sAnswerLang)
+          onClicked: MyDownloader.playWord(idQuizModel.answer,sAnswerLang)
         }
 
       }
