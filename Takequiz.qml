@@ -11,6 +11,7 @@ Item {
   property bool bTextAnswerOk : false
   property bool bImageMode : false
   property bool bMoving : false
+  property bool bVoiceMode : false
   width:400
   height:400
   Component.onCompleted:
@@ -52,6 +53,16 @@ Item {
         anchors.topMargin:  20
         source:"qrc:edit.png"
         onClicked: bTextMode = !bTextMode
+      }
+      ButtonQuizImg
+      {
+        id:idVoiceModeBtn
+        anchors.left:  parent.left
+        anchors.leftMargin:  20
+        anchors.top:  idInfoBtn.bottom
+        anchors.topMargin:  20
+        source:"qrc:horn_small.png"
+        onClicked: bVoiceMode = !bVoiceMode
       }
 
       ButtonQuizImg
@@ -145,6 +156,7 @@ Item {
         Text
         {
           id:idTextQuestion
+          opacity: bVoiceMode ? 0 : 1
           anchors.horizontalCenter: parent.horizontalCenter
           font.pointSize: 25
           text : idQuizModel.question
