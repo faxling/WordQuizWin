@@ -1,6 +1,6 @@
 
 ; NSIS Modern User Interface
-!define VERSION 2.0.0.9
+!define VERSION 2.0.0.10
 
 VIAddVersionKey "ProductName" "WordQuiz"
 VIAddVersionKey "Comments" "WordQuiz"
@@ -49,66 +49,22 @@ VIAddVersionKey "PrivateBuild" "${VERSION} ${__DATE__} ${__TIME__}"
 
 ; --------------------------------
 ; Installer Sections
+; use tool windeployqt.exe c:\Users\fraxl\Documents\qt\build-glosquiz-Desktop_Qt_5_14_2_MinGW_64_bit-Release\release\glosquiz.exe --qmldir c:\Users\fraxl\Documents\qt\glosquiz
+; to generate install files
 
 Section "WordQuiz" SecDummy
 
   SetOutPath "$INSTDIR"
   
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Core.dll
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Gui.dll
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Multimedia.dll	
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Network.dll	
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Qml.dll									
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Quick.dll								
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Sql.dll									
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Svg.dll									
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5Widgets.dll					     	
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\Qt5XmlPatterns.dll					
+   File /r c:\QtNy\5.14.2\mingw73_64\Deploy	
+   Rename "$INSTDIR\Deploy" "$INSTDIR\Bin"
+   SetOutPath "$INSTDIR\Bin"
 
-  File c:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\libeay32.dll 
-  File c:\Qt\Qt5.5.1\5.5\msvc2013_64\bin\ssleay32.dll  
+  File c:\Users\fraxl\Documents\qt\build-glosquiz-Desktop_Qt_5_14_2_MinGW_64_bit-Release\release\glosquiz.exe	
 
- 	
-  File /r C:\Qt\Deploy\QtQuick.2		
-  File /r C:\Qt\Deploy\Controls	
-  File /r C:\Qt\Deploy\LocalStorage
-  File /r C:\Qt\Deploy\Window.2
-  File /r C:\Qt\Deploy\XmlListModel
-             
  
-
-  File c:\Users\fraxl\Documents\qt\build-glosquiz-Desktop_Qt_5_5_1_MSVC2013_64bit-Release\release\glosquiz.exe	
-
-  SetOutPath "$INSTDIR\imageformats"
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qdds.dll						
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qgif.dll						
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qicns.dll					
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qico.dll						
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qjp2.dll						
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qjpeg.dll					
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qmng.dll						
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qsvg.dll						
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qtga.dll						
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qtiff.dll					
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qwbmp.dll					
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\imageformats\qwebp.dll				
-	
-  SetOutPath "$INSTDIR\platforms"
-
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\platforms\qwindows.dll		
-
-  SetOutPath "$INSTDIR\audio"
-
-  File 	"C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\audio\qtaudio_windows.dll"
-
-  SetOutPath "$INSTDIR\sqldrivers"
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\sqldrivers\qsqlite.dll		
-  SetOutPath "$INSTDIR\bearer"
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\bearer\qgenericbearer.dll			
-  File C:\Qt\Qt5.5.1\5.5\msvc2013_64\plugins\bearer\qnativewifibearer.dll	
-
-  CreateShortCut "$SMPROGRAMS\WordQuiz.lnk" "$INSTDIR\glosquiz.exe" 
-  CreateShortCut "$DESKTOP\WordQuiz.lnk" "$INSTDIR\glosquiz.exe" 
+  CreateShortCut "$SMPROGRAMS\WordQuiz.lnk" "$INSTDIR\bin\glosquiz.exe" 
+  CreateShortCut "$DESKTOP\WordQuiz.lnk" "$INSTDIR\\bin\glosquiz.exe" 
    
   ; Store installation folder
   WriteRegStr HKCU "Software\WordQuiz" "" $INSTDIR

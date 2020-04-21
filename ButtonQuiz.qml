@@ -3,10 +3,10 @@ import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 Button
 {
-  height:32
-  width:100
+  width:n4BtnWidth
+  height : nBtnHeight
   property bool bProgVisible
-
+  property int  nButtonFontSize : nFontSize
   style: ButtonStyle {
           background: Rectangle {
               border.width: control.activeFocus ? 2 : 1
@@ -25,5 +25,12 @@ Button
 
               }
           }
+          label: Text {
+                  renderType: Text.NativeRendering
+                  verticalAlignment: Text.AlignVCenter
+                  horizontalAlignment: Text.AlignHCenter
+                  font.pointSize: nButtonFontSize
+                  text: control.text
+                }
       }
 }

@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.1
 
 ListView
 {
@@ -8,4 +9,5 @@ ListView
     opacity:0.5
     color: "#009bff"
   }
+   ScrollBar.vertical: ScrollBar {}
 }

@@ -12,8 +12,6 @@ Item {
   property bool bImageMode : false
   property bool bMoving : false
   property bool bVoiceMode : false
-  width:400
-  height:400
   Component.onCompleted:
   {
     idWindow.oTakeQuiz = idRectTakeQuiz
@@ -29,7 +27,7 @@ Item {
       radius:10
       width:idView.width
       height:idView.height
-      color:"mediumspringgreen"
+      gradient:  "NearMoon"
 
       ButtonQuizImg
       {
@@ -156,7 +154,7 @@ Item {
         Text
         {
           id:idTextQuestion
-          opacity: bVoiceMode ? 0 : 1
+          opacity: ( bVoiceMode || idWindow.bAllok ) ? 0 : 1
           anchors.horizontalCenter: parent.horizontalCenter
           font.pointSize: 25
           text : idQuizModel.question
@@ -164,8 +162,10 @@ Item {
         }
 
 
-        ButtonQuizImg
+        ButtonQuizImgLarge
         {
+          height : nBtnHeight
+          width : nBtnHeight
           anchors.horizontalCenter: parent.horizontalCenter
           visible:bHasSpeech
           source:"qrc:horn.png"
@@ -175,8 +175,10 @@ Item {
         ButtonQuiz
         {
           id:idBtnAnswer
+          width : n25BtnWidth
           anchors.horizontalCenter: parent.horizontalCenter
           text:"Show Answer"
+          nButtonFontSize : 20
           onClicked:
           {
             bAnswerVisible = !bAnswerVisible
@@ -199,7 +201,7 @@ Item {
           }
         }
 
-        ButtonQuizImg
+        ButtonQuizImgLarge
         {
           anchors.horizontalCenter: parent.horizontalCenter
           visible:bHasSpeech && bAnswerVisible

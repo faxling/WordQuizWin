@@ -24,5 +24,7 @@
         <file>thumb_small.png</file>
         <file>horn_small.png</file>
         <file>img.png</file>
+        <file>TextListLarge.qml</file>
+        <file>ButtonQuizImgLarge.qml</file>
     </qresource>
 </RCC>

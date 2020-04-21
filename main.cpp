@@ -63,6 +63,8 @@ int main(int argc, char *argv[])
 
   qDebug() <<  "start wordquiz";
 
+  app.setWindowIcon(QIcon("qrc:horn.png"));
+
   oLS.LoadLast();
 
   return app.exec();

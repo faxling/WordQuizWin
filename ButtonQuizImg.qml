@@ -2,8 +2,10 @@ import QtQuick 2.0
 
 Image
 {
-  fillMode: Image.Stretch
   id:idImageBtn
+  fillMode: Image.Stretch
+  width:nBtnHeight / 2
+  height : nBtnHeight / 2
   signal clicked()
   MouseArea
   {

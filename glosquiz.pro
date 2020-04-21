@@ -4,6 +4,7 @@ QT += qml quick multimedia
 
 CONFIG += c++11
 
+
 SOURCES += main.cpp \
     ../harbour-wordquiz/src/speechdownloader.cpp \
     ../harbour-wordquiz/src/filehelpers.cpp
@@ -15,6 +16,7 @@ RESOURCES += qml.qrc
 # Default rules for deployment.
 include(deployment.pri)
 
+
 RC_FILE = ./glosquiz/Resource.rc
 
 HEADERS += \
@@ -24,6 +26,15 @@ HEADERS += \
 
 
 DISTFILES += \
+    ButtonQuizImgLarge.qml \
+    TextListLarge.qml \
+    android/AndroidManifest.xml \
+    android/build.gradle \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew \
+    android/gradlew.bat \
+    android/res/values/libs.xml \
     main.qml \
 ButtonQuiz.qml \
 ButtonQuizImg.qml \
@@ -36,3 +47,5 @@ TakeQuiz.qml \
 TextList.qml \
 RectRounded.qml \
 ../harbour-wordquiz/qml/QuizFunctions.js
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

@@ -38,10 +38,15 @@ Window {
   property int nDbNumber : 0;
 
   property int nQuizIndex: 1
+  property int nFontSize:  idWindow.height > 1200 ? 14 : 11
+  property int nDlgHeight: idWindow.height / 4.5
+  property int nDlgHeightLarge: idWindow.height / 2.5
+  property int nBtnHeight: idWindow.height / 15
   property int n3BtnWidth: idTabMain.width / 3 - 8
   property int n4BtnWidth: idTabMain.width / 4 - 7
   property int n25BtnWidth: idTabMain.width / 2.4 - 7
   property int n2BtnWidth: idTabMain.width / 2
+  property int nMainWidth: idTabMain.width
   property bool bQSort : true
   property string sQSort : bQSort ? "UPPER(quizword)" : "UPPER(answer)"
   property variant glosListView
@@ -113,10 +118,13 @@ Window {
   visible: true
   Item
   {
+    z: 3
     width:parent.width
     height: idTitle.height
     TextList {
       id: idTitle
+      anchors.top : parent.top
+      anchors.topMargin : 10
       anchors.horizontalCenter: parent.horizontalCenter
       text: sQuizName + " " + sFromLang + (bIsReverse ? "<-" : "->") +  sToLang + " " + sScoreText
     }
@@ -124,10 +132,12 @@ Window {
     ButtonQuizImg
     {
       id: idBtnHelp
+
       anchors.right: parent.right
       //  anchors.topMargin : -40
       anchors.rightMargin : 40
       anchors.top : parent.top
+      anchors.topMargin : 10
       source:"qrc:help.png"
       onClicked: Qt.openUrlExternally("https://faxling.github.io/WordQuizWin/index.html");
     }
@@ -145,15 +155,15 @@ Window {
     anchors.fill : parent
     anchors.leftMargin : 50
     anchors.rightMargin : 50
-    anchors.bottomMargin:  50
-    anchors.topMargin : 50
+    anchors.bottomMargin:  nBtnHeight / 2
+    anchors.topMargin : nBtnHeight / 2
 
     Tab
     {
-      title: "Create"
-
-      active: true
       id:idTab1
+      title: "Create"
+      active: true
+
       CreateNewQuiz
       {
         anchors.fill: parent
@@ -175,8 +185,7 @@ Window {
       TakeQuiz
       {
         id:idTab3
-        width : idTabMain.width
-        height : idTabMain.width
+        anchors.fill: parent
       }
     }
 
@@ -186,7 +195,7 @@ Window {
         color: styleData.selected ? "#626567" :"#BDC3C7"
         border.color:  "#797D7F"
         implicitWidth: idTabMain.width / 3
-        implicitHeight: 40
+        implicitHeight: nBtnHeight
         radius: 2
         Text {
           id: text

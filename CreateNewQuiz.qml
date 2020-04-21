@@ -68,7 +68,7 @@ Item
     {
       TextList
       {
-        width: 100
+        width: n4BtnWidth
         id:idTextSelected
         onClick: idTextInputQuizName.text = text
       }
@@ -100,13 +100,14 @@ Item
         text:"Rename"
         onClicked:
         {
-          sQuizName = idTextInputQuizName.text
-          glosModelIndex.setProperty(idQuizList.currentIndex,"quizname", idTextInputQuizName.text)
+          sQuizName = idTextInputQuizName.displayText
+          glosModelIndex.setProperty(idQuizList.currentIndex,"quizname",sQuizName)
           db.transaction(
                 function(tx) {
                   var nId = glosModelIndex.get(idQuizList.currentIndex).number;
-                  tx.executeSql('UPDATE GlosaDbIndex SET quizname=? WHERE dbnumber=?',[idTextInputQuizName.text, nId]);
-                  idTextSelected.text = idTextInputQuizName.text
+                  console.log("name " + sQuizName)
+                  tx.executeSql('UPDATE GlosaDbIndex SET quizname=? WHERE dbnumber=?',[sQuizName, nId]);
+                  idTextSelected.text = sQuizName
                 }
                 )
         }
@@ -146,9 +147,11 @@ Item
 
     Row
     {
-      width:parent.width
-      height : 100
       id:idLangListRow
+      anchors.horizontalCenter: parent.horizontalCenter
+      //  width:parent.width
+      height : nDlgHeight / 2
+
       function doCurrentIndexChanged()
       {
         if (idLangList1.currentIndex < 0 || idLangList1.currentIndex < 0)
@@ -164,20 +167,27 @@ Item
           idLangListRow.doCurrentIndexChanged()
         }
 
-        width:100
+        width:n4BtnWidth
         height:parent.height + 2
         model: idLangModel
         delegate: TextList {
           text:lang
+          height : nBtnHeight / 2
           onClick: idLangList1.currentIndex = index
         }
       }
 
+      TextList
+      {
+        width:n4BtnWidth
+        horizontalAlignment: Text.AlignLeft
+        text:sLangLangSelected
+      }
 
       ListViewHi
       {
         id:idLangList2
-        width:100
+        width:n4BtnWidth
         height:parent.height + 2
         model: idLangModel
         onCurrentIndexChanged:
@@ -187,6 +197,7 @@ Item
 
         delegate: TextList {
           text:lang
+          height : nBtnHeight / 2
           onClick:idLangList2.currentIndex = index
         }
       }
@@ -195,7 +206,8 @@ Item
     TextList
     {
       id:idAvailableQuizText
-      height:10
+      x:idQuizList.x
+      height:nFontSize*4
       color: "steelblue"
       text:glosModelIndex.count + " Available Quiz's:"
     }
@@ -203,8 +215,9 @@ Item
     ListViewHi
     {
       id:idQuizList
-      width:parent.width
-      height:parent.height -idAvailableQuizText.y + 60
+      width:nMainWidth
+      anchors.horizontalCenter: parent.horizontalCenter
+      height:parent.height - idAvailableQuizText.y
       model:glosModelIndex
       spacing:3
 
@@ -226,41 +239,34 @@ Item
 
       delegate: Row {
         id:idQuizListRow
-
-        TextList
-        {
-          id:idCol1
-          width:50
-          text:index+1
-        }
-        TextList
+        TextListLarge
         {
           id:idCol2
-          width:130
+          width:n25BtnWidth
           text:quizname
           onClick: idQuizList.currentIndex = index
         }
-        TextList
+        TextListLarge
         {
           id:idCol3
-          width:100
+          width:n4BtnWidth
           text:langpair
           onClick: idQuizList.currentIndex = index
         }
-        TextList
+        TextListLarge
         {
 
           id:idCol4
-          width:100
+          width:n4BtnWidth
           text:state1
-
           onClick: idQuizList.currentIndex = index
         }
 
         ButtonQuizImg
         {
-          height:26
-          width:32
+          id:idCol5
+          height:idCol4.height
+          width:idCol4.height
           source: "qrc:rm.png"
           onClicked:
           {
@@ -294,7 +300,7 @@ Item
     y:20
     visible: false;
     width:parent.width
-    height:170
+    height:nDlgHeight
 
     onCloseClicked:  idExport.visible = false
 
@@ -370,7 +376,7 @@ Item
     y:20
     visible: false;
     width:parent.width
-    height:250
+    height:nDlgHeightLarge
     onCloseClicked:  {
       idPwdDialog.visible = false;
       idDeleteQuiz.bProgVisible = false
@@ -402,13 +408,21 @@ Item
       text:""
     }
 
-    TextList {
+    WhiteText {
       id: idImportTitle
       x:20
-      text:"Available Quiz"
+      text:"Available Quiz's"
+    }
+    WhiteText {
+      id: idNameLabel
+      x:20
+      y: idQuestionsLabel.y
+      text:"Name"
     }
 
-    TextList {
+    WhiteText {
+      id:idQuestionsLabel
+      anchors.top :idDescDate.bottom
       anchors.right: parent.right
       anchors.rightMargin:30
       text:"Questions"
@@ -418,15 +432,15 @@ Item
     ListViewHi
     {
       id:idServerListView
-      y:70
+      anchors.top :idQuestionsLabel.bottom
       x:10
       width:idImport.width - 20
-      height:parent.height - 115
+      height:parent.height - nBtnHeight  - idServerListView.y - idImport.y
       model: idServerQModel
       delegate: Item {
-        height :25
         property int nW : idServerListView.width / 6
         width:idServerListView.width
+        height : idTextQname.height
         Row
         {
           WhiteText {
@@ -522,6 +536,7 @@ Item
       {
         bProgVisible = true
         idTextInputQuizName.text = idImport.sSelectedQ
+        sQuizName  = idImport.sSelectedQ
         MyDownloader.importQuiz(idImport.sSelectedQ)
       }
     }

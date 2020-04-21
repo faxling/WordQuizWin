@@ -19,7 +19,7 @@ Item {
 
   Column
   {
-    id:idGlosListHeader
+    id:idGlosListMainColumn
     spacing:10
     anchors.topMargin: 20
     anchors.bottomMargin: 50
@@ -58,6 +58,7 @@ Item {
       id: idTrMeanModel
       XmlRole { name: "mean"; query: "text/string()" }
     }
+
     XmlListModel {
       id: idTranslateModel
       property var oBtn
@@ -80,6 +81,7 @@ Item {
 
     Row
     {
+      id:idIextDictDisplayRow
       spacing:20
       TextList
       {
@@ -103,6 +105,7 @@ Item {
 
     Row
     {
+      id:idIextInputToDictRow
       spacing:20
       InputTextQuiz
       {
@@ -120,11 +123,12 @@ Item {
 
     Row
     {
+      id:idDictBtnRow
       spacing:10
 
       ButtonQuiz {
         id:idBtn1
-        text: "Find in Dict " + sLangLang
+        text: "Find " + sLangLang
         onClicked: {
           nLastSearch = 0
           var oInText  = QuizLib.getTextFromInput(idTextInput)
@@ -138,7 +142,7 @@ Item {
 
       ButtonQuiz {
         id:idBtn2
-        text: "Find in Dict " + sLangLangRev
+        text: "Find " + sLangLangRev
         onClicked: {
           nLastSearch = 1
           var oInText  = QuizLib.getTextFromInput(idTextInput2)
@@ -152,7 +156,7 @@ Item {
 
       ButtonQuiz {
         id:idBtn3
-        text: "Find in Dict " + sLangLangEn
+        text: "Find " + sLangLangEn
         onClicked: {
           nLastSearch = 2
           var oInText  = QuizLib.getTextFromInput(idTextInput)
@@ -258,15 +262,16 @@ Item {
       }
     }
 
-    Row {
-      height :10
+    Row
+    {
       id:idTableHeaderRow
-      spacing: 5
+      spacing:5
+    //  height : idHeader1Text.height
       TextList {
         id:idHeader1Text
         color:"steelblue"
         font.bold:bQSort
-        width:n25BtnWidth
+        width:(idGlosList.width  / 2) - 80
         text:  "Question"
         onClick: {
           bQSort = true
@@ -290,7 +295,7 @@ Item {
       id:idGlosList
       clip: true
       width:idEditQuiz.width  -20
-      height:parent.height - idTableHeaderRow.y
+      height:parent.height - idTableHeaderRow.y - nBtnHeight
       spacing: 3
       Component.onCompleted:
       {
@@ -302,7 +307,8 @@ Item {
         spacing:5
 
         TextList {
-          width:idGlosList.width  / 3
+          id:idQuestion
+          width:(idGlosList.width  / 2) - 80
           text:  question
           color: state1 === 0 ? "black" : "green"
           onClick: idTextInput.text = question
@@ -311,7 +317,7 @@ Item {
 
         TextList {
           id:idAnswer
-          width:idGlosList.width  / 3
+          width:idQuestion.width
           text: answer
           font.bold: extra.length > 0
           color: state1 === 0 ? "black" : "green"
@@ -321,8 +327,8 @@ Item {
 
         ButtonQuizImg
         {
-          height:26
-          width:32
+          height: idAnswer.height
+          width: idAnswer.height
           //    y:-5
           source: "qrc:edit.png"
           onClicked:
@@ -340,8 +346,8 @@ Item {
 
         ButtonQuizImg
         {
-          height:26
-          width:32
+          height: idAnswer.height
+          width: idAnswer.height
           visible:bHasSpeech
           source:"qrc:horn.png"
           onClicked: MyDownloader.playWord(question,sFromLang)
@@ -349,19 +355,22 @@ Item {
 
         ButtonQuizImg
         {
-          height:26
-          width:32
+          height: idAnswer.height
+          width: idAnswer.height
           visible:bHasSpeech
           source:"qrc:horn.png"
           onClicked: MyDownloader.playWord(answer,sToLang)
         }
       }
     }
+
     Row
     {
+      id:idLowerBtnRow
       spacing:10
       ButtonQuiz
       {
+        width:n2BtnWidth
         text : "Reset"
         onClicked:
         {
@@ -372,20 +381,23 @@ Item {
       ButtonQuiz
       {
         text : "Reverse"
+        width:n2BtnWidth
         onClicked:
         {
           QuizLib.reverseQuiz()
         }
       }
-
+/*
       ButtonQuiz
       {
-        text : "Download All Audio"
+        text : "Download\nAudio"
+        width:n3BtnWidth
         onClicked:
         {
           MyDownloader.downLoadAllSpeech(glosModel, sLangLang);
         }
       }
+      */
     }
   }
 
@@ -394,7 +406,7 @@ Item {
     id:idEditDlg
     visible : false
     width:parent.width
-    height:190
+    height:nDlgHeight
     onCloseClicked: idEditDlg.visible = false
 
     Column
@@ -473,7 +485,7 @@ Item {
       id:idBtnUpdate
       width:n3BtnWidth
       anchors.bottom: parent.bottom
-      anchors.bottomMargin: 20
+      anchors.bottomMargin: 5
       anchors.right: idBtnDelete.left
       anchors.rightMargin: 20
       text:  "Update"
@@ -485,7 +497,7 @@ Item {
     ButtonQuiz {
       id:idBtnDelete
       anchors.bottom: parent.bottom
-      anchors.bottomMargin: 20
+      anchors.bottomMargin: 5
       anchors.right: parent.right
       anchors.rightMargin: 20
       width:n3BtnWidth

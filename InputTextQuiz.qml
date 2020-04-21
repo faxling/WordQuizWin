@@ -7,12 +7,12 @@ Rectangle
   color:"grey"
   width: parent.width -10
   x:5
-  height: 23
+  height:   nBtnHeight / 2
   TextInput
   {
     selectByMouse : true
     anchors.leftMargin: 5
-    font.pointSize: 12
+    font.pointSize: nFontSize
     anchors.fill: parent
     id:idTextInput
   }
