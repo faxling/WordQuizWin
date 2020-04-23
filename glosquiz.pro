@@ -26,26 +26,12 @@ HEADERS += \
 
 
 DISTFILES += \
-    ButtonQuizImgLarge.qml \
-    TextListLarge.qml \
     android/AndroidManifest.xml \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.jar \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew \
     android/gradlew.bat \
-    android/res/values/libs.xml \
-    main.qml \
-ButtonQuiz.qml \
-ButtonQuizImg.qml \
-CreateNewQuiz.qml \
-EditQuiz.qml \
-InputTextQuiz.qml \
-ListViewHi.qml \
-main.qml \
-TakeQuiz.qml \
-TextList.qml \
-RectRounded.qml \
-../harbour-wordquiz/qml/QuizFunctions.js
+    android/res/values/libs.xml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

@@ -12,7 +12,7 @@ Rectangle
   {
     selectByMouse : true
     anchors.leftMargin: 5
-    font.pointSize: nFontSize
+    font.pixelSize: nBtnHeight / 2.5
     anchors.fill: parent
     id:idTextInput
   }

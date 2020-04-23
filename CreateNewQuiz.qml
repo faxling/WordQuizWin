@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.4
+import QtQuick.Dialogs 1.1
 import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
 Item
@@ -56,8 +57,10 @@ Item
       code:"es"
     }
   }
+
   Column
   {
+    id:idCreateNewMainColumn
     spacing:10
     anchors.topMargin: 20
     anchors.rightMargin: 0
@@ -270,20 +273,9 @@ Item
           source: "qrc:rm.png"
           onClicked:
           {
-            db.transaction(
-                  function(tx) {
-                    tx.executeSql('DELETE FROM GlosaDbIndex WHERE dbnumber = ?',[number]);
-                    tx.executeSql('DROP TABLE Glosa'+number);
-                    tx.executeSql('DELETE FROM GlosaDbDesc WHERE dbnumber = ?',[number]);
-                  }
-                  )
-
-            glosModelIndex.remove(index)
-            if (index ===idQuizList.currentIndex)
-            {
-              if (index>0)
-                idQuizList.currentIndex = idQuizList.currentIndex -1
-            }
+            idDeleteConfirmationDlg.nIndex = index
+            idDeleteConfirmationDlg.nNumber = number
+            idDeleteConfirmationDlg.visible = true
 
           }
         }
@@ -295,7 +287,55 @@ Item
     }
 
   }
-  RectRounded{
+
+  RectRounded
+  {
+    id:idDeleteConfirmationDlg
+    y:20
+    visible: false
+    anchors.horizontalCenter: parent.horizontalCenter
+    width:parent.width / 3
+    height:nDlgHeight
+    property int nIndex
+    property int nNumber
+    onCloseClicked:  idDeleteConfirmationDlg.visible = false
+
+    WhiteText {
+      x:20
+      y:30
+      text:"Do You realy want to delete '" +sQuizName + "' ?"
+    }
+
+    ButtonQuiz
+    {
+      text: "Yes"
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: 10
+      anchors.right: parent.right
+      anchors.rightMargin: 10
+      onClicked:
+      {
+        db.transaction(
+              function(tx) {
+                tx.executeSql('DELETE FROM GlosaDbIndex WHERE dbnumber = ?',[idDeleteConfirmationDlg.nNumber]);
+                tx.executeSql('DROP TABLE Glosa'+idDeleteConfirmationDlg.nNumber);
+                tx.executeSql('DELETE FROM GlosaDbDesc WHERE dbnumber = ?',[idDeleteConfirmationDlg.nNumber]);
+              }
+              )
+
+        glosModelIndex.remove(idDeleteConfirmationDlg.nIndex)
+        if (idDeleteConfirmationDlg.nIndex ===idQuizList.currentIndex)
+        {
+          if (idDeleteConfirmationDlg.nIndex>0)
+            idQuizList.currentIndex = idQuizList.currentIndex -1
+        }
+
+        idDeleteConfirmationDlg.visible = false
+      }
+    }
+  }
+  RectRounded
+  {
     id:idExport
     y:20
     visible: false;
@@ -305,9 +345,9 @@ Item
     onCloseClicked:  idExport.visible = false
 
     WhiteText {
+      id:idExportTitle
       x:20
       y:30
-      id:idExportTitle
       text:"Add a description off the quiz '" +sQuizName + "'"
     }
 

@@ -44,7 +44,7 @@ Item {
       ButtonQuizImg
       {
         id:idTextBtn
-        visible : !idWindow.bAllok
+        visible : !allok
         anchors.right:  parent.right
         anchors.rightMargin:  20
         anchors.top:  parent.top
@@ -55,6 +55,7 @@ Item {
       ButtonQuizImg
       {
         id:idVoiceModeBtn
+        visible : !allok
         anchors.left:  parent.left
         anchors.leftMargin:  20
         anchors.top:  idInfoBtn.bottom
@@ -66,7 +67,7 @@ Item {
       ButtonQuizImg
       {
         id:idImgBtn
-        visible : !idWindow.bAllok
+        visible : !allok
         anchors.right:  parent.right
         anchors.rightMargin:  20
         anchors.top:  idTextBtn.bottom
@@ -79,13 +80,13 @@ Item {
       ButtonQuizImg
       {
         id:idSoundBtn
-        visible : bTextAnswerOk && bTextMode &&  !idWindow.bAllok
+        visible : bTextAnswerOk && bTextMode &&  !allok
         anchors.right:  parent.right
         anchors.rightMargin:  20
         anchors.top:  idImgBtn.bottom
         anchors.topMargin:  20
         source:"qrc:horn_small.png"
-        onClicked: MyDownloader.playWord(answer,sAnswerLang )
+        onClicked: MyDownloader.playWord(idQuizModel.answer,sAnswerLang )
       }
 
       Text
@@ -114,7 +115,7 @@ Item {
         y:50
         z:2
         anchors.horizontalCenter: parent.horizontalCenter
-        visible:bTextMode
+        visible:bTextMode  &&  !allok
         width:parent.width  - 150
         placeholderText : "your answer"
         onTextChanged:
@@ -138,7 +139,7 @@ Item {
         spacing: 20
         anchors.horizontalCenter:  parent.horizontalCenter
         y : parent.height / 5
-        visible:!idWindow.bAllok
+        visible:!allok
 
         Image
         {
@@ -154,10 +155,10 @@ Item {
         Text
         {
           id:idTextQuestion
-          opacity: ( bVoiceMode || idWindow.bAllok ) ? 0 : 1
+          opacity: ( bVoiceMode ) ? 0 : 1
           anchors.horizontalCenter: parent.horizontalCenter
-          font.pointSize: 25
-          text : idQuizModel.question
+          font.pointSize: 30
+          text :question
           onTextChanged: idTextEditYourAnswer.text = ""
         }
 
@@ -169,7 +170,7 @@ Item {
           anchors.horizontalCenter: parent.horizontalCenter
           visible:bHasSpeech
           source:"qrc:horn.png"
-          onClicked: MyDownloader.playWord(idQuizModel.question,sQuestonLang)
+          onClicked: MyDownloader.playWord(question,sQuestonLang)
         }
 
         ButtonQuiz
@@ -196,7 +197,7 @@ Item {
             visible:bAnswerVisible
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
-            font.pointSize: 25
+            font.pointSize: 30
             text : idQuizModel.answer
           }
         }
@@ -211,7 +212,7 @@ Item {
 
       }
       Image {
-        visible:idWindow.bAllok
+        visible:allok
         anchors.centerIn: parent
         source: "qrc:thumb.png"
       }
@@ -249,27 +250,22 @@ Item {
   PathView
   {
     id:idView
-    property int nPreviousCurrentIndex
+  //   property int nPreviousCurrentIndex
     property int nLastIndex : 1
-
     interactive: bTextAnswerOk || !bTextMode || bAnswerVisible || bMoving || moving
 
+    highlightMoveDuration:800
 
     Timer {
       id:idTimer
-      interval: 500;
+      interval: 1000;
       onTriggered: bMoving = false
     }
 
     onCurrentIndexChanged:
     {
-      if (currentIndex === nPreviousCurrentIndex)
-      {
-        // When klicking on buttons
-        return;
-      }
       idTimer.start()
-      nPreviousCurrentIndex = currentIndex
+      // nPreviousCurrentIndex = currentIndex
       QuizLib.calcAndAssigNextQuizWord(currentIndex)
       bTextAnswerOk = false
     }

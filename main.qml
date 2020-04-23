@@ -36,10 +36,9 @@ Window {
   property string sQuizName : "-"
   property string sScoreText : "-"
   property int nDbNumber : 0;
-
   property int nQuizIndex: 1
   property int nFontSize:  idWindow.height > 1200 ? 14 : 11
-  property int nDlgHeight: idWindow.height / 4.5
+  property int nDlgHeight: idWindow.height / 5 + 45
   property int nDlgHeightLarge: idWindow.height / 2.5
   property int nBtnHeight: idWindow.height / 15
   property int n3BtnWidth: idTabMain.width / 3 - 8
@@ -95,16 +94,26 @@ Window {
     property string answer
     property int number
 
-    onQuestionChanged: MyDownloader.setImgWord(question,sQuestonLang )
+    onQuestionChanged:
+    {
+      idQuizModel.get(idWindow.nQuizIndex).question = question
+      MyDownloader.setImgWord(question,sQuestonLang )
+    }
 
     ListElement {
       number:0
+      question:"-"
+      allok:false
     }
     ListElement {
       number:1
+      question:"-"
+      allok:false
     }
     ListElement {
       number:2
+      question:"-"
+      allok:false
     }
   }
 
@@ -118,13 +127,13 @@ Window {
   visible: true
   Item
   {
+    id:idMainTitle
     z: 3
     width:parent.width
-    height: idTitle.height
+    height: idBtnHelp.height
     TextList {
       id: idTitle
-      anchors.top : parent.top
-      anchors.topMargin : 10
+      anchors.verticalCenter: idBtnHelp.verticalCenter
       anchors.horizontalCenter: parent.horizontalCenter
       text: sQuizName + " " + sFromLang + (bIsReverse ? "<-" : "->") +  sToLang + " " + sScoreText
     }
@@ -132,12 +141,10 @@ Window {
     ButtonQuizImg
     {
       id: idBtnHelp
-
       anchors.right: parent.right
-      //  anchors.topMargin : -40
       anchors.rightMargin : 40
       anchors.top : parent.top
-      anchors.topMargin : 10
+      anchors.topMargin : 5
       source:"qrc:help.png"
       onClicked: Qt.openUrlExternally("https://faxling.github.io/WordQuizWin/index.html");
     }
@@ -156,7 +163,7 @@ Window {
     anchors.leftMargin : 50
     anchors.rightMargin : 50
     anchors.bottomMargin:  nBtnHeight / 2
-    anchors.topMargin : nBtnHeight / 2
+    anchors.topMargin:  idMainTitle.height + 10
 
     Tab
     {
