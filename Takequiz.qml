@@ -103,7 +103,7 @@ Item {
       Image {
         anchors.left:  parent.left
         anchors.leftMargin:  10
-        anchors.top:  idTextBtn.bottom
+        anchors.top:  idSoundBtn.bottom
         anchors.topMargin:  20
         visible : bTextAnswerOk && bTextMode
         source: "qrc:thumb_small.png"
@@ -236,7 +236,7 @@ Item {
         anchors.bottomMargin: 20
         anchors.bottom: parent.bottom
         anchors.left:parent.left
-        anchors.leftMargin: 10
+        anchors.leftMargin: 20
         source:"qrc:left.png"
         onClicked:
         {

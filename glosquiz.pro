@@ -35,3 +35,5 @@ DISTFILES += \
     android/res/values/libs.xml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+ANDROID_EXTRA_LIBS = C:/openssl-1.1.1g/libcrypto_1_1.so C:/openssl-1.1.1g/libssl_1_1.so

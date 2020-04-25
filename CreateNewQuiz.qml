@@ -173,14 +173,14 @@ Item
         width:n4BtnWidth
         height:parent.height + 2
         model: idLangModel
-        delegate: TextList {
+        delegate: TextListLarge {
           text:lang
           height : nBtnHeight / 2
           onClick: idLangList1.currentIndex = index
         }
       }
 
-      TextList
+      TextListLarge
       {
         width:n4BtnWidth
         horizontalAlignment: Text.AlignLeft
@@ -198,7 +198,7 @@ Item
           idLangListRow.doCurrentIndexChanged()
         }
 
-        delegate: TextList {
+        delegate: TextListLarge {
           text:lang
           height : nBtnHeight / 2
           onClick:idLangList2.currentIndex = index
@@ -276,7 +276,6 @@ Item
             idDeleteConfirmationDlg.nIndex = index
             idDeleteConfirmationDlg.nNumber = number
             idDeleteConfirmationDlg.visible = true
-
           }
         }
       }
@@ -294,15 +293,17 @@ Item
     y:20
     visible: false
     anchors.horizontalCenter: parent.horizontalCenter
-    width:parent.width / 3
+    width:idDeleteText.width + 70
     height:nDlgHeight
     property int nIndex
     property int nNumber
     onCloseClicked:  idDeleteConfirmationDlg.visible = false
 
     WhiteText {
-      x:20
-      y:30
+      id:idDeleteText
+      anchors.top : idDeleteConfirmationDlg.bottomClose
+      anchors.topMargin : 30
+      x:30
       text:"Do You realy want to delete '" +sQuizName + "' ?"
     }
 
@@ -347,7 +348,7 @@ Item
     WhiteText {
       id:idExportTitle
       x:20
-      y:30
+      anchors.top : idExport.bottomClose
       text:"Add a description off the quiz '" +sQuizName + "'"
     }
 
@@ -378,6 +379,22 @@ Item
       color:"red"
       text:"error"
     }
+
+
+    ButtonQuiz
+    {
+      id:idUpdateDescBtn
+      text: "Update\nDescription"
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: 10
+      anchors.right: idUpdateBtn.left
+      anchors.rightMargin: 10
+      onClicked:
+      {
+        QuizLib.updateDesc1(idTextInputQuizDesc.displayText)
+        idExport.visible = false
+      }
+    }
     ButtonQuiz
     {
       id:idUpdateBtn
@@ -390,7 +407,7 @@ Item
       {
         bProgVisible = true
         QuizLib.updateDesc1(idTextInputQuizDesc.displayText)
-        MyDownloader.updateCurrentQuiz( glosModel, sQuizName,sLangLang, idTextInputQuizPwd.displayText, idTextInputQuizDesc.displayText )
+        MyDownloader.updateCurrentQuiz(glosModel, sQuizName,sLangLang, idTextInputQuizPwd.displayText, idTextInputQuizDesc.displayText )
       }
     }
 
