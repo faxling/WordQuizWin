@@ -7,6 +7,13 @@ import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
 Item {
   id: idEditQuiz
+
+  Rectangle
+  {
+    anchors.fill: parent
+    gradient:"MorningSalad"
+  }
+
   property int nLastSearch: 0
   onVisibleChanged: {
     if (visible) {
@@ -99,12 +106,12 @@ Item {
       id: idIextInputToDictRow
       spacing: 20
       InputTextQuiz {
-        width: idEditQuiz.width / 2 - 15
+        width: idEditQuiz.width / 2 - 10
         text: ""
         id: idTextInput
       }
       InputTextQuiz {
-        width: idEditQuiz.width / 2 - 15
+        width: idEditQuiz.width / 2 - 10
         text: ""
         id: idTextInput2
       }
@@ -112,7 +119,7 @@ Item {
 
     Row {
       id: idDictBtnRow
-      spacing: 10
+      spacing: 9
 
       ButtonQuiz {
         id: idBtn1
@@ -158,35 +165,27 @@ Item {
 
       ButtonQuiz {
         text: "Add"
-        onClicked: {
-
-          // Find a new Id
-          var nC = 0
-          for (var i = 0; i < glosModel.count; i++) {
-            if (glosModel.get(i).number > nC)
-              nC = glosModel.get(i).number
-          }
-
-          nC += 1
-          QuizLib.insertGlosa(nDbNumber, nC, idTextInput.displayText,
-                              idTextInput2.displayText)
-
-          if (bHasSpeech)
-            MyDownloader.downloadWord(idTextInput2.displayText, sToLang)
-        }
+        onClicked: QuizLib.getTextInputAndAdd()
       }
+
     }
 
     Row {
       id: idDictionaryResultRow
       height: 100
       width: parent.width - 100
-
       TextList {
         id: idErrorText
         visible: false
-        color: "red"
         font.pointSize: 16
+        color: "red"
+        onClick: visible = false
+      }
+      TextList {
+        id: idErrorText2
+        visible: false
+        font.pointSize: 16
+        color: "red"
         onClick: visible = false
       }
 
@@ -243,15 +242,17 @@ Item {
       }
     }
 
-    Row {
-      id: idTableHeaderRow
-      spacing: 5
-      //  height : idHeader1Text.height
+
+    //  height : idHeader1Text.height
+    Row
+    {
+      x:10
+      id: idHeaderRow
+      height : idHeader1Text.height*2
       TextList {
         id: idHeader1Text
         color: "steelblue"
         font.bold: bQSort
-        width: (idGlosList.width / 2) - 50
         text: "Question"
         onClick: {
           bQSort = true
@@ -260,6 +261,7 @@ Item {
       }
 
       TextList {
+        id: idHeader2Text
         color: "steelblue"
         font.bold: !bQSort
         width: n25BtnWidth
@@ -273,9 +275,10 @@ Item {
 
     ListViewHi {
       id: idGlosList
-      clip: true
-      width: idEditQuiz.width - 20
-      height: parent.height - idTableHeaderRow.y - nBtnHeight
+      x:10
+
+      width: idEditQuiz.width
+      height: parent.height - idHeaderRow.y - idHeaderRow.height - 55
       spacing: 3
       Component.onCompleted: {
         idWindow.glosListView = idGlosList
@@ -283,11 +286,12 @@ Item {
 
       model: glosModel
       delegate: Row {
+        id :idRowRow
         spacing: 5
 
         TextList {
           id: idQuestion
-          width: (idGlosList.width / 2) - 50
+          width: (idGlosList.width / 2) - (idEditBtn.width * 1.5) - 20
           text: question
           color: state1 === 0 ? "black" : "green"
           onClick: idTextInput.text = question
@@ -296,6 +300,7 @@ Item {
 
         TextList {
           id: idAnswer
+          onXChanged: idHeader1Text.width = x
           width: idQuestion.width
           text: answer
           font.bold: extra.length > 0
@@ -305,6 +310,7 @@ Item {
         }
 
         ButtonQuizImg {
+          id : idEditBtn
           height: idAnswer.height
           width: idAnswer.height
           //    y:-5
@@ -343,6 +349,7 @@ Item {
     }
 
     Row {
+      x: 5
       id: idLowerBtnRow
       spacing: 10
       ButtonQuiz {

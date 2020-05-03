@@ -26,7 +26,8 @@ Item {
       property alias answerVisible: idTextAnswer.visible
       radius:10
       width:idView.width
-      height:idView.height
+      height:idView.height -20
+      // sy : 15
       gradient:  "NearMoon"
 
       ButtonQuizImg
@@ -250,6 +251,8 @@ Item {
   PathView
   {
     id:idView
+    width:idRectTakeQuiz.width
+    height:idRectTakeQuiz.height
   //   property int nPreviousCurrentIndex
     property int nLastIndex : 1
     interactive: bTextAnswerOk || !bTextMode || bAnswerVisible || bMoving || moving
@@ -270,8 +273,7 @@ Item {
       bTextAnswerOk = false
     }
     clip:true
-    width:idRectTakeQuiz.width
-    height:idRectTakeQuiz.height
+
     model : idQuizModel
     delegate:idQuestionComponent
     snapMode: ListView.SnapOneItem

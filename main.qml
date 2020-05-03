@@ -44,19 +44,32 @@ Window {
   property int n3BtnWidth: idTabMain.width / 3 - 8
   property int n4BtnWidth: idTabMain.width / 4 - 7
   property int n25BtnWidth: idTabMain.width / 2.4 - 7
-  property int n2BtnWidth: idTabMain.width / 2
+  property int n2BtnWidth: idTabMain.width / 2 - 10
   property int nMainWidth: idTabMain.width
   property bool bQSort : true
   property string sQSort : bQSort ? "UPPER(quizword)" : "UPPER(answer)"
   property variant glosListView
   property variant quizListView
   property variant oTakeQuiz
+  property variant oPopDlg
   property bool bAllok : false
   property int nGlosaDbLastIndex:  -1
 
   color: "#E5E7E9"
 
   property int nGlosaTakeQuizIndex : -1
+  property int nLastIndex : 0
+
+  function onBackPressedTab() {
+    nLastIndex = MyDownloader.popIndex()
+    idTabMain.currentIndex = nLastIndex
+  }
+
+  function onBackPressedDlg() {
+    idWindow.oPopDlg.closeThisDlg()
+  }
+
+
   onSScoreTextChanged:
   {
 
@@ -89,6 +102,7 @@ Window {
 
   ListModel {
     id:idQuizModel
+
     property string question
     property string extra
     property string answer
@@ -120,6 +134,7 @@ Window {
   Component.onCompleted:
   {
     QuizLib.getAndInitDb()
+
   }
 
   width:570
@@ -165,12 +180,12 @@ Window {
     anchors.bottomMargin:  nBtnHeight / 2
     anchors.topMargin:  idMainTitle.height + 10
 
+
     Tab
     {
       id:idTab1
-      title: "Create"
+      title: "Home"
       active: true
-
       CreateNewQuiz
       {
         anchors.fill: parent
@@ -213,6 +228,17 @@ Window {
       }
       frame: Rectangle { color: "#E5E7E9" }
     }
+
+    onCurrentIndexChanged:
+    {
+      if (nLastIndex === currentIndex)
+        return
+      MyDownloader.pushIndex(nLastIndex)
+      nLastIndex = currentIndex
+    }
+
+
+
   }
 
 }

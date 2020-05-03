@@ -5,8 +5,10 @@
 #include <QQmlContext>
 #include <QWindow>
 #include <QFile>
+#include <QKeyEvent>
 #include "..\harbour-wordquiz\src\speechdownloader.h"
 #include "filehelpers.h"
+
 
 
 // "sqlite3.exe .open c:/Users/fraxl/AppData/Local/glosquiz/QML/OfflineStorage/Databases/2db1346274c33ae632adc881bdcd2f8e.sqlite"
@@ -22,15 +24,20 @@ public:
 
   void aboutToQuit()
   {
+    qDebug() <<  "end wordquiz";
+#ifndef Q_OS_ANDROID
     QFile oGeometry(m_sPath);
     oGeometry.open(QIODevice::ReadWrite);
     QDataStream  ss(&oGeometry);
     ss << m_p->geometry();
     oGeometry.close();
+#endif
   }
 
   void LoadLast()
   {
+
+#ifndef Q_OS_ANDROID
     QFile oGeometry(m_sPath);
     if (oGeometry.open(QIODevice::ReadOnly) == false)
     {
@@ -41,10 +48,48 @@ public:
     QRect tGeometry;
     ss >> tGeometry;
     m_p->setGeometry(tGeometry);
+#endif
   }
 
   QWindow *m_p;
   QString m_sPath;
+
+};
+
+
+class Engine : public QQmlApplicationEngine
+{
+public:
+  Engine()
+  {
+    m_p = new Speechdownloader(offlineStoragePath(), nullptr);
+    rootContext()->setContextProperty("MyDownloader",  m_p);
+    connect(this, &Engine::objectCreated, [=](QObject *object, const QUrl &){
+      object->installEventFilter(this);
+    });
+  }
+
+  bool eventFilter(QObject*, QEvent *event) override
+  {
+    if (event->type() == QEvent::KeyPress) {
+      QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+      if (keyEvent->key() == Qt::Key_Back)
+      {
+        if (rootObjects().first()->property("oPopDlg") != QVariant() )
+        {
+          QMetaObject::invokeMethod(rootObjects().first(), "onBackPressedDlg");
+          return true;
+        }
+        else if (m_p->isStackEmpty() == false)
+        {
+          QMetaObject::invokeMethod(rootObjects().first(), "onBackPressedTab");
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  Speechdownloader* m_p;
 };
 
 
@@ -52,8 +97,8 @@ int main(int argc, char *argv[])
 {
   QGuiApplication app(argc, argv);
 
-  QQmlApplicationEngine engine;
-  engine.rootContext()->setContextProperty("MyDownloader", new Speechdownloader(engine.offlineStoragePath(), nullptr));
+  Engine engine;
+
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 

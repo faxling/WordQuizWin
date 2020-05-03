@@ -6,6 +6,11 @@ import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 Item
 {
   property alias nQuizListCurrentIndex: idQuizList.currentIndex
+  Rectangle
+  {
+    anchors.fill: parent
+    gradient:  "GagarinView"
+  }
 
   ListModel {
     id:idServerQModel
@@ -63,19 +68,20 @@ Item
     id:idCreateNewMainColumn
     spacing:10
     anchors.topMargin: 20
-    anchors.rightMargin: 0
     anchors.bottomMargin: 50
     anchors.fill: parent
 
     Row
     {
-      TextList
+      x:5
+      height: idTextInputQuizName.height
+      TextListLarge
       {
-        width: n4BtnWidth
         id:idTextSelected
+        width: n4BtnWidth
         onClick: idTextInputQuizName.text = text
       }
-      TextList
+      TextListLarge
       {
         id:idDescTextOnPage
         text:"---"
@@ -89,7 +95,7 @@ Item
     Row
     {
       id:rowEButtons
-      spacing:10
+      spacing:9
       ButtonQuiz
       {
         text:"New Quiz"
@@ -206,7 +212,7 @@ Item
       }
     }
 
-    TextList
+    TextListLarge
     {
       id:idAvailableQuizText
       x:idQuizList.x
@@ -218,9 +224,10 @@ Item
     ListViewHi
     {
       id:idQuizList
-      width:nMainWidth
-      anchors.horizontalCenter: parent.horizontalCenter
-      height:parent.height - idAvailableQuizText.y
+      width:nMainWidth - 20
+
+      x:10
+      height:parent.height - idAvailableQuizText.y -20
       model:glosModelIndex
       spacing:3
 
@@ -528,16 +535,32 @@ Item
         }
       }
     }
-    Rectangle
+    RectRounded
     {
       id:idPwdDialog
       visible:false
       height:70
-      color:"black"
       radius:7
+      color: "#202020"
       anchors.bottom: idDeleteQuiz.top
       anchors.bottomMargin: 20
       width:idServerListView.width
+      function closeThisDlg()
+      {
+        console.log("idPwdDialog close")
+        idPwdDialog.closeClicked()
+      }
+      onVisibleChanged: {
+        if (visible)
+          idWindow.oPopDlg = idPwdDialog
+        else
+          idWindow.oPopDlg = idImport
+      }
+      onCloseClicked:
+      {
+        idPwdDialog.visible = false
+        idDeleteQuiz.bProgVisible = false
+      }
       Row
       {
         x:20
@@ -552,7 +575,7 @@ Item
 
         InputTextQuiz
         {
-          width:parent.width / 2
+          width:parent.width / 3
           id:idPwdTextInput
         }
       }
