@@ -53,6 +53,7 @@ Item {
         anchors.top:  parent.top
         anchors.topMargin:  20
         source:"qrc:edit.png"
+        bIsPushed:bTextMode
         onClicked: bTextMode = !bTextMode
       }
       ButtonQuizImg
@@ -63,6 +64,7 @@ Item {
         anchors.leftMargin:  20
         anchors.top:  idInfoBtn.bottom
         anchors.topMargin:  20
+        bIsPushed:bVoiceMode
         source:"qrc:horn_small.png"
         onClicked: bVoiceMode = !bVoiceMode
       }
@@ -75,7 +77,7 @@ Item {
         anchors.rightMargin:  20
         anchors.top:  idTextBtn.bottom
         anchors.topMargin:  20
-        opacity : bImageMode ? 1 : 0.5
+        bIsPushed: bImageMode
         source:"qrc:img.png"
         onClicked: bImageMode = !bImageMode
       }
@@ -276,7 +278,6 @@ Item {
 
       // nPreviousCurrentIndex = currentIndex
       QuizLib.calcAndAssigNextQuizWord(currentIndex)
-      bTextAnswerOk = false
 
     }
 
