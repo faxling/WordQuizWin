@@ -58,11 +58,11 @@ Window {
   color: "#E5E7E9"
 
   property int nGlosaTakeQuizIndex : -1
-  property int nLastIndex : 0
+  property int nLastIndexMain : 0
 
   function onBackPressedTab() {
-    nLastIndex = MyDownloader.popIndex()
-    idTabMain.currentIndex = nLastIndex
+    nLastIndexMain = MyDownloader.popIndex()
+    idTabMain.currentIndex = nLastIndexMain
   }
 
   function onBackPressedDlg() {
@@ -231,14 +231,11 @@ Window {
 
     onCurrentIndexChanged:
     {
-      if (nLastIndex === currentIndex)
+      if (nLastIndexMain === currentIndex)
         return
-      MyDownloader.pushIndex(nLastIndex)
-      nLastIndex = currentIndex
+      MyDownloader.pushIndex(nLastIndexMain)
+      nLastIndexMain = currentIndex
     }
-
-
-
   }
 
 }

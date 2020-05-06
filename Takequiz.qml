@@ -275,10 +275,7 @@ Item {
     onCurrentIndexChanged:
     {
       idTimer.start()
-
-      // nPreviousCurrentIndex = currentIndex
       QuizLib.calcAndAssigNextQuizWord(currentIndex)
-
     }
 
     clip:true
@@ -291,9 +288,16 @@ Item {
       PathLine  { relativeX:  idView.width*3 + 300; relativeY: 0}
     }
 
-    focus: true
-    Keys.onLeftPressed: incrementCurrentIndex()
-    Keys.onRightPressed: decrementCurrentIndex()
+    // focus: true
+    Keys.onLeftPressed: {
+      bMoving = true
+      idView.incrementCurrentIndex()
+    }
+    Keys.onRightPressed: {
+      bMoving = true
+      idView.decrementCurrentIndex()
+    }
+
     Keys.onSpacePressed: bAnswerVisible = !bAnswerVisible
   }
 

@@ -21,7 +21,8 @@ RC_FILE = ./glosquiz/Resource.rc
 
 HEADERS += \
     ../harbour-wordquiz/src/speechdownloader.h \
-    ../harbour-wordquiz/src/filehelpers.h
+    ../harbour-wordquiz/src/filehelpers.h \
+    ./glosquiz/Resource.rc
 
 
 

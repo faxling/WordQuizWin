@@ -3,8 +3,8 @@
 IDI_ICON1		ICON		DISCARDABLE	"harbour-wordquiz.ico"
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION 1,0,0,0
-PRODUCTVERSION 1,0,0,0
+FILEVERSION 1,2,0,0
+PRODUCTVERSION 1,2,0,0
 FILEFLAGSMASK 0x3fL
 
 FILEOS VOS__WINDOWS32
@@ -17,11 +17,11 @@ BLOCK "080904B0"
 BEGIN
 VALUE "CompanyName", "Soft Ax"
 VALUE "FileDescription", "WordQuiz"
-VALUE "FileVersion", "1.0"
+VALUE "FileVersion", "1.2"
 VALUE "LegalCopyright", "Soft Ax"
 VALUE "OriginalFilename", "glosquiz.exe"
 VALUE "ProductName", "WordQuiz"
-VALUE "ProductVersion", "1.0"
+VALUE "ProductVersion", "1.2"
 END
 END
 BLOCK "VarFileInfo"
