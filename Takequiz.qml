@@ -12,6 +12,7 @@ Item {
   property bool bImageMode : false
   property bool bMoving : false
   property bool bVoiceMode : false
+
   Component.onCompleted:
   {
     idWindow.oTakeQuiz = idRectTakeQuiz
@@ -21,9 +22,10 @@ Item {
   {
     id:idQuestionComponent
 
+
     Rectangle
     {
-      property alias answerVisible: idTextAnswer.visible
+
       radius:10
       width:idView.width
       height:idView.height -20
@@ -106,13 +108,17 @@ Item {
         anchors.leftMargin:  10
         anchors.top:  idSoundBtn.bottom
         anchors.topMargin:  20
-        visible : bTextAnswerOk && bTextMode
+        visible : bTextAnswerOk && bTextMode && !allok
         source: "qrc:thumb_small.png"
       }
 
       TextField
       {
         id:idTextEditYourAnswer
+        Component.onCompleted:
+        {
+          MyDownloader.storeTextInputField(idTextEditYourAnswer)
+        }
         y:50
         z:2
         anchors.horizontalCenter: parent.horizontalCenter
@@ -160,7 +166,6 @@ Item {
           anchors.horizontalCenter: parent.horizontalCenter
           font.pointSize: 30
           text :question
-          onTextChanged: idTextEditYourAnswer.text = ""
         }
 
 
@@ -253,7 +258,7 @@ Item {
     id:idView
     width:idRectTakeQuiz.width
     height:idRectTakeQuiz.height
-  //   property int nPreviousCurrentIndex
+    //   property int nPreviousCurrentIndex
     property int nLastIndex : 1
     interactive: bTextAnswerOk || !bTextMode || bAnswerVisible || bMoving || moving
 
@@ -268,10 +273,13 @@ Item {
     onCurrentIndexChanged:
     {
       idTimer.start()
+
       // nPreviousCurrentIndex = currentIndex
       QuizLib.calcAndAssigNextQuizWord(currentIndex)
       bTextAnswerOk = false
+
     }
+
     clip:true
 
     model : idQuizModel
@@ -281,6 +289,12 @@ Item {
       startX: -(idView.width / 2 + 100); startY: idView.height / 2
       PathLine  { relativeX:  idView.width*3 + 300; relativeY: 0}
     }
+
+    focus: true
+    Keys.onLeftPressed: incrementCurrentIndex()
+    Keys.onRightPressed: decrementCurrentIndex()
+    Keys.onSpacePressed: bAnswerVisible = !bAnswerVisible
   }
+
 }
 

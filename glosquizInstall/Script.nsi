@@ -49,15 +49,15 @@ VIAddVersionKey "PrivateBuild" "${VERSION} ${__DATE__} ${__TIME__}"
 
 ; --------------------------------
 ; Installer Sections
-; use tool windeployqt.exe c:\Users\fraxl\Documents\qt\build-glosquiz-Desktop_Qt_5_14_2_MinGW_64_bit-Release\release\glosquiz.exe --qmldir c:\Users\fraxl\Documents\qt\glosquiz
+; use tool windeployqt.exe c:\Users\fraxl\Documents\qt\build-glosquiz-Desktop_Qt_5_14_2_MinGW_64_bit-Release\release\glosquiz.exe --qmldir c:\Users\fraxl\Documents\qt\glosquiz -dir c:\QtNy\5.14.2\mingw73_64\Deploy\Bin
 ; to generate install files
 
 Section "WordQuiz" SecDummy
 
   SetOutPath "$INSTDIR"
-  
-   File /r c:\QtNy\5.14.2\mingw73_64\Deploy	
-   Rename "$INSTDIR\Deploy" "$INSTDIR\Bin"
+
+   File /r c:\QtNy\5.14.2\mingw73_64\Deploy\Bin	
+
    SetOutPath "$INSTDIR\Bin"
 
   File c:\Users\fraxl\Documents\qt\build-glosquiz-Desktop_Qt_5_14_2_MinGW_64_bit-Release\release\glosquiz.exe	
