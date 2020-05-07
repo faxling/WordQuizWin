@@ -117,6 +117,7 @@ Item {
       TextField
       {
         id:idTextEditYourAnswer
+        enabled: bTextMode
         Component.onCompleted:
         {
           MyDownloader.storeTextInputField(idTextEditYourAnswer)
@@ -131,6 +132,7 @@ Item {
         {
           bTextAnswerOk =  QuizLib.isAnswerOk(text, idQuizModel.answer)
         }
+
       }
 
       DropArea
@@ -293,12 +295,15 @@ Item {
       bMoving = true
       idView.incrementCurrentIndex()
     }
+
     Keys.onRightPressed: {
       bMoving = true
       idView.decrementCurrentIndex()
     }
+    Keys.onSpacePressed: {
+      bAnswerVisible = !bAnswerVisible
+    }
 
-    Keys.onSpacePressed: bAnswerVisible = !bAnswerVisible
   }
 
 }

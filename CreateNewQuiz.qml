@@ -317,6 +317,7 @@ Item
     ButtonQuiz
     {
       text: "Yes"
+      width:idDeleteText.contentWidth
       anchors.bottom: parent.bottom
       anchors.bottomMargin: 10
       anchors.right: parent.right
