@@ -30,68 +30,6 @@ Item {
     anchors.bottomMargin: 50
     anchors.fill: parent
 
-    XmlListModel {
-      id: idTrTextModel
-      onStatusChanged: {
-        if (status === XmlListModel.Ready) {
-          if (idTrTextModel.count <= 0) {
-            idTextTrans.text = "-"
-            return
-          }
-
-          QuizLib.assignTextInputField(idTrTextModel.get(0).text1)
-
-          idTrSynModel.query = "/DicResult/def/tr[1]/syn"
-          idTrMeanModel.query = "/DicResult/def/tr[1]/mean"
-        }
-      }
-
-      query: "/DicResult/def/tr"
-      XmlRole {
-        name: "count1"
-        query: "count(syn)"
-      }
-      XmlRole {
-        name: "text1"
-        query: "text/string()"
-      }
-    }
-
-    XmlListModel {
-      id: idTrSynModel
-      XmlRole {
-        name: "syn"
-        query: "text/string()"
-      }
-    }
-
-    XmlListModel {
-      id: idTrMeanModel
-      XmlRole {
-        name: "mean"
-        query: "text/string()"
-      }
-    }
-
-    XmlListModel {
-      id: idTranslateModel
-      property var oBtn
-      query: "/Translation"
-      XmlRole {
-        name: "trans"
-        query: "text/string()"
-      }
-      onStatusChanged: {
-        if (status === XmlListModel.Ready) {
-          if (idTranslateModel.count <= 0) {
-            idTextTrans.text = "-"
-            return
-          }
-          idTextTrans.text = idTranslateModel.get(0).trans
-        }
-      }
-    }
-
     TextListLarge {
       id: idTextTrans
       height: idTextInput.height
@@ -105,14 +43,16 @@ Item {
     Row {
       id: idIextInputToDictRow
       spacing: 20
+      x:5
       InputTextQuiz {
-        width: idEditQuiz.width / 2 - 10
-        text: ""
+        cursorVisible: true
+        width: idEditQuiz.width / 2 - 15
+        placeholderText:"text to translate"
         id: idTextInput
       }
       InputTextQuiz {
-        width: idEditQuiz.width / 2 - 10
-        text: ""
+        width: idEditQuiz.width / 2 - 15
+        placeholderText:"translation"
         id: idTextInput2
       }
     }
@@ -294,8 +234,11 @@ Item {
           width: (idGlosList.width / 2) - (idEditBtn.width * 1.5) - 20
           text: question
           color: state1 === 0 ? "black" : "green"
-          onClick: idTextInput.text = question
-          onPressAndHold: idTextInput.text = question
+          onClick:
+          {
+            idTextInput.text = question + " "
+          }
+
         }
 
         TextList {
@@ -305,8 +248,7 @@ Item {
           text: answer
           font.bold: extra.length > 0
           color: state1 === 0 ? "black" : "green"
-          onClick: idTextInput2.text = answer
-          onPressAndHold: idTextInput2.text = answer
+          onClick: idTextInput2.text = answer + " "
         }
 
         ButtonQuizImg {
@@ -495,4 +437,68 @@ Item {
       }
     }
   }
+
+
+  XmlListModel {
+    id: idTrTextModel
+    onStatusChanged: {
+      if (status === XmlListModel.Ready) {
+        if (idTrTextModel.count <= 0) {
+          idTextTrans.text = "-"
+          return
+        }
+
+        QuizLib.assignTextInputField(idTrTextModel.get(0).text1)
+
+        idTrSynModel.query = "/DicResult/def/tr[1]/syn"
+        idTrMeanModel.query = "/DicResult/def/tr[1]/mean"
+      }
+    }
+
+    query: "/DicResult/def/tr"
+    XmlRole {
+      name: "count1"
+      query: "count(syn)"
+    }
+    XmlRole {
+      name: "text1"
+      query: "text/string()"
+    }
+  }
+
+  XmlListModel {
+    id: idTrSynModel
+    XmlRole {
+      name: "syn"
+      query: "text/string()"
+    }
+  }
+
+  XmlListModel {
+    id: idTrMeanModel
+    XmlRole {
+      name: "mean"
+      query: "text/string()"
+    }
+  }
+
+  XmlListModel {
+    id: idTranslateModel
+    property var oBtn
+    query: "/Translation"
+    XmlRole {
+      name: "trans"
+      query: "text/string()"
+    }
+    onStatusChanged: {
+      if (status === XmlListModel.Ready) {
+        if (idTranslateModel.count <= 0) {
+          idTextTrans.text = "-"
+          return
+        }
+        idTextTrans.text = idTranslateModel.get(0).trans
+      }
+    }
+  }
+
 }

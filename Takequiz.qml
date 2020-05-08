@@ -22,7 +22,6 @@ Item {
   {
     id:idQuestionComponent
 
-
     Rectangle
     {
 
@@ -114,7 +113,7 @@ Item {
         source: "qrc:thumb_small.png"
       }
 
-      TextField
+      InputTextQuiz
       {
         id:idTextEditYourAnswer
         enabled: bTextMode
@@ -303,7 +302,6 @@ Item {
     Keys.onSpacePressed: {
       bAnswerVisible = !bAnswerVisible
     }
-
   }
 
 }

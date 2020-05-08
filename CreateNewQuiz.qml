@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.14
 import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.1
 import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
@@ -10,57 +10,6 @@ Item
   {
     anchors.fill: parent
     gradient:  "GagarinView"
-  }
-
-  ListModel {
-    id:idServerQModel
-    ListElement {
-      qname: "-"
-      code:""
-      state1:""
-      desc1:""
-      date1:""
-    }
-  }
-
-  ListModel {
-    id:idLangModel
-    ListElement {
-      lang: "Swedish"
-      code:"sv"
-    }
-    ListElement {
-      lang: "Russian"
-      code:"ru"
-    }
-    ListElement {
-      lang: "French"
-      code:"fr"
-    }
-    ListElement {
-      lang: "Italian"
-      code:"it"
-    }
-    ListElement {
-      lang: "English"
-      code:"en"
-    }
-    ListElement {
-      lang: "Hungarian"
-      code:"hu"
-    }
-    ListElement {
-      lang: "Polish"
-      code:"pl"
-    }
-    ListElement {
-      lang: "Norvegian"
-      code:"no"
-    }
-    ListElement {
-      lang: "Spanish"
-      code:"es"
-    }
   }
 
   Column
@@ -79,7 +28,7 @@ Item
       {
         id:idTextSelected
         width: n4BtnWidth
-        onClick: idTextInputQuizName.text = text
+        onClick: idTextInputQuizName.text = text + " "
       }
       TextListLarge
       {
@@ -87,14 +36,17 @@ Item
         text:"---"
       }
     }
+
     InputTextQuiz
     {
       id:idTextInputQuizName
-      text:"new q"
+      cursorVisible : true
+      placeholderText: "quiz name"
     }
+
     Row
     {
-      id:rowEButtons
+      id:rowCreateButtons
       spacing:9
       ButtonQuiz
       {
@@ -478,6 +430,7 @@ Item
       x:20
       text:"Available Quiz's"
     }
+
     WhiteText {
       id: idNameLabel
       x:20
@@ -488,8 +441,7 @@ Item
     WhiteText {
       id:idQuestionsLabel
       anchors.top :idDescDate.bottom
-      anchors.right: parent.right
-      anchors.rightMargin:30
+      x : idServerListView.width * (5 / 6 )
       text:"Questions"
     }
 
@@ -498,6 +450,7 @@ Item
     {
       id:idServerListView
       anchors.top :idQuestionsLabel.bottom
+      anchors.topMargin :10
       x:10
       width:idImport.width - 20
       height:parent.height - nBtnHeight  - idServerListView.y - idImport.y
@@ -548,7 +501,6 @@ Item
       width:idServerListView.width
       function closeThisDlg()
       {
-        console.log("idPwdDialog close")
         idPwdDialog.closeClicked()
       }
       onVisibleChanged: {
@@ -593,7 +545,7 @@ Item
       onClicked:
       {
         bProgVisible = true
-        idTextInputQuizName.text = idImport.sSelectedQ
+        idTextInputQuizName.text = idImport.sSelectedQ + " "
         if (idPwdTextInput.displayText.length > 0)
         {
           idPwdDialog.visible = false;
@@ -616,11 +568,64 @@ Item
       onClicked:
       {
         bProgVisible = true
-        idTextInputQuizName.text = idImport.sSelectedQ
+        idTextInputQuizName.text = idImport.sSelectedQ + " "
         sQuizName  = idImport.sSelectedQ
         MyDownloader.importQuiz(idImport.sSelectedQ)
       }
     }
   }
+
+
+  ListModel {
+    id:idServerQModel
+    ListElement {
+      qname: "-"
+      code:""
+      state1:""
+      desc1:""
+      date1:""
+    }
+  }
+
+  ListModel {
+    id:idLangModel
+    ListElement {
+      lang: "Swedish"
+      code:"sv"
+    }
+    ListElement {
+      lang: "Russian"
+      code:"ru"
+    }
+    ListElement {
+      lang: "French"
+      code:"fr"
+    }
+    ListElement {
+      lang: "Italian"
+      code:"it"
+    }
+    ListElement {
+      lang: "English"
+      code:"en"
+    }
+    ListElement {
+      lang: "Hungarian"
+      code:"hu"
+    }
+    ListElement {
+      lang: "Polish"
+      code:"pl"
+    }
+    ListElement {
+      lang: "Norvegian"
+      code:"no"
+    }
+    ListElement {
+      lang: "Spanish"
+      code:"es"
+    }
+  }
+
 }
 
