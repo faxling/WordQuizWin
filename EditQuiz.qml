@@ -91,15 +91,16 @@ Item {
 
       ButtonQuiz {
         id: idBtn3
-        text: "Find " + sLangLangEn
+        text: sAnswerLang + " Wiktionary"
         onClicked: {
-          nLastSearch = 2
-          var oInText = QuizLib.getTextFromInput(idTextInput)
-          if (bHasDictTo)
-            QuizLib.downloadDictOnWord(sReqDictUrlEn, oInText)
+          var oInText
 
-          idTranslateModel.oBtn = idBtn3
-          idTranslateModel.source = sReqUrlBase + sLangLangEn + "&text=" + oInText
+          if (bIsReverse)
+            oInText   = QuizLib.getTextFromInput(idTextInput)
+          else
+            oInText   = QuizLib.getTextFromInput(idTextInput2)
+
+          onClicked: Qt.openUrlExternally("http://"+sAnswerLang+ ".wiktionary.org/w/index.php?title=" +oInText.toLowerCase()  + "&printable=yes" );
         }
       }
 
