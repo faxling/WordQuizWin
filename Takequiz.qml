@@ -139,7 +139,7 @@ Item {
         anchors.fill: parent
         onDropped:
         {
-          MyDownloader.downloadImage(drop.urls, idQuizModel.question, sQuestonLang , idQuizModel.answer,sAnswerLang)
+          MyDownloader.downloadImage(drop.urls, idQuizModel.question, sQuestionLang , idQuizModel.answer,sAnswerLang)
         }
       }
 
@@ -179,7 +179,7 @@ Item {
           anchors.horizontalCenter: parent.horizontalCenter
           visible:bHasSpeech
           source:"qrc:horn.png"
-          onClicked: MyDownloader.playWord(question,sQuestonLang)
+          onClicked: MyDownloader.playWord(question,sQuestionLang)
         }
 
         ButtonQuiz

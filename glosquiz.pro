@@ -37,5 +37,9 @@ DISTFILES += \
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
-ANDROID_EXTRA_LIBS =
-android: include(c:/Users/fraxl/AppData/Local/Android/Sdk/android_openssl/openssl.pri)
+ANDROID_EXTRA_LIBS = \
+C:/Users/fraxl/AppData/Local/Android/Sdk/android_openssl/latest/arm64/libcrypto_1_1.so \
+C:/Users/fraxl/AppData/Local/Android/Sdk/android_openssl/latest/arm64/libssl_1_1.so
+
+
+

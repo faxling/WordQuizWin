@@ -9,5 +9,5 @@ ListView
     opacity:0.5
     color: "#009bff"
   }
-   ScrollBar.vertical: ScrollBar {}
+  ScrollBar.vertical: ScrollBar {}
 }

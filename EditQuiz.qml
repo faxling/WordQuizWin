@@ -1,12 +1,13 @@
 import QtQuick 2.3
 import QtQuick.Window 2.2
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.1
 import QtQuick.XmlListModel 2.0
 import QtQuick.LocalStorage 2.0 as Sql
 import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
 Item {
   id: idEditQuiz
+  property bool bDoLookUppText1 : true
 
   Rectangle
   {
@@ -46,11 +47,21 @@ Item {
       x:5
       InputTextQuiz {
         cursorVisible: true
+        onCursorVisibleChanged:
+        {
+          if (cursorVisible)
+            bDoLookUppText1 = true
+        }
         width: idEditQuiz.width / 2 - 15
         placeholderText:"text to translate"
         id: idTextInput
       }
       InputTextQuiz {
+        onCursorVisibleChanged:
+        {
+          if (cursorVisible)
+            bDoLookUppText1 = false
+        }
         width: idEditQuiz.width / 2 - 15
         placeholderText:"translation"
         id: idTextInput2
@@ -91,16 +102,17 @@ Item {
 
       ButtonQuiz {
         id: idBtn3
-        text: sAnswerLang + " Wiktionary"
+        text: (bDoLookUppText1 ? sQuestionLang : sAnswerLang) + " Wiktionary"
         onClicked: {
           var oInText
+          var sLang = bDoLookUppText1 ? sQuestionLang : sAnswerLang
 
-          if (bIsReverse)
+          if (bDoLookUppText1)
             oInText   = QuizLib.getTextFromInput(idTextInput)
           else
             oInText   = QuizLib.getTextFromInput(idTextInput2)
 
-          onClicked: Qt.openUrlExternally("http://"+sAnswerLang+ ".wiktionary.org/w/index.php?title=" +oInText.toLowerCase()  + "&printable=yes" );
+          onClicked: Qt.openUrlExternally("http://"+sLang+ ".wiktionary.org/w/index.php?title=" +oInText.toLowerCase()  + "&printable=yes" );
         }
       }
 
@@ -160,6 +172,7 @@ Item {
         model: idTrSynModel
         width: parent.width / 3
         height: parent.height
+        clip:true
         delegate: TextListLarge {
           id: idSynText
           text: syn
@@ -168,11 +181,13 @@ Item {
             onClicked: QuizLib.assignTextInputField(idSynText.text)
           }
         }
+        ScrollBar.vertical: ScrollBar {}
       }
       ListView {
         model: idTrMeanModel
         width: parent.width / 3
         height: parent.height
+        clip:true
         delegate: TextListLarge {
           id: idMeanText
           text: mean
@@ -238,6 +253,7 @@ Item {
           onClick:
           {
             idTextInput.text = question + " "
+            bDoLookUppText1 = true
           }
 
         }
@@ -249,7 +265,10 @@ Item {
           text: answer
           font.bold: extra.length > 0
           color: state1 === 0 ? "black" : "green"
-          onClick: idTextInput2.text = answer + " "
+          onClick: {
+            idTextInput2.text = answer + " "
+            bDoLookUppText1 = false
+          }
         }
 
         ButtonQuizImg {
