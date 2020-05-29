@@ -221,10 +221,21 @@ Item {
 
       }
       Image {
+        id:idImageAllok
         visible:allok
         anchors.centerIn: parent
         source: "qrc:thumb.png"
       }
+
+      ButtonQuiz {
+        visible:allok
+        text:"One more time?"
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top:idImageAllok.bottom
+        anchors.topMargin: 20
+        onClicked: QuizLib.resetQuiz()
+      }
+
       ButtonQuizImg
       {
         enabled: idView.interactive
