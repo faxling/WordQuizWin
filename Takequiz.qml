@@ -233,6 +233,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top:idImageAllok.bottom
         anchors.topMargin: 20
+        nButtonFontSize : 20
         onClicked: QuizLib.resetQuiz()
       }
 
@@ -274,7 +275,8 @@ Item {
     height:idRectTakeQuiz.height
     //   property int nPreviousCurrentIndex
     property int nLastIndex : 1
-    interactive: bTextAnswerOk || !bTextMode || bAnswerVisible || bMoving || moving
+
+    interactive: ((!bAllok) && (bTextAnswerOk || !bTextMode || bAnswerVisible)) ||  (bMoving || moving)
 
     highlightMoveDuration:800
 
