@@ -8,29 +8,30 @@ Button
   property bool bProgVisible
   property int  nButtonFontSize : nFontSize
   style: ButtonStyle {
-          background: Rectangle {
-              border.width: control.activeFocus ? 2 : 1
-              border.color: "#888"
-              radius: 4
-              color:
-              {
+    background: Rectangle {
+      border.width: control.activeFocus ? 2 : 1
+      border.color: "#888"
+      radius: 4
+      color:
+      {
 
-                if (control.pressed)
-                  return "steelblue"
+        if (control.pressed)
+          return "steelblue"
 
-                if (bProgVisible)
-                  return "Orange"
+        if (bProgVisible)
+          return "Orange"
 
-                return "lightsteelblue"
+        return "lightsteelblue"
 
-              }
-          }
-          label: Text {
-                  renderType: Text.NativeRendering
-                  verticalAlignment: Text.AlignVCenter
-                  horizontalAlignment: Text.AlignHCenter
-                  font.pointSize: nButtonFontSize
-                  text: control.text
-                }
       }
+    }
+    label: Text {
+      id: idTextLabel
+      renderType: Text.NativeRendering
+      verticalAlignment: Text.AlignVCenter
+      horizontalAlignment: Text.AlignHCenter
+      font.pointSize: nButtonFontSize
+      text: control.text
+    }
+  }
 }

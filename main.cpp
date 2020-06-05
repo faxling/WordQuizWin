@@ -9,7 +9,10 @@
 #include "..\harbour-wordquiz\src\speechdownloader.h"
 #include "filehelpers.h"
 
-
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+#include <QAndroidJniObject>
+#endif
 
 // "sqlite3.exe .open c:/Users/fraxl/AppData/Local/glosquiz/QML/OfflineStorage/Databases/2db1346274c33ae632adc881bdcd2f8e.sqlite"
 
@@ -111,7 +114,14 @@ int main(int argc, char *argv[])
   app.setWindowIcon(QIcon("qrc:horn.png"));
 
   oLS.LoadLast();
-
+#ifdef Q_OS_ANDROID
+  QAndroidJniObject const activity = QtAndroid::androidActivity();
+  if (activity.isValid()) {
+    // Control music volume
+    int const STREAM_MUSIC = 3;
+    activity.callMethod<void>("setVolumeControlStream", "(I)V", STREAM_MUSIC);
+  }
+#endif
   return app.exec();
 }
 

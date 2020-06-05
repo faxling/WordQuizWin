@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick multimedia
+QT += qml quick multimedia androidextras
 
 CONFIG += c++11
 

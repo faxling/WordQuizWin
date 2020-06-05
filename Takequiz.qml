@@ -234,6 +234,7 @@ Item {
         anchors.top:idImageAllok.bottom
         anchors.topMargin: 20
         nButtonFontSize : 20
+        width: nButtonFontSize * text.length + 40
         onClicked: QuizLib.resetQuiz()
       }
 
