@@ -1,9 +1,10 @@
 TEMPLATE = app
 
-QT += qml quick multimedia androidextras
+QT += qml quick multimedia
+
+android: QT += androidextras
 
 CONFIG += c++11
-
 
 SOURCES += main.cpp \
     ../harbour-wordquiz/src/speechdownloader.cpp \

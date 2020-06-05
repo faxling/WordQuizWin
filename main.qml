@@ -134,7 +134,6 @@ Window {
   Component.onCompleted:
   {
     QuizLib.getAndInitDb()
-
   }
 
   width:570
