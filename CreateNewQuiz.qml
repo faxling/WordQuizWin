@@ -23,11 +23,13 @@ Item
     Row
     {
       x:5
+      spacing:20
       height: idTextInputQuizName.height
       TextListLarge
       {
         id:idTextSelected
         width: n4BtnWidth
+        clip: true
         onClick: idTextInputQuizName.text = text + " "
       }
       TextListLarge
@@ -53,7 +55,17 @@ Item
         text:"New Quiz"
         onClicked:
         {
-          QuizLib.newQuiz()
+          if (text === "New Quiz")
+          {
+            text = "Create"
+            idLangListRow.visible = true
+          }
+          else
+          {
+            text = "New Quiz"
+            idLangListRow.visible = false
+            QuizLib.newQuiz()
+          }
         }
       }
       ButtonQuiz
@@ -61,16 +73,7 @@ Item
         text:"Rename"
         onClicked:
         {
-          sQuizName = idTextInputQuizName.displayText
-          glosModelIndex.setProperty(idQuizList.currentIndex,"quizname",sQuizName)
-          db.transaction(
-                function(tx) {
-                  var nId = glosModelIndex.get(idQuizList.currentIndex).number;
-                  console.log("name " + sQuizName)
-                  tx.executeSql('UPDATE GlosaDbIndex SET quizname=? WHERE dbnumber=?',[sQuizName, nId]);
-                  idTextSelected.text = sQuizName
-                }
-                )
+          QuizLib.renameQuiz()
         }
       }
       ButtonQuiz
@@ -81,7 +84,6 @@ Item
         {
           idExport.visible = true
           idExportError.visible = false
-
         }
       }
       ButtonQuiz
@@ -90,10 +92,7 @@ Item
         text:"Download"
         onClicked:
         {
-          bProgVisible = true
-          idImportMsg.text =""
-          idImport.visible = true
-          MyDownloader.listQuiz()
+          idImport.showPane()
         }
       }
       /*
@@ -109,6 +108,7 @@ Item
     Row
     {
       id:idLangListRow
+      visible: false
       anchors.horizontalCenter: parent.horizontalCenter
       //  width:parent.width
       height : nDlgHeight / 2
@@ -177,7 +177,6 @@ Item
     {
       id:idQuizList
       width:nMainWidth - 20
-
       x:10
       height:parent.height - idAvailableQuizText.y -20
       model:glosModelIndex
@@ -199,44 +198,61 @@ Item
           nGlosaDbLastIndex = 0;
       }
 
-      delegate: Row {
+      delegate:Item
+      {
+        width : n25BtnWidth + n4BtnWidth*2 - 5
+        height : idCol2.height
         id:idQuizListRow
-        TextListLarge
-        {
-          id:idCol2
-          width:n25BtnWidth
-          text:quizname
-          onClick: idQuizList.currentIndex = index
-        }
-        TextListLarge
-        {
-          id:idCol3
-          width:n4BtnWidth
-          text:langpair
-          onClick: idQuizList.currentIndex = index
-        }
-        TextListLarge
-        {
+        Row {
 
-          id:idCol4
-          width:n4BtnWidth
-          text:state1
-          onClick: idQuizList.currentIndex = index
-        }
 
-        ButtonQuizImg
-        {
-          id:idCol5
-          height:idCol4.height
-          width:idCol4.height
-          source: "qrc:rm.png"
-          onClicked:
+          TextListLarge
           {
-            idDeleteConfirmationDlg.nIndex = index
-            idDeleteConfirmationDlg.nNumber = number
-            idDeleteConfirmationDlg.visible = true
+            id:idCol2
+            width:n25BtnWidth
+            text:quizname
+          }
+
+          TextListLarge
+          {
+            id:idCol3
+            width:n4BtnWidth
+            text:langpair
+            // onClick: idQuizList.currentIndex = index
+          }
+
+          TextListLarge
+          {
+            id:idCol4
+            width:n4BtnWidth
+            text:state1
+            //   onClick: idQuizList.currentIndex = index
+          }
+
+          ButtonQuizImg
+          {
+            id:idCol5
+            height:idCol4.height
+            width:idCol4.height
+            source: "qrc:rm.png"
+            onClicked:
+            {
+              idDeleteConfirmationDlg.sQuizToDelete = quizname
+              idDeleteConfirmationDlg.nIndex = index
+              idDeleteConfirmationDlg.nNumber = number
+              idDeleteConfirmationDlg.visible = true
+            }
           }
         }
+        MouseArea
+        {
+          anchors.fill:idQuizListRow
+          onClicked: {
+            console.log("onClicked")
+            idQuizList.currentIndex = index
+          }
+        }
+
       }
     }
 
@@ -256,6 +272,7 @@ Item
     height:nDlgHeight
     property int nIndex
     property int nNumber
+    property string sQuizToDelete
     onCloseClicked:  idDeleteConfirmationDlg.visible = false
 
     WhiteText {
@@ -263,7 +280,7 @@ Item
       anchors.top : idDeleteConfirmationDlg.bottomClose
       anchors.topMargin : 30
       x:30
-      text:"Do You realy want to delete '" +sQuizName + "' ?"
+      text:"Do You realy want to delete '" +idDeleteConfirmationDlg.sQuizToDelete + "' ?"
     }
 
     ButtonQuiz
@@ -340,7 +357,6 @@ Item
       text:"error"
     }
 
-
     ButtonQuiz
     {
       id:idUpdateDescBtn
@@ -355,6 +371,7 @@ Item
         idExport.visible = false
       }
     }
+
     ButtonQuiz
     {
       id:idUpdateBtn
@@ -382,199 +399,42 @@ Item
       onClicked:
       {
         bProgVisible = true
+        QuizLib.updateDesc1(idTextInputQuizDesc.displayText)
         MyDownloader.exportCurrentQuiz( glosModel, sQuizName,sLangLang, idTextInputQuizPwd.displayText, idTextInputQuizDesc.displayText )
       }
     }
   }
+  clip: true
+
+  DownLoad
+  {
+    id:idImport
+    //   anchors.fill: parent
+    width:parent.width
+    height: parent.height
+    //  height:nDlgHeightLarge
+  }
 
   RectRounded
   {
-    id:idImport
+    id:idErrorDialog
+    visible:false
+    anchors.horizontalCenter: parent.horizontalCenter
     y:20
-    visible: false;
-    width:parent.width
-    height:nDlgHeightLarge
-    onCloseClicked:  {
-      idPwdDialog.visible = false;
-      idDeleteQuiz.bProgVisible = false
-      idImport.visible = false
-      idPwdTextInput.text = ""
-    }
-    WhiteText
-    {
-      id:idDescText
-      anchors.top :idImportTitle.bottom
-      x:20
-      text:"---"
-    }
-
-    WhiteText
-    {
-      id:idDescDate
-      font.pointSize: 9
-      anchors.top :idDescText.bottom
-      x:20
-      text:"-"
-    }
-
-    TextList {
-      id:idImportMsg
-      x:70
-      y:25
-      color:"red"
-      text:""
-    }
+    height : nDlgHeight
+    radius:7
+    width:idImport.width
 
     WhiteText {
-      id: idImportTitle
       x:20
-      text:"Available Quiz's"
+      anchors.top : idErrorDialog.bottomClose
+      text:"'" +idTextInputQuizName.displayText + "'" + " To short Quiz name"
     }
-
-    WhiteText {
-      id: idNameLabel
-      x:20
-      y: idQuestionsLabel.y
-      text:"Name"
-    }
-
-    WhiteText {
-      id:idQuestionsLabel
-      anchors.top :idDescDate.bottom
-      x : idServerListView.width * (5 / 6 )
-      text:"Questions"
-    }
-
-    property string sSelectedQ
-    ListViewHi
+    onCloseClicked:
     {
-      id:idServerListView
-      anchors.top :idQuestionsLabel.bottom
-      anchors.topMargin :10
-      x:10
-      width:idImport.width - 20
-      height:parent.height - nBtnHeight  - idServerListView.y - idImport.y
-      model: idServerQModel
-      delegate: Item {
-        property int nW : idServerListView.width / 6
-        width:idServerListView.width
-        height : idTextQname.height
-        Row
-        {
-          WhiteText {
-            width: nW *4
-            id:idTextQname
-            text:qname
-            onClick:
-            {
-              idImportMsg.text = ""
-              idDescText.text = desc1
-              idDescDate.text = date1
-              idImport.sSelectedQ = qname;
-              idServerListView.currentIndex = index
-            }
-          }
-
-          WhiteText
-          {
-            width:nW
-            text:code
-          }
-
-          WhiteText
-          {
-            width:nW
-            text:state1
-          }
-        }
-      }
-    }
-    RectRounded
-    {
-      id:idPwdDialog
-      visible:false
-      height:70
-      radius:7
-      color: "#202020"
-      anchors.bottom: idDeleteQuiz.top
-      anchors.bottomMargin: 20
-      width:idServerListView.width
-      function closeThisDlg()
-      {
-        idPwdDialog.closeClicked()
-      }
-      onVisibleChanged: {
-        if (visible)
-          idWindow.oPopDlg = idPwdDialog
-        else
-          idWindow.oPopDlg = idImport
-      }
-      onCloseClicked:
-      {
-        idPwdDialog.visible = false
-        idDeleteQuiz.bProgVisible = false
-      }
-      Row
-      {
-        x:20
-        anchors.verticalCenter:parent.verticalCenter
-        spacing:20
-        Text
-        {
-          anchors.verticalCenter:parent.verticalCenter
-          color: "white"
-          text: "Password to remove '" + idImport.sSelectedQ +"'"
-        }
-
-        InputTextQuiz
-        {
-          width:parent.width / 3
-          id:idPwdTextInput
-        }
-      }
-    }
-
-    ButtonQuiz
-    {
-      id:idDeleteQuiz
-      text: "Remove"
-      anchors.bottom: parent.bottom
-      anchors.bottomMargin: 10
-      anchors.right: parent.right
-      anchors.rightMargin: 20
-      onClicked:
-      {
-        bProgVisible = true
-        idTextInputQuizName.text = idImport.sSelectedQ + " "
-        if (idPwdTextInput.displayText.length > 0)
-        {
-          idPwdDialog.visible = false;
-          MyDownloader.deleteQuiz(idImport.sSelectedQ, idPwdTextInput.displayText,idServerListView.currentIndex)
-          idPwdTextInput.text = ""
-        }
-        else
-          idPwdDialog.visible = true
-      }
-    }
-
-    ButtonQuiz
-    {
-      id:idLoadQuiz
-      text: "Download"
-      anchors.bottom: parent.bottom
-      anchors.bottomMargin: 10
-      anchors.right: idDeleteQuiz.left
-      anchors.rightMargin: 20
-      onClicked:
-      {
-        bProgVisible = true
-        idTextInputQuizName.text = idImport.sSelectedQ + " "
-        sQuizName  = idImport.sSelectedQ
-        MyDownloader.importQuiz(idImport.sSelectedQ)
-      }
+      idErrorDialog.visible = false
     }
   }
-
 
   ListModel {
     id:idServerQModel
@@ -587,45 +447,7 @@ Item
     }
   }
 
-  ListModel {
-    id:idLangModel
-    ListElement {
-      lang: "Swedish"
-      code:"sv"
-    }
-    ListElement {
-      lang: "Russian"
-      code:"ru"
-    }
-    ListElement {
-      lang: "French"
-      code:"fr"
-    }
-    ListElement {
-      lang: "Italian"
-      code:"it"
-    }
-    ListElement {
-      lang: "English"
-      code:"en"
-    }
-    ListElement {
-      lang: "Hungarian"
-      code:"hu"
-    }
-    ListElement {
-      lang: "Polish"
-      code:"pl"
-    }
-    ListElement {
-      lang: "Norvegian"
-      code:"no"
-    }
-    ListElement {
-      lang: "Spanish"
-      code:"es"
-    }
-  }
+
 
 }
 

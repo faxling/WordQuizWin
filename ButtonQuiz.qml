@@ -7,6 +7,12 @@ Button
   height : nBtnHeight
   property bool bProgVisible
   property int  nButtonFontSize : nFontSize
+
+  BusyIndicator {
+    anchors.centerIn: parent
+    running: bProgVisible
+  }
+
   style: ButtonStyle {
     background: Rectangle {
       border.width: control.activeFocus ? 2 : 1
@@ -14,7 +20,6 @@ Button
       radius: 4
       color:
       {
-
         if (control.pressed)
           return "steelblue"
 
@@ -25,6 +30,7 @@ Button
 
       }
     }
+
     label: Text {
       id: idTextLabel
       renderType: Text.NativeRendering

@@ -13,10 +13,10 @@ Rectangle {
     else
       idWindow.oPopDlg = undefined
   }
+
   signal closeClicked
 
   function closeThisDlg() {
-      console.log("closeThisDlg ")
     idDlgPopup.closeClicked()
   }
 
@@ -28,7 +28,7 @@ Rectangle {
     anchors.rightMargin: 10
     source: "qrc:quit.png"
     onClicked: {
-      closeThisDlg()
+      idDlgPopup.closeThisDlg()
     }
   }
 }

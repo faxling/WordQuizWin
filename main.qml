@@ -98,8 +98,64 @@ Window {
   ListModel {
     id: glosModelIndex
   }
+// https://www.countryflags.com/
+  ListModel {
+    id:idLangModel
+    ListElement {
+      lang: "Swedish"
+      imgsource:"qrc:/glosquiz/flags/sweden-flag-button-round-icon-128.png"
+      code:"sv"
+    }
 
+    ListElement {
+      lang: "Russian"
+      imgsource:"qrc:/glosquiz/flags/russia-flag-button-round-icon-128.png"
+      code:"ru"
+    }
 
+    ListElement {
+      lang: "French"
+      imgsource:"qrc:/glosquiz/flags/france-flag-button-round-icon-128.png"
+      code:"fr"
+    }
+
+    ListElement {
+      lang: "Italian"
+      imgsource:"qrc:/glosquiz/flags/italy-flag-button-round-icon-128.png"
+      code:"it"
+    }
+
+    ListElement {
+      lang: "English"
+      imgsource:"qrc:/glosquiz/flags/united-kingdom-flag-button-round-icon-128.png"
+      code:"en"
+    }
+
+    ListElement {
+      lang: "Polish"
+      imgsource:"qrc:/glosquiz/flags/poland-flag-button-round-icon-128.png"
+      code:"pl"
+    }
+
+    ListElement {
+      lang: "Norvegian"
+      imgsource:"qrc:/glosquiz/flags/norway-flag-button-round-icon-128.png"
+      code:"no"
+    }
+
+    ListElement {
+      lang: "Spanish"
+      imgsource:"qrc:/glosquiz/flags/spain-flag-button-round-icon-128.png"
+      code:"es"
+    }
+
+    ListElement {
+      lang: "Hungarian"
+      imgsource:"qrc:/glosquiz/flags/hungary-flag-button-round-icon-128.png"
+      code:"hu"
+    }
+
+  }
   ListModel {
     id:idQuizModel
 
@@ -147,9 +203,16 @@ Window {
     height: idBtnHelp.height
     TextList {
       id: idTitle
+      font.italic: glosModelIndex.count === 0
       anchors.verticalCenter: idBtnHelp.verticalCenter
       anchors.horizontalCenter: parent.horizontalCenter
-      text: sQuizName + " " + sFromLang + (bIsReverse ? "<-" : "->") +  sToLang + " " + sScoreText
+      text: {
+        if (glosModelIndex.count === 0)
+          return "No Quiz create one or download"
+
+        return sQuizName + " " + sFromLang + (bIsReverse ? "<-" : "->") +  sToLang + " " + sScoreText
+
+      }
     }
 
     ButtonQuizImg
@@ -193,6 +256,7 @@ Window {
     Tab
     {
       title: "Edit"
+      enabled: glosModelIndex.count > 0
       active: true
       EditQuiz
       {
@@ -202,6 +266,7 @@ Window {
     }
     Tab
     {
+      enabled: glosModelIndex.count > 0
       title: "Quiz"
       TakeQuiz
       {
@@ -214,6 +279,7 @@ Window {
 
       tab: Rectangle {
         color: styleData.selected ? "#626567" :"#BDC3C7"
+        opacity: styleData.enabled ? 1 :0.5
         border.color:  "#797D7F"
         implicitWidth: idTabMain.width / 3
         implicitHeight: nBtnHeight
@@ -235,6 +301,8 @@ Window {
       MyDownloader.pushIndex(nLastIndexMain)
       nLastIndexMain = currentIndex
     }
+
+
   }
 
 }
