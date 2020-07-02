@@ -34,6 +34,8 @@ Window {
   property bool bHasDictFrom : sFromLang ==="ru" || sFromLang ==="en"
   property string sLangLangEn
   property string sQuizName : "-"
+  property string sQuizDate : "-"
+  property string sQuizDesc : "-"
   property string sScoreText : "-"
   property int nDbNumber : 0;
   property int nQuizIndex: 1

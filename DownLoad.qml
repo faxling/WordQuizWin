@@ -5,11 +5,13 @@ Flipable {
   id:idContainer
   x:-width
   property bool bIsDownloading : false
+  property bool bIsDownloadingList : false
   property bool bIsDeleting : false
   property string sSelectedQ
-  property string sImportMsg: ""
-  property string sDesc1: ""
-  property string sDescDate : ""
+  property string sImportMsg
+  property string sDesc1
+  property string sLang
+  property string sDescDate
   property alias currentIndex: idServerListView.currentIndex
   function positionViewAtIndex(nIndex)
   {
@@ -19,7 +21,7 @@ Flipable {
 
   function showPane()
   {
-    idImport.sImportMsg = ""
+    idContainer.sImportMsg = ""
     idNumberAnimation.duration = 500
     idContainer.state = "Show"
   }
@@ -63,7 +65,8 @@ Flipable {
             anchors.fill:parent
             onClicked:
             {
-              bIsDownloading = true
+              bIsDownloadingList = true
+              sLang = lang
               MyDownloader.listQuizLang(code)
               idContainer.state = "Back"
               idNumberAnimation.duration = 1000
@@ -91,12 +94,12 @@ Flipable {
 
     BusyIndicator {
       anchors.centerIn: parent
-      running:bIsDownloading
+      running:bIsDownloadingList
     }
 
     onCloseClicked:  {
       idPwdDialog.visible = false;
-      idImport.state = ""
+      idContainer.state = "Flip"
       bIsDeleting = false
       idPwdTextInput.text = ""
     }
@@ -115,7 +118,7 @@ Flipable {
       font.pointSize: 9
       anchors.top :idDescText.bottom
       x:20
-      text:"-"
+      text:sDescDate
     }
 
     TextList {
@@ -144,6 +147,13 @@ Flipable {
       anchors.top :idDescDate.bottom
       x : idServerListView.width * (5 / 6 )
       text:"Questions"
+    }
+
+    TextListLarge
+    {
+      anchors.centerIn: parent
+      visible: idServerQModel.count === 0
+      text: "No Quiz aviailable in "+ sLang +"\nplease create one and upload"
     }
 
     ListViewHi
@@ -187,10 +197,10 @@ Flipable {
           anchors.fill:idImportRow
           onClicked:
           {
-            idImportMsg.text = ""
-            idImport.sDesc1 = desc1
-            idImport.sDescDate = date1
-            idImport.sSelectedQ = qname;
+            idContainer.sImportMsg = ""
+            idContainer.sDesc1 = desc1
+            idContainer.sDescDate = date1
+            idContainer.sSelectedQ = qname;
             idServerListView.currentIndex = index
           }
         }
@@ -278,9 +288,9 @@ Flipable {
       onClicked:
       {
         bIsDownloading = true
-        idTextInputQuizName.text = idImport.sSelectedQ + " "
-        sQuizName  = idImport.sSelectedQ
-        MyDownloader.importQuiz(idImport.sSelectedQ)
+        idTextInputQuizName.text = idContainer.sSelectedQ + " "
+        sQuizName  = idContainer.sSelectedQ
+        MyDownloader.importQuiz(idContainer.sSelectedQ)
       }
     }
   }
@@ -304,6 +314,11 @@ Flipable {
     State {
       name: "Back"
       PropertyChanges { target: itemRotation; angle: 180 }
+      PropertyChanges { target: idContainer; x: 0 }
+    } ,
+    State {
+      name: "Flip"
+      PropertyChanges { target: itemRotation; angle: 0 }
       PropertyChanges { target: idContainer; x: 0 }
     } ,
     State {

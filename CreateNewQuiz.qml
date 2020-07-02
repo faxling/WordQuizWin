@@ -5,7 +5,6 @@ import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
 Item
 {
-  property alias nQuizListCurrentIndex: idQuizList.currentIndex
   Rectangle
   {
     anchors.fill: parent
@@ -20,8 +19,16 @@ Item
     anchors.bottomMargin: 50
     anchors.fill: parent
 
+    TextList
+    {
+      x:idDescText.x
+      id:idDateDesc1
+      text: idWindow.sQuizDate
+    }
+
     Row
     {
+      id:idDescText
       x:5
       spacing:20
       height: idTextInputQuizName.height
@@ -35,7 +42,7 @@ Item
       TextListLarge
       {
         id:idDescTextOnPage
-        text:"---"
+        text:idWindow.sQuizDesc
       }
     }
 
@@ -53,19 +60,10 @@ Item
       ButtonQuiz
       {
         text:"New Quiz"
+        bIsPressedIn : idLangListRow.visible
         onClicked:
         {
-          if (text === "New Quiz")
-          {
-            text = "Create"
-            idLangListRow.visible = true
-          }
-          else
-          {
-            text = "New Quiz"
-            idLangListRow.visible = false
-            QuizLib.newQuiz()
-          }
+          idLangListRow.visible = !idLangListRow.visible
         }
       }
       ButtonQuiz
@@ -73,7 +71,7 @@ Item
         text:"Rename"
         onClicked:
         {
-          QuizLib.renameQuiz()
+          QuizLib.renameQuiz(idTextInputQuizName.displayText)
         }
       }
       ButtonQuiz
@@ -113,6 +111,7 @@ Item
       //  width:parent.width
       height : nDlgHeight / 2
 
+      spacing:20
       function doCurrentIndexChanged()
       {
         if (idLangList1.currentIndex < 0 || idLangList1.currentIndex < 0)
@@ -133,16 +132,26 @@ Item
         model: idLangModel
         delegate: TextListLarge {
           text:lang
+          width:n4BtnWidth
           height : nBtnHeight / 2
           onClick: idLangList1.currentIndex = index
         }
       }
 
-      TextListLarge
+      Column
       {
-        width:n4BtnWidth
-        horizontalAlignment: Text.AlignLeft
-        text:sLangLangSelected
+        TextListLarge
+        {
+          width:n4BtnWidth
+          horizontalAlignment: Text.AlignHCenter
+          text:sLangLangSelected
+        }
+        ButtonQuiz
+        {
+          width: n4BtnWidth
+          text: "Create"
+          onClicked:  QuizLib.newQuiz()
+        }
       }
 
       ListViewHi
@@ -157,10 +166,13 @@ Item
         }
 
         delegate: TextListLarge {
+          horizontalAlignment: Text.AlignRight
           text:lang
           height : nBtnHeight / 2
+          width: idLangList2.width
           onClick:idLangList2.currentIndex = index
         }
+
       }
     }
 
@@ -248,7 +260,6 @@ Item
         {
           anchors.fill:idQuizListRow
           onClicked: {
-            console.log("onClicked")
             idQuizList.currentIndex = index
           }
         }
@@ -302,11 +313,11 @@ Item
               )
 
         glosModelIndex.remove(idDeleteConfirmationDlg.nIndex)
-        if (idDeleteConfirmationDlg.nIndex ===idQuizList.currentIndex)
-        {
-          if (idDeleteConfirmationDlg.nIndex>0)
-            idQuizList.currentIndex = idQuizList.currentIndex -1
-        }
+        //if (idDeleteConfirmationDlg.nIndex === idQuizList.currentIndex)
+        //{
+          //if (idDeleteConfirmationDlg.nIndex>0)
+          //  idQuizList.currentIndex = idQuizList.currentIndex -1
+        // }
 
         idDeleteConfirmationDlg.visible = false
       }
@@ -446,8 +457,5 @@ Item
       date1:""
     }
   }
-
-
-
 }
 

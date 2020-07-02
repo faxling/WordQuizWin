@@ -3,6 +3,7 @@ import QtQuick.Controls 2.1
 
 ListView
 {
+  id:idListView
   clip:true
   highlightMoveDuration :500
   highlight: Rectangle {

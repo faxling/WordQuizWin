@@ -6,6 +6,7 @@ Button
   width:n4BtnWidth
   height : nBtnHeight
   property bool bProgVisible
+  property bool bIsPressedIn : false
   property int  nButtonFontSize : nFontSize
 
   BusyIndicator {
@@ -23,9 +24,12 @@ Button
         if (control.pressed)
           return "steelblue"
 
+
         if (bProgVisible)
           return "Orange"
 
+        if (bIsPressedIn)
+          return  "#009bff"
         return "lightsteelblue"
 
       }

@@ -8,6 +8,8 @@
 #include <QKeyEvent>
 #include "..\harbour-wordquiz\src\speechdownloader.h"
 #include "filehelpers.h"
+#include <QStandardPaths>
+
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
@@ -65,6 +67,8 @@ class Engine : public QQmlApplicationEngine
 public:
   Engine()
   {
+    QString filePath = QStandardPaths::writableLocation( QStandardPaths::StandardLocation::DocumentsLocation ) ^ "SoftFrax";
+    setOfflineStoragePath(filePath);
     m_p = new Speechdownloader(offlineStoragePath(), nullptr);
     rootContext()->setContextProperty("MyDownloader",  m_p);
     connect(this, &Engine::objectCreated, [=](QObject *object, const QUrl &){
@@ -101,6 +105,7 @@ int main(int argc, char *argv[])
   QGuiApplication app(argc, argv);
 
   Engine engine;
+
 
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
