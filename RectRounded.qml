@@ -7,11 +7,21 @@ Rectangle {
   property alias bottomClose: idBtnCancel.bottom
   radius: 10
   color: "black"
+  property bool bIgnoreBackHandling : false
   onVisibleChanged: {
+    if (bIgnoreBackHandling)
+      return
+
     if (visible)
+    {
+      console.log("idDlgPopup")
       idWindow.oPopDlg = idDlgPopup
+    }
     else
+    {
+       console.log("idDlgPopup undefined")
       idWindow.oPopDlg = undefined
+    }
   }
 
   signal closeClicked

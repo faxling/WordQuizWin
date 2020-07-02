@@ -28,6 +28,7 @@ Flipable {
 
   front: RectRounded {
     radius: 0
+    bIgnoreBackHandling : true
     gradient:  "StrongStick"
     // color: "black"
     anchors.fill: idContainer
@@ -91,7 +92,7 @@ Flipable {
     radius: 0
     gradient:  "StrongStick"
     anchors.fill: idContainer
-
+    bIgnoreBackHandling : true
     BusyIndicator {
       anchors.centerIn: parent
       running:bIsDownloadingList
@@ -210,6 +211,7 @@ Flipable {
     {
       id:idPwdDialog
       visible:false
+
       height:70
       radius:7
       color: "#202020"

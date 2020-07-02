@@ -5,6 +5,7 @@
 #include <QQmlContext>
 #include <QWindow>
 #include <QFile>
+#include <QDir>
 #include <QKeyEvent>
 #include "..\harbour-wordquiz\src\speechdownloader.h"
 #include "filehelpers.h"
@@ -67,8 +68,6 @@ class Engine : public QQmlApplicationEngine
 public:
   Engine()
   {
-    QString filePath = QStandardPaths::writableLocation( QStandardPaths::StandardLocation::DocumentsLocation ) ^ "SoftFrax";
-    setOfflineStoragePath(filePath);
     m_p = new Speechdownloader(offlineStoragePath(), nullptr);
     rootContext()->setContextProperty("MyDownloader",  m_p);
     connect(this, &Engine::objectCreated, [=](QObject *object, const QUrl &){
@@ -84,14 +83,17 @@ public:
       {
         if (rootObjects().first()->property("oPopDlg") != QVariant() )
         {
+             qDebug() << "oPopDlg " ;
           QMetaObject::invokeMethod(rootObjects().first(), "onBackPressedDlg");
           return true;
         }
         else if (m_p->isStackEmpty() == false)
         {
+            qDebug() << "onBackPressedTab " ;
           QMetaObject::invokeMethod(rootObjects().first(), "onBackPressedTab");
           return true;
-        }
+        } else if (m_p->isStackEmpty() == true)
+          qDebug() << "StackEmpty " ;
       }
     }
     return false;
@@ -102,11 +104,10 @@ public:
 
 int main(int argc, char *argv[])
 {
+
   QGuiApplication app(argc, argv);
 
   Engine engine;
-
-
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 

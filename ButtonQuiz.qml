@@ -24,12 +24,12 @@ Button
         if (control.pressed)
           return "steelblue"
 
-
         if (bProgVisible)
           return "Orange"
 
         if (bIsPressedIn)
           return  "#009bff"
+
         return "lightsteelblue"
 
       }
