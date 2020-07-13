@@ -45,6 +45,7 @@ Window {
   property int nBtnHeight: idWindow.height / 15
   property int n3BtnWidth: idTabMain.width / 3 - 8
   property int n4BtnWidth: idTabMain.width / 4 - 7
+  property int n5BtnWidth: idTabMain.width / 6
   property int n25BtnWidth: idTabMain.width / 2.4 - 7
   property int n2BtnWidth: idTabMain.width / 2 - 10
   property int nMainWidth: idTabMain.width
@@ -100,7 +101,7 @@ Window {
   ListModel {
     id: glosModelIndex
   }
-// https://www.countryflags.com/
+  // https://www.countryflags.com/
   ListModel {
     id:idLangModel
     ListElement {
@@ -303,7 +304,6 @@ Window {
       MyDownloader.pushIndex(nLastIndexMain)
       nLastIndexMain = currentIndex
     }
-
 
   }
 

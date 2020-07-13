@@ -48,8 +48,8 @@ Flipable {
       width: parent.width
       model: idLangModel
 
-      cellHeight : 170
-      cellWidth : 150
+      cellHeight : n4BtnWidth
+      cellWidth : n4BtnWidth
 
       delegate :
           Item {
@@ -59,8 +59,8 @@ Flipable {
         Image
         {
           anchors.horizontalCenter: parent.horizontalCenter
-          //  height :idContainer.width / 3 -5
-          //  width : height
+          height :n5BtnWidth
+          width : n5BtnWidth
           source:imgsource
           MouseArea{
             anchors.fill:parent

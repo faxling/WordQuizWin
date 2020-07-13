@@ -14,12 +14,10 @@ Rectangle {
 
     if (visible)
     {
-      console.log("idDlgPopup")
       idWindow.oPopDlg = idDlgPopup
     }
     else
     {
-       console.log("idDlgPopup undefined")
       idWindow.oPopDlg = undefined
     }
   }
