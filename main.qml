@@ -56,6 +56,7 @@ Window {
   property variant oTakeQuiz
   property variant oPopDlg
   property bool bAllok : false
+  property bool bDownloadNotVisible : true
   property int nGlosaDbLastIndex:  -1
 
   color: "#E5E7E9"
@@ -132,6 +133,12 @@ Window {
       lang: "English"
       imgsource:"qrc:/glosquiz/flags/united-kingdom-flag-button-round-icon-128.png"
       code:"en"
+    }
+
+    ListElement {
+      lang: "German"
+      imgsource:"qrc:/glosquiz/flags/germany-flag-button-round-icon-128.png"
+      code:"de"
     }
 
     ListElement {
@@ -259,7 +266,7 @@ Window {
     Tab
     {
       title: "Edit"
-      enabled: glosModelIndex.count > 0
+      enabled: glosModelIndex.count > 0 && bDownloadNotVisible
       active: true
       EditQuiz
       {
@@ -269,7 +276,7 @@ Window {
     }
     Tab
     {
-      enabled: glosModelIndex.count > 0
+      enabled: glosModelIndex.count > 0 && bDownloadNotVisible
       title: "Quiz"
       TakeQuiz
       {

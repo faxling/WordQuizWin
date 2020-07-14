@@ -5,6 +5,7 @@ import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
 Item
 {
+
   Rectangle
   {
     anchors.fill: parent
@@ -423,7 +424,9 @@ Item
     //   anchors.fill: parent
     width:parent.width
     height: parent.height
-    //  height:nDlgHeightLarge
+    onStateChanged:{
+      idWindow.bDownloadNotVisible = (state === "")
+    }
   }
 
   RectRounded

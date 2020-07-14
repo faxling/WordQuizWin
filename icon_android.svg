@@ -112,8 +112,8 @@
    showguides="true"
    inkscape:guide-bbox="true"
    inkscape:zoom="3.3402582"
-   inkscape:cx="21.475458"
-   inkscape:cy="40.034198"
+   inkscape:cx="-32.412592"
+   inkscape:cy="51.941898"
    inkscape:window-x="-8"
    inkscape:window-y="-8"
    inkscape:window-maximized="1"
@@ -127,7 +127,7 @@
    style="display:inline"><path
      inkscape:connector-curvature="0"
      id="path3021"
-     d="M 0,-2 V 128 H 130 V -2 Z"
+     d="M 5,3 V 123 H 125 V 3 Z"
      style="fill:#a80096;fill-opacity:1"
      sodipodi:nodetypes="ccccc" /></g><g
    id="Layer_2"

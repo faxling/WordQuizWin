@@ -22,7 +22,7 @@ Flipable {
   function showPane()
   {
     idContainer.sImportMsg = ""
-    idNumberAnimation.duration = 500
+  // idNumberAnimation.duration = 500
     idContainer.state = "Show"
   }
 
@@ -48,8 +48,8 @@ Flipable {
       width: parent.width
       model: idLangModel
 
-      cellHeight : n4BtnWidth
-      cellWidth : n4BtnWidth
+      cellHeight : n3BtnWidth
+      cellWidth : n3BtnWidth
 
       delegate :
           Item {
@@ -58,7 +58,8 @@ Flipable {
         // height : 150
         Image
         {
-          anchors.horizontalCenter: parent.horizontalCenter
+          id: idLangImage
+          anchors.centerIn: parent
           height :n5BtnWidth
           width : n5BtnWidth
           source:imgsource
@@ -68,17 +69,17 @@ Flipable {
             {
               bIsDownloadingList = true
               sLang = lang
+              idNumberAnimation.duration = 1500
               MyDownloader.listQuizLang(code)
               idContainer.state = "Back"
-              idNumberAnimation.duration = 1000
+
             }
           }
         }
         TextListLarge
         {
           text :lang
-          anchors.bottom: parent.bottom
-          anchors.bottomMargin: 10
+          y : idLangImage.x + n5BtnWidth + height
           anchors.horizontalCenter: parent.horizontalCenter
         }
       }
@@ -100,6 +101,7 @@ Flipable {
 
     onCloseClicked:  {
       idPwdDialog.visible = false;
+      idNumberAnimation.duration = 500
       idContainer.state = "Flip"
       bIsDeleting = false
       idPwdTextInput.text = ""
@@ -305,10 +307,14 @@ Flipable {
   }
 
   transitions: Transition {
-    NumberAnimation { easing.type: Easing.InOutQuad; properties: "angle"; duration: 500 }
     NumberAnimation {
       id:idNumberAnimation
-      easing.type: Easing.InOutQuad; properties: "x"; duration: 1000
+      easing.type: Easing.InOutQuad;
+      properties: "angle"; duration: 1000
+    }
+    NumberAnimation {
+      easing.type: Easing.InOutQuad;
+      properties: "x"; duration: 500
     }
   }
 
