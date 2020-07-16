@@ -133,7 +133,7 @@ Item
         model: idLangModel
         delegate: TextListLarge {
           text:lang
-          width:n4BtnWidth
+          width:n4BtnWidth -10
           height : nBtnHeight / 2
           onClick: idLangList1.currentIndex = index
         }
@@ -170,7 +170,7 @@ Item
           horizontalAlignment: Text.AlignRight
           text:lang
           height : nBtnHeight / 2
-          width: idLangList2.width
+          width: idLangList2.width - 10
           onClick:idLangList2.currentIndex = index
         }
 
@@ -217,8 +217,6 @@ Item
         height : idCol2.height
         id:idQuizListRow
         Row {
-
-
           TextListLarge
           {
             id:idCol2
@@ -316,8 +314,8 @@ Item
         glosModelIndex.remove(idDeleteConfirmationDlg.nIndex)
         //if (idDeleteConfirmationDlg.nIndex === idQuizList.currentIndex)
         //{
-          //if (idDeleteConfirmationDlg.nIndex>0)
-          //  idQuizList.currentIndex = idQuizList.currentIndex -1
+        //if (idDeleteConfirmationDlg.nIndex>0)
+        //  idQuizList.currentIndex = idQuizList.currentIndex -1
         // }
 
         idDeleteConfirmationDlg.visible = false
@@ -438,11 +436,13 @@ Item
     height : nDlgHeight
     radius:7
     width:idImport.width
+    property alias text : idWhiteText.text
 
     WhiteText {
+      id:idWhiteText
       x:20
       anchors.top : idErrorDialog.bottomClose
-      text:"'" +idTextInputQuizName.displayText + "'" + " To short Quiz name"
+
     }
     onCloseClicked:
     {

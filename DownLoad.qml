@@ -24,6 +24,7 @@ Flipable {
     idContainer.sImportMsg = ""
   // idNumberAnimation.duration = 500
     idContainer.state = "Show"
+    idContainer.forceActiveFocus()
   }
 
   front: RectRounded {
@@ -72,14 +73,13 @@ Flipable {
               idNumberAnimation.duration = 1500
               MyDownloader.listQuizLang(code)
               idContainer.state = "Back"
-
             }
           }
         }
         TextListLarge
         {
           text :lang
-          y : idLangImage.x + n5BtnWidth + height
+          y : idLangImage.x + n5BtnWidth + 20
           anchors.horizontalCenter: parent.horizontalCenter
         }
       }

@@ -9,6 +9,8 @@ Rectangle {
   color: "black"
   property bool bIgnoreBackHandling : false
   onVisibleChanged: {
+
+    idDlgPopup.forceActiveFocus()
     if (bIgnoreBackHandling)
       return
 

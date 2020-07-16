@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
+import QtQuick.Window 2.0
 
 Item {
   id:idRectTakeQuiz
@@ -234,8 +235,11 @@ Item {
         anchors.top:idImageAllok.bottom
         anchors.topMargin: 20
         nButtonFontSize : 20
-        width: nButtonFontSize * text.length + 40
-        onClicked: QuizLib.resetQuiz()
+        width: (nButtonFontSize * Screen.pixelDensity *  text.length / 6) + 40
+        onClicked:
+        {
+          QuizLib.resetQuiz()
+        }
       }
 
       ButtonQuizImg
@@ -248,6 +252,7 @@ Item {
         source:"qrc:r.png"
         onClicked:
         {
+
           bMoving = true
           idView.decrementCurrentIndex()
         }
