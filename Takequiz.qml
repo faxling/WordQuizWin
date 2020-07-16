@@ -242,7 +242,7 @@ Item {
         }
       }
 
-      ButtonQuizImg
+      ButtonQuizImgLarge
       {
         enabled: idView.interactive
         anchors.bottomMargin: 20
@@ -257,7 +257,7 @@ Item {
           idView.decrementCurrentIndex()
         }
       }
-      ButtonQuizImg
+      ButtonQuizImgLarge
       {
         enabled: idView.interactive
         anchors.bottomMargin: 20

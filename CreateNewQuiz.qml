@@ -196,11 +196,7 @@ Item
       spacing:3
 
       Component.onCompleted: {
-        MyDownloader.exportedSignal.connect(QuizLib.quizExported)
-        MyDownloader.quizDownloadedSignal.connect(QuizLib.loadFromList)
-        MyDownloader.quizListDownloadedSignal.connect(QuizLib.loadFromServerList)
-        MyDownloader.deletedSignal.connect(QuizLib.quizDeleted)
-        idWindow.quizListView = idQuizList
+        QuizLib.connectMyDownloader()
       }
 
       onCurrentIndexChanged:
