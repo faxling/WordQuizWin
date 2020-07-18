@@ -1,18 +1,22 @@
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 Button
 {
-  width:n4BtnWidth
+  width : n4BtnWidth
   height : nBtnHeight
   property bool bProgVisible
   property bool bIsPressedIn : false
   property int  nButtonFontSize : nFontSize
 
+
+
+
   BusyIndicator {
     anchors.centerIn: parent
     running: bProgVisible
   }
+
 
   style: ButtonStyle {
     background: Rectangle {

@@ -1,4 +1,4 @@
-import QtQuick 2.3
+import QtQuick 2.5
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.1
 import QtQuick.XmlListModel 2.0
@@ -39,6 +39,12 @@ Item {
       onClick: {
         QuizLib.assignTextInputField(idTextTrans.text)
       }
+    }
+
+    TextMetrics {
+      id:     t_metrics
+      font: idTextTrans.font
+      text:    "-"
     }
 
     Row {
@@ -147,7 +153,7 @@ Item {
 
     Row {
       id: idDictionaryResultRow
-      height: 100
+      height: t_metrics.boundingRect.height*3
       width: parent.width - 100
 
       ListViewHi {
@@ -212,7 +218,7 @@ Item {
     {
       x:10
       id: idHeaderRow
-      height : idHeader1Text.height*2
+      height : idHeader1Text.height
       TextList {
         id: idHeader1Text
         color: "steelblue"
@@ -319,8 +325,8 @@ Item {
     }
 
     Row {
-      x: 5
       id: idLowerBtnRow
+      x: 5
       spacing: 10
       ButtonQuiz {
         width: n2BtnWidth
