@@ -198,7 +198,7 @@ Item {
 
         Item
         {
-          height:50
+          height: idTextAnswer.height
           width:parent.width
           //   color:"yellow"
           Text
@@ -231,6 +231,7 @@ Item {
       ButtonQuiz {
         visible:allok
         text:"One more time?"
+        width : nTextWidth + nTextWidth / 5
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top:idImageAllok.bottom
         anchors.topMargin: 20
@@ -243,6 +244,7 @@ Item {
 
       ButtonQuizImgLarge
       {
+        visible:  !allok
         enabled: idView.interactive
         anchors.bottomMargin: 20
         anchors.bottom: parent.bottom
@@ -258,6 +260,7 @@ Item {
       }
       ButtonQuizImgLarge
       {
+        visible:  !allok
         enabled: idView.interactive
         anchors.bottomMargin: 20
         anchors.bottom: parent.bottom

@@ -37,5 +37,6 @@
         <file>glosquiz/flags/united-kingdom-flag-button-round-icon-128.png</file>
         <file>glosquiz/flags/poland-flag-button-round-icon-128.png</file>
         <file>glosquiz/flags/hungary-flag-button-round-icon-128.png</file>
+        <file>l.svg</file>
     </qresource>
 </RCC>

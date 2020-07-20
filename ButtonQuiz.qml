@@ -3,12 +3,13 @@ import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 Button
 {
+  id:idButtonQuiz
   width : n4BtnWidth
   height : nBtnHeight
   property bool bProgVisible
   property bool bIsPressedIn : false
   property int  nButtonFontSize : nFontSize
-
+  property int  nTextWidth
 
 
 
@@ -46,6 +47,12 @@ Button
       horizontalAlignment: Text.AlignHCenter
       font.pointSize: nButtonFontSize
       text: control.text
+      TextMetrics {
+        id:     t_metrics
+        font: idTextLabel.font
+        text:    idTextLabel.text
+        onWidthChanged: idButtonQuiz.nTextWidth = width
+      }
     }
   }
 }
