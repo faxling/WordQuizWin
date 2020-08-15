@@ -8,7 +8,8 @@ CONFIG += c++11
 
 SOURCES += main.cpp \
     ../harbour-wordquiz/src/speechdownloader.cpp \
-    ../harbour-wordquiz/src/filehelpers.cpp
+    ../harbour-wordquiz/src/filehelpers.cpp \
+    imagepickerandroid.cpp
 
 RESOURCES += qml.qrc
 
@@ -23,7 +24,8 @@ RC_FILE = ./glosquiz/Resource.rc
 HEADERS += \
     ../harbour-wordquiz/src/speechdownloader.h \
     ../harbour-wordquiz/src/filehelpers.h \
-    ./glosquiz/Resource.rc
+    ./glosquiz/Resource.rc \
+    imagepickerandroid.h
 
 
 

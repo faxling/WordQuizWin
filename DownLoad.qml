@@ -216,7 +216,7 @@ Flipable {
 
       height:70
       radius:7
-      color: "#202020"
+      color: "#303030"
       anchors.bottom: idDeleteQuiz.top
       anchors.bottomMargin: 20
       width:idServerListView.width

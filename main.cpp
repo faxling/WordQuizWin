@@ -8,13 +8,14 @@
 #include <QDir>
 #include <QKeyEvent>
 #include "..\harbour-wordquiz\src\speechdownloader.h"
-#include "filehelpers.h"
+#include "..\harbour-wordquiz\src\filehelpers.h"
 #include <QStandardPaths>
 
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
 #include <QAndroidJniObject>
+#include <imagepickerandroid.h>
 #endif
 
 // "sqlite3.exe .open c:/Users/fraxl/AppData/Local/glosquiz/QML/OfflineStorage/Databases/2db1346274c33ae632adc881bdcd2f8e.sqlite"
@@ -70,6 +71,11 @@ public:
   {
     m_p = new Speechdownloader(offlineStoragePath(), nullptr);
     rootContext()->setContextProperty("MyDownloader",  m_p);
+#ifdef Q_OS_ANDROID
+    auto pIP = new ImagePickerAndroid(m_p);
+    rootContext()->setContextProperty("MyImagePicker",  pIP);
+#endif
+    connect(m_p, &Speechdownloader::downloadImage,m_p,  &Speechdownloader::downloadImageSlot);
     connect(this, &Engine::objectCreated, [=](QObject *object, const QUrl &){
       object->installEventFilter(this);
     });
@@ -83,13 +89,13 @@ public:
       {
         if (rootObjects().first()->property("oPopDlg") != QVariant() )
         {
-             qDebug() << "oPopDlg " ;
+          qDebug() << "oPopDlg " ;
           QMetaObject::invokeMethod(rootObjects().first(), "onBackPressedDlg");
           return true;
         }
         else if (m_p->isStackEmpty() == false)
         {
-            qDebug() << "onBackPressedTab " ;
+          qDebug() << "onBackPressedTab " ;
           QMetaObject::invokeMethod(rootObjects().first(), "onBackPressedTab");
           return true;
         } else if (m_p->isStackEmpty() == true)

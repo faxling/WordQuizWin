@@ -438,7 +438,6 @@ Item
       id:idWhiteText
       x:20
       anchors.top : idErrorDialog.bottomClose
-
     }
     onCloseClicked:
     {

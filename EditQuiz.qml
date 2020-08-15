@@ -82,15 +82,7 @@ Item {
         id: idBtn1
         text: "Find " + sLangLang
         onClicked: {
-          nLastSearch = 0
-          var oInText = QuizLib.getTextFromInput(idTextInput)
-          if (oInText === "")
-            return
-          if (bHasDictTo)
-            QuizLib.downloadDictOnWord(sReqDictUrl, oInText)
-
-          idTranslateModel.oBtn = idBtn1
-          idTranslateModel.source = sReqUrl + oInText
+          QuizLib.reqTranslation(idBtn1, false)
         }
       }
 
@@ -98,34 +90,15 @@ Item {
         id: idBtn2
         text: "Find " + sLangLangRev
         onClicked: {
-          nLastSearch = 1
-          var oInText = QuizLib.getTextFromInput(idTextInput2)
-          if (oInText === "")
-            return
-          if (bHasDictFrom)
-            QuizLib.downloadDictOnWord(sReqDictUrlRev, oInText)
-
-          idTranslateModel.oBtn = idBtn2
-          idTranslateModel.source = sReqUrlBase + sLangLangRev + "&text=" + oInText
+          QuizLib.reqTranslation(idBtn2, true)
         }
       }
 
       ButtonQuiz {
         id: idBtn3
-        text: (bDoLookUppText1 ? sQuestionLang : sAnswerLang) + " Wiktionary"
+        text: (bDoLookUppText1 ? sFromLang : sToLang) + " Wiktionary"
         onClicked: {
-          var oInText
-          var sLang = bDoLookUppText1 ? sQuestionLang : sAnswerLang
-
-          if (bDoLookUppText1)
-            oInText   = QuizLib.getTextFromInput(idTextInput)
-          else
-            oInText   = QuizLib.getTextFromInput(idTextInput2)
-
-          if (oInText === "")
-            return
-
-          onClicked: Qt.openUrlExternally("http://"+sLang+ ".wiktionary.org/w/index.php?title=" +oInText.toLowerCase()  + "&printable=yes" );
+          QuizLib.lookUppInWiki()
         }
       }
 
@@ -414,22 +387,47 @@ Item {
       width: 64
     }
     Label {
+      id : idGlosStateLabel
       anchors.verticalCenter: idBtnUpdate.verticalCenter
-      anchors.right: idGlosState.left
-      anchors.rightMargin: 20
+      anchors.left: idEditWordImage.right
+      anchors.leftMargin: 20
       color: "white"
       text: "Done:"
     }
+
     CheckBox {
       id: idGlosState
       anchors.verticalCenter: idBtnUpdate.verticalCenter
+      anchors.left: idGlosStateLabel.right
+      anchors.rightMargin: 20
+    }
+
+
+    ButtonQuiz {
+      id: idBtnImg
+      width: n5BtnWidth
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: 5
       anchors.right: idBtnUpdate.left
       anchors.rightMargin: 20
+      text: "Image"
+      onClicked: {
+        if (typeof MyImagePicker === "undefined")
+        {
+          idImagePick.visible = true
+        }
+        else
+        {
+          MyImagePicker.pickImage(idTextEdit1.text, sFromLang,
+                                  idTextEdit2.text, sToLang)
+        }
+
+      }
     }
 
     ButtonQuiz {
       id: idBtnUpdate
-      width: n3BtnWidth
+      width: n5BtnWidth
       anchors.bottom: parent.bottom
       anchors.bottomMargin: 5
       anchors.right: idBtnDelete.left
@@ -446,7 +444,7 @@ Item {
       anchors.bottomMargin: 5
       anchors.right: parent.right
       anchors.rightMargin: 20
-      width: n3BtnWidth
+      width: n5BtnWidth
       text: "Delete"
       onClicked: {
         QuizLib.deleteWordInQuiz()
@@ -466,12 +464,35 @@ Item {
       }
       anchors.fill: parent
       onDropped: {
+        console.log("MyDownloader.downloadImage")
         MyDownloader.downloadImage(drop.urls, idTextEdit1.text, sFromLang,
                                    idTextEdit2.text, sToLang, true)
       }
     }
   }
 
+  RectRounded
+  {
+    id:idImagePick
+    visible:false
+    color: "#303030"
+    anchors.horizontalCenter: parent.horizontalCenter
+    y:40
+    height : nDlgHeight / 2
+    radius:7
+    width:parent.width/2
+
+    WhiteText {
+      id:idWhiteText
+      text : "Use Drag and Drop for images"
+      x:20
+      anchors.top : idImagePick.bottomClose
+    }
+    onCloseClicked:
+    {
+      idImagePick.visible = false
+    }
+  }
 
   XmlListModel {
     id: idTrTextModel
@@ -481,8 +502,6 @@ Item {
           idTextTrans.text = "-"
           return
         }
-
-        QuizLib.assignTextInputField(idTrTextModel.get(0).text1)
 
         idTrSynModel.query = "/DicResult/def/tr[1]/syn"
         idTrMeanModel.query = "/DicResult/def/tr[1]/mean"
@@ -524,15 +543,11 @@ Item {
       name: "trans"
       query: "text/string()"
     }
+
     onStatusChanged: {
-      if (status === XmlListModel.Ready) {
-        if (idTranslateModel.count <= 0) {
-          idTextTrans.text = "-"
-          return
-        }
-        idTextTrans.text = idTranslateModel.get(0).trans
-      }
+      QuizLib.assignTranslation(status, oBtn)
     }
+
   }
 
 }
