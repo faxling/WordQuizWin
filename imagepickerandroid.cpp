@@ -39,26 +39,31 @@ void ImagePickerAndroid::pickImage(QString sWord, QString sLang, QString sWord2,
   };
 
 */
-  auto permissionCallback = [](const QtAndroid::PermissionResultMap & permissionResult)
+  auto permissionCallback = [&](const QtAndroid::PermissionResultMap & permissionResult)
   {
     for(auto &i : IterRange(permissionResult))
-      qDebug() << i.iter().key() << " Permission:" <<  (i.val() == QtAndroid::PermissionResult::Denied ? "denied" : "granted");;
+    {
+      qDebug() << i.iter().key() << " Permission:" <<  (i.val() == QtAndroid::PermissionResult::Denied ? "denied" : "granted");
+      if (i.val() == QtAndroid::PermissionResult::Granted)
+      {
+        QAndroidJniObject ACTION_PICK = QAndroidJniObject::getStaticObjectField("android/content/Intent", "ACTION_PICK", "Ljava/lang/String;");
+        QAndroidJniObject EXTERNAL_CONTENT_URI = QAndroidJniObject::getStaticObjectField("android/provider/MediaStore$Images$Media", "EXTERNAL_CONTENT_URI", "Landroid/net/Uri;");
 
+        QAndroidJniObject intent=QAndroidJniObject("android/content/Intent", "(Ljava/lang/String;Landroid/net/Uri;)V", ACTION_PICK.object<jstring>(), EXTERNAL_CONTENT_URI.object<jobject>());
+
+        if (ACTION_PICK.isValid() && intent.isValid())
+        {
+          intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;", QAndroidJniObject::fromString("image/*").object<jstring>());
+          QtAndroid::startActivity(intent.object<jobject>(), 101, this);
+        }
+      }
+    }
   };
 
   QtAndroid::requestPermissions(permissions , permissionCallback);
-  QAndroidJniObject ACTION_PICK = QAndroidJniObject::getStaticObjectField("android/content/Intent", "ACTION_PICK", "Ljava/lang/String;");
-  QAndroidJniObject EXTERNAL_CONTENT_URI = QAndroidJniObject::getStaticObjectField("android/provider/MediaStore$Images$Media", "EXTERNAL_CONTENT_URI", "Landroid/net/Uri;");
-
-  QAndroidJniObject intent=QAndroidJniObject("android/content/Intent", "(Ljava/lang/String;Landroid/net/Uri;)V", ACTION_PICK.object<jstring>(), EXTERNAL_CONTENT_URI.object<jobject>());
-
-  if (ACTION_PICK.isValid() && intent.isValid())
-  {
-    intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;", QAndroidJniObject::fromString("image/*").object<jstring>());
-    QtAndroid::startActivity(intent.object<jobject>(), 101, this);
-  }
-
 }
+
+
 
 void ImagePickerAndroid::handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data)
 {
@@ -66,29 +71,24 @@ void ImagePickerAndroid::handleActivityResult(int receiverRequestCode, int resul
   if (receiverRequestCode == 101 && resultCode == RESULT_OK)
   {
     QAndroidJniObject uri = data.callObjectMethod("getData", "()Landroid/net/Uri;");
-    QAndroidJniObject dadosAndroid = QAndroidJniObject::getStaticObjectField("android/provider/MediaStore$MediaColumns", "DATA", "Ljava/lang/String;");
+    QAndroidJniObject oAndroidMediaStore = QAndroidJniObject::getStaticObjectField("android/provider/MediaStore$MediaColumns", "DATA", "Ljava/lang/String;");
     QAndroidJniEnvironment env;
-    jobjectArray projecao = (jobjectArray)env->NewObjectArray(1, env->FindClass("java/lang/String"), NULL);
-    jobject projacaoDadosAndroid = env->NewStringUTF(dadosAndroid.toString().toStdString().c_str());
-    env->SetObjectArrayElement(projecao, 0, projacaoDadosAndroid);
+    QString sMS = oAndroidMediaStore.toString();
+    jobjectArray oJavaArray = (jobjectArray)env->NewObjectArray(1, env->FindClass("java/lang/String"), NULL);
+    jobject projacaoDadosAndroid = env->NewString(sMS.utf16(),sMS.length());
+    env->SetObjectArrayElement(oJavaArray, 0, projacaoDadosAndroid);
     QAndroidJniObject contentResolver = QtAndroid::androidActivity().callObjectMethod("getContentResolver", "()Landroid/content/ContentResolver;");
-    QAndroidJniObject cursor = contentResolver.callObjectMethod("query", "(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;", uri.object<jobject>(), projecao, NULL, NULL, NULL);
-    jint columnIndex = cursor.callMethod<jint>("getColumnIndex", "(Ljava/lang/String;)I", dadosAndroid.object<jstring>());
+    QAndroidJniObject cursor = contentResolver.callObjectMethod("query", "(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;", uri.object<jobject>(), oJavaArray, NULL, NULL, NULL);
+    jint columnIndex = cursor.callMethod<jint>("getColumnIndex", "(Ljava/lang/String;)I", oAndroidMediaStore.object<jstring>());
     cursor.callMethod<jboolean>("moveToFirst", "()Z");
-    QAndroidJniObject resultado = cursor.callObjectMethod("getString", "(I)Ljava/lang/String;", columnIndex);
-    QString imagemCaminho = "file://" + resultado.toString();
-    qDebug() << imagemCaminho;
+    QAndroidJniObject result = cursor.callObjectMethod("getString", "(I)Ljava/lang/String;", columnIndex);
     QList<QUrl> oc;
-    oc.append(QUrl::fromLocalFile(resultado.toString()));
-    qDebug() << oc.first().toString();
+    oc.append(QUrl::fromLocalFile(result.toString()));
     emit m_pS->downloadImage(oc, m_sWord,m_sLang, m_sWord2, m_sLang2,true);
-
-
-    //  emit imagemCaminhoSignal(imagemCaminho);
   }
   else
   {
-    qDebug() << "errado";
+    qDebug() << "downloadImage error";
   }
 }
 #endif

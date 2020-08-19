@@ -31,16 +31,35 @@ Item {
     anchors.bottomMargin: 50
     anchors.fill: parent
 
-    TextListLarge {
-      id: idTextTrans
-      height: idTextInput.height
-      width: parent.width
-      text: "-"
-      onClick: {
-        QuizLib.assignTextInputField(idTextTrans.text)
-      }
-    }
+    Row
+    {
 
+      TextListLarge {
+        id: idTextTrans
+        Component.onCompleted: MyDownloader.storeTransText(idTextTrans)
+        height: idTextInput.height
+        width:  idEditQuiz.width / 2 +10
+        text: "-"
+        onTextChanged:  QuizLib.assignTextInputField(idTextTrans.text)
+        onClick: {
+          QuizLib.assignTextInputField(idTextTrans.text)
+        }
+      }
+
+      ButtonQuizImg {
+        id : idShiftBtn
+        height: nBtnHeight / 2
+        width: nBtnHeight / 2
+        source: "qrc:lr_svg.svg"
+        onClicked:
+        {
+          var sT = idTextInput.displayText
+          idTextInput.text = idTextInput2.displayText
+          idTextInput2.text = sT
+        }
+      }
+
+    }
     TextMetrics {
       id:     t_metrics
       font: idTextTrans.font
@@ -52,6 +71,7 @@ Item {
       spacing: 20
       x:5
       InputTextQuiz {
+        id: idTextInput
         cursorVisible: true
         onCursorVisibleChanged:
         {
@@ -60,9 +80,10 @@ Item {
         }
         width: idEditQuiz.width / 2 - 15
         placeholderText:"text to translate"
-        id: idTextInput
       }
+
       InputTextQuiz {
+        id: idTextInput2
         onCursorVisibleChanged:
         {
           if (cursorVisible)
@@ -70,7 +91,6 @@ Item {
         }
         width: idEditQuiz.width / 2 - 15
         placeholderText:"translation"
-        id: idTextInput2
       }
     }
 
@@ -533,21 +553,6 @@ Item {
       name: "mean"
       query: "text/string()"
     }
-  }
-
-  XmlListModel {
-    id: idTranslateModel
-    property var oBtn
-    query: "/Translation"
-    XmlRole {
-      name: "trans"
-      query: "text/string()"
-    }
-
-    onStatusChanged: {
-      QuizLib.assignTranslation(status, oBtn)
-    }
-
   }
 
 }
