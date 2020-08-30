@@ -28,8 +28,6 @@ Window {
   property string sQuestionLang : bIsReverse ? sToLang : sFromLang
   property string sAnswerLang : bIsReverse ? sFromLang : sToLang
   property bool bIsReverse
-  property bool bHasSpeech : sToLang !== "hu"
-  property bool bHasSpeechFrom : sFromLang !=="hu"
   property bool bHasDictTo : sToLang ==="ru" || sToLang ==="en"
   property bool bHasDictFrom : sFromLang ==="ru" || sFromLang ==="en"
   property string sLangLangEn

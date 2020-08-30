@@ -178,7 +178,6 @@ Item {
           height : nBtnHeight
           width : nBtnHeight
           anchors.horizontalCenter: parent.horizontalCenter
-          visible:bHasSpeech
           source:"qrc:horn.png"
           onClicked: MyDownloader.playWord(question,sQuestionLang)
         }
@@ -215,7 +214,7 @@ Item {
         ButtonQuizImgLarge
         {
           anchors.horizontalCenter: parent.horizontalCenter
-          visible:bHasSpeech && bAnswerVisible
+          visible: bAnswerVisible
           source:"qrc:horn.png"
           onClicked: MyDownloader.playWord(idQuizModel.answer,sAnswerLang)
         }

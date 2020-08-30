@@ -302,7 +302,6 @@ Item {
         ButtonQuizImg {
           height: idAnswer.height
           width: idAnswer.height
-          visible: bHasSpeech
           source: "qrc:horn.png"
           onClicked: MyDownloader.playWord(question, sFromLang)
         }
@@ -310,7 +309,6 @@ Item {
         ButtonQuizImg {
           height: idAnswer.height
           width: idAnswer.height
-          visible: bHasSpeech
           source: "qrc:horn.png"
           onClicked: MyDownloader.playWord(answer, sToLang)
         }
