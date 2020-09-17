@@ -22,7 +22,7 @@ Flipable {
   function showPane()
   {
     idContainer.sImportMsg = ""
-  // idNumberAnimation.duration = 500
+    // idNumberAnimation.duration = 500
     idContainer.state = "Show"
     idContainer.forceActiveFocus()
   }
@@ -273,6 +273,7 @@ Flipable {
         {
           idPwdDialog.visible = false;
           MyDownloader.deleteQuiz(idImport.sSelectedQ, idPwdTextInput.displayText,idServerListView.currentIndex)
+          idImport.bIsDeleting = true
           idPwdTextInput.text = ""
         }
         else
@@ -294,9 +295,22 @@ Flipable {
         bIsDownloading = true
         idTextInputQuizName.text = idContainer.sSelectedQ + " "
         sQuizName  = idContainer.sSelectedQ
-        MyDownloader.importQuiz(idContainer.sSelectedQ)
+        MyDownloader.importQuiz(idContainer.sSelectedQ, idProgress)
       }
     }
+
+    Rectangle
+    {
+      id:idProgress
+      anchors.bottom: idLoadQuiz.top
+      anchors.bottomMargin: 10
+      x:20
+      property double progress
+      color : "orange"
+      height: nBtnHeight / 10
+      width: (parent.width - 40) * progress
+    }
+
   }
 
   transform: Rotation {

@@ -30,7 +30,7 @@ Button
           return "steelblue"
 
         if (bProgVisible)
-          return "Orange"
+          return "orange"
 
         if (bIsPressedIn)
           return  "#009bff"

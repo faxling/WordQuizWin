@@ -390,7 +390,7 @@ Item
       {
         bProgVisible = true
         QuizLib.updateDesc1(idTextInputQuizDesc.displayText)
-        MyDownloader.updateCurrentQuiz(glosModel, sQuizName,sLangLang, idTextInputQuizPwd.displayText, idTextInputQuizDesc.displayText )
+        MyDownloader.updateCurrentQuiz(glosModel, sQuizName,sLangLang, idTextInputQuizPwd.displayText, idTextInputQuizDesc.displayText, idProgressUpload )
       }
     }
 
@@ -404,11 +404,24 @@ Item
       anchors.rightMargin: 10
       onClicked:
       {
-        bProgVisible = true
         QuizLib.updateDesc1(idTextInputQuizDesc.displayText)
-        MyDownloader.exportCurrentQuiz( glosModel, sQuizName,sLangLang, idTextInputQuizPwd.displayText, idTextInputQuizDesc.displayText )
+        MyDownloader.exportCurrentQuiz( glosModel, sQuizName,sLangLang, idTextInputQuizPwd.displayText, idTextInputQuizDesc.displayText, idProgressUpload )
+        bProgVisible = true
       }
     }
+
+    Rectangle
+    {
+      id:idProgressUpload
+      x:10
+      anchors.bottom: idExportBtn.top
+      anchors.bottomMargin: 5
+      property double progress
+      color : "orange"
+      height: nBtnHeight / 10
+      width: (parent.width - 20) * progress
+    }
+
   }
   clip: true
 
