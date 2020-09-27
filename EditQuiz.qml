@@ -34,28 +34,63 @@ Item {
     Row
     {
 
-      TextListLarge {
-        id: idTextTrans
-        Component.onCompleted: MyDownloader.storeTransText(idTextTrans, idErrorText)
-        height: idTextInput.height
-        width:  idEditQuiz.width / 2 +10
-        text: "-"
-        onTextChanged:  QuizLib.assignTextInputField(idTextTrans.text)
-        onClick: {
-          QuizLib.assignTextInputField(idTextTrans.text)
-        }
-      }
 
-      ButtonQuizImg {
-        id : idShiftBtn
-        height: nBtnHeight / 2
-        width: nBtnHeight / 2
-        source: "qrc:lr_svg.svg"
-        onClicked:
-        {
-          var sT = idTextInput.displayText
-          idTextInput.text = idTextInput2.displayText
-          idTextInput2.text = sT
+      Item {
+        height: idTextInput.height
+        width:  idEditQuiz.width / 2
+
+        TextListLarge {
+          id: idTextTrans
+          Component.onCompleted: MyDownloader.storeTransText(idTextTrans, idErrorText)
+        //  height: idTextInput.height
+        //  width:  idEditQuiz.width / 2
+          text: "-"
+          onTextChanged:  QuizLib.assignTextInputField(idTextTrans.text)
+          onClick: {
+            QuizLib.assignTextInputField(idTextTrans.text)
+          }
+        }
+
+        ButtonQuizImg {
+          id: idBtnClear
+          anchors.right: parent.right
+          anchors.rightMargin: 10
+          height: nBtnHeight / 2
+          width: nBtnHeight / 2
+          source: "qrc:quit.png"
+          onClicked: {
+            idTextInput.text = ""
+          }
+        }
+
+      }
+      Item {
+        height: idTextInput.height
+        width:  idEditQuiz.width / 2
+        ButtonQuizImg {
+          id : idShiftBtn
+          x: 10
+          height: nBtnHeight / 2
+          width: nBtnHeight / 2
+          source: "qrc:lr_svg.svg"
+          onClicked:
+          {
+            var sT = idTextInput.displayText
+            idTextInput.text = idTextInput2.displayText
+            idTextInput2.text = sT
+          }
+        }
+
+        ButtonQuizImg {
+          id: idBtnClear2
+          anchors.right: parent.right
+          anchors.rightMargin: 5
+          height: nBtnHeight / 2
+          width: nBtnHeight / 2
+          source: "qrc:quit.png"
+          onClicked: {
+            idTextInput2.text = ""
+          }
         }
       }
 

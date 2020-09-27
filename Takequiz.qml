@@ -82,6 +82,17 @@ Item {
         onClicked: bImageMode = !bImageMode
       }
 
+      Rectangle
+      {
+        anchors.top: idImgBtn.bottom
+        anchors.topMargin: 2
+        anchors.left: idImgBtn.left
+        width:idImgBtn.width
+        height:4
+        color: "#009bff"
+        visible : MyDownloader.hasImg
+      }
+
       ButtonQuizImg
       {
         id:idSoundBtn
@@ -149,13 +160,15 @@ Item {
         id:idQuizColumn
         spacing: 20
         anchors.horizontalCenter:  parent.horizontalCenter
-        y : parent.height / 5
+        y : idWordImage.visible ? idInfoBtn.y : parent.height / 5
         visible:!allok
 
         Image
         {
           id:idWordImage
           cache:false
+          height:idRectTakeQuiz.height / 3
+          width:idRectTakeQuiz.height / 3
           fillMode: Image.PreserveAspectFit
           anchors.horizontalCenter: parent.horizontalCenter
           visible : bImageMode && MyDownloader.hasImg
