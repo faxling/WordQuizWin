@@ -59,6 +59,7 @@ Item {
           width: nBtnHeight / 2
           source: "qrc:quit.png"
           onClicked: {
+            idTextInput.text = "-"
             idTextInput.text = ""
           }
         }
@@ -89,7 +90,10 @@ Item {
           width: nBtnHeight / 2
           source: "qrc:quit.png"
           onClicked: {
-            idTextInput2.text = ""
+            onClicked: {
+              idTextInput2.text = "-"
+              idTextInput2.text = ""
+            }
           }
         }
       }

@@ -13,7 +13,7 @@ Item {
   property bool bImageMode : false
   property bool bMoving : false
   property bool bVoiceMode : false
-
+  property bool allok : idWindow.bAllok
   Component.onCompleted:
   {
     idWindow.oTakeQuiz = idRectTakeQuiz
@@ -79,18 +79,20 @@ Item {
         anchors.topMargin:  20
         bIsPushed: bImageMode
         source:"qrc:img.png"
-        onClicked: bImageMode = !bImageMode
-      }
-
-      Rectangle
-      {
-        anchors.top: idImgBtn.bottom
-        anchors.topMargin: 2
-        anchors.left: idImgBtn.left
-        width:idImgBtn.width
-        height:4
-        color: "#009bff"
-        visible : MyDownloader.hasImg
+        onClicked:
+        {
+          bImageMode = !bImageMode
+          idTextQuestion.forceLayout()
+          idTextAnswer.forceLayout()
+        }
+        Rectangle
+        {
+          y: idImgBtn.height + 2
+          width:idImgBtn.width
+          height:4
+          color: "#009bff"
+          visible : MyDownloader.hasImg
+        }
       }
 
       ButtonQuizImg
@@ -171,7 +173,7 @@ Item {
           width:idRectTakeQuiz.height / 3
           fillMode: Image.PreserveAspectFit
           anchors.horizontalCenter: parent.horizontalCenter
-          visible : bImageMode && MyDownloader.hasImg
+          visible : MyDownloader.hasImg && bImageMode
           source : MyDownloader.urlImg
         }
 
@@ -182,7 +184,7 @@ Item {
           opacity: ( bVoiceMode ) ? 0 : 1
           anchors.horizontalCenter: parent.horizontalCenter
           font.pointSize: 30
-          text :question
+          text : idQuizModel.question
         }
 
 
@@ -192,7 +194,7 @@ Item {
           width : nBtnHeight
           anchors.horizontalCenter: parent.horizontalCenter
           source:"qrc:horn.png"
-          onClicked: MyDownloader.playWord(question,sQuestionLang)
+          onClicked: MyDownloader.playWord(idQuizModel.question,sQuestionLang)
         }
 
         ButtonQuiz

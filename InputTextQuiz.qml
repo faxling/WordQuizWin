@@ -7,6 +7,7 @@ Rectangle
     idTextInput.forceActiveFocus()
   }
 
+  property alias echoMode : idTextInput.echoMode
   property string placeholderText
   Text
   {
@@ -26,7 +27,7 @@ Rectangle
   height:   nBtnHeight / 2
   TextInput
   {
-    id:idTextInput
+    id:idTextInput 
     selectByMouse : true
     anchors.leftMargin: 5
     font.pixelSize: nBtnHeight / 2.5

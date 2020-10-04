@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQuick.Controls 1.4
 
 Flipable {
@@ -213,13 +213,13 @@ Flipable {
     {
       id:idPwdDialog
       visible:false
-
-      height:70
+      height:idPwdTextInput.height*4
       radius:7
       color: "#303030"
       anchors.bottom: idDeleteQuiz.top
       anchors.bottomMargin: 20
-      width:idServerListView.width
+      anchors.horizontalCenter: parent.horizontalCenter
+      width:t_metrics.width * 35
       function closeThisDlg()
       {
         idPwdDialog.closeClicked()
@@ -243,15 +243,21 @@ Flipable {
         spacing:20
         Text
         {
+          id:idPwdText
           anchors.verticalCenter:parent.verticalCenter
           color: "white"
-          text: "Password to remove '" + idImport.sSelectedQ +"'"
+          text: "Password to remove '" + idImport.sSelectedQ.substring(0,7) +  (idImport.sSelectedQ.length > 7 ? "...'" : "':")
         }
-
+        TextMetrics {
+          id:     t_metrics
+          font: idPwdText.font
+          text:    "W"
+        }
         InputTextQuiz
         {
-          width:parent.width / 3
           id:idPwdTextInput
+          echoMode : TextInput.Password
+          width:t_metrics.width * 8
         }
       }
     }
