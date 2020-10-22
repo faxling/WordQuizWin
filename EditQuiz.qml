@@ -42,8 +42,8 @@ Item {
         TextListLarge {
           id: idTextTrans
           Component.onCompleted: MyDownloader.storeTransText(idTextTrans, idErrorText)
-        //  height: idTextInput.height
-        //  width:  idEditQuiz.width / 2
+          //  height: idTextInput.height
+          //  width:  idEditQuiz.width / 2
           text: "-"
           onTextChanged:  QuizLib.assignTextInputField(idTextTrans.text)
           onClick: {
@@ -89,12 +89,12 @@ Item {
           height: nBtnHeight / 2
           width: nBtnHeight / 2
           source: "qrc:quit.png"
+
           onClicked: {
-            onClicked: {
-              idTextInput2.text = "-"
-              idTextInput2.text = ""
-            }
+            idTextInput2.text = "-"
+            idTextInput2.text = ""
           }
+
         }
       }
 
@@ -278,9 +278,8 @@ Item {
     ListViewHi {
       id: idGlosList
       x:10
-
       width: idEditQuiz.width
-      height: parent.height - idHeaderRow.y - idHeaderRow.height - 55
+      height: parent.height - idHeaderRow.y  - nBtnHeight
       spacing: 3
       Component.onCompleted: {
         idWindow.glosListView = idGlosList
@@ -353,39 +352,29 @@ Item {
         }
       }
     }
+  }
 
-    Row {
-      id: idLowerBtnRow
-      x: 5
-      spacing: 10
-      ButtonQuiz {
-        width: n2BtnWidth
-        text: "Reset"
-        onClicked: {
-          QuizLib.resetQuiz()
-        }
+  Row
+  {
+    id: idLowerBtnRow
+    x: 5
+    anchors.bottom: parent.bottom
+    anchors.bottomMargin: 10
+    spacing: 10
+    ButtonQuiz {
+      width: n2BtnWidth
+      text: "Reset"
+      onClicked: {
+        QuizLib.resetQuiz()
       }
+    }
 
-      ButtonQuiz {
-        text: "Reverse"
-        width: n2BtnWidth
-        onClicked: {
-          QuizLib.reverseQuiz()
-        }
+    ButtonQuiz {
+      text: "Reverse"
+      width: n2BtnWidth
+      onClicked: {
+        QuizLib.reverseQuiz()
       }
-
-
-      /*
-      ButtonQuiz
-      {
-        text : "Download\nAudio"
-        width:n3BtnWidth
-        onClicked:
-        {
-          MyDownloader.downLoadAllSpeech(glosModel, sLangLang);
-        }
-      }
-      */
     }
   }
 

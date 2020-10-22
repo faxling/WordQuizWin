@@ -181,8 +181,10 @@ Item {
         Text
         {
           id:idTextQuestion
+          horizontalAlignment : Text.AlignHCenter
+          width: idView.width
+          wrapMode :Text.WordWrap
           opacity: ( bVoiceMode ) ? 0 : 1
-          anchors.horizontalCenter: parent.horizontalCenter
           font.pointSize: 30
           text : idQuizModel.question
         }
@@ -210,21 +212,18 @@ Item {
           }
         }
 
-        Item
+
+        Text
         {
-          height: idTextAnswer.height
-          width:parent.width
-          //   color:"yellow"
-          Text
-          {
-            id:idTextAnswer
-            visible:bAnswerVisible
-            anchors.horizontalCenter: parent.horizontalCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.pointSize: 30
-            text : idQuizModel.answer
-          }
+          id:idTextAnswer
+          horizontalAlignment : Text.AlignHCenter
+          width: idView.width
+          wrapMode :Text.WordWrap
+          visible:bAnswerVisible
+          font.pointSize: 30
+          text : idQuizModel.answer
         }
+
 
         ButtonQuizImgLarge
         {
@@ -337,6 +336,11 @@ Item {
     Keys.onSpacePressed: {
       bAnswerVisible = !bAnswerVisible
     }
+
+    Keys.onUpPressed: {
+      MyDownloader.playWord(idQuizModel.question,sQuestionLang)
+    }
+
   }
 
 }
