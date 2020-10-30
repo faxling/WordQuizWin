@@ -38,7 +38,7 @@ Window {
   property int nDbNumber : 0;
   property int nQuizIndex: 1
   property int nFontSize:  idWindow.height > 1200 ? 14 : 11
-  property int nDlgHeight: idWindow.height / 5 + 45
+  property int nDlgHeight: idWindow.height / 5 + 80
   property int nDlgHeightLarge: idWindow.height / 2.5
   property int nBtnHeight: idWindow.height / 15
   property int n3BtnWidth: idTabMain.width / 3 - 8

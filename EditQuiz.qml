@@ -389,7 +389,7 @@ Item {
       x: 20
       anchors.top: idEditDlg.bottomClose
       anchors.topMargin: 10
-      spacing: 20
+      spacing: 10
       Row {
         spacing: 20
         width: idEditDlg.width - 40
@@ -407,18 +407,16 @@ Item {
         }
       }
 
-      Row {
-        spacing: 20
-        width: idEditDlg.width
-        height: idTextEdit3.height
-        InputTextQuiz {
-          id: idTextEdit1
-          width: idEditDlg.width / 2 - 30
-        }
-        InputTextQuiz {
-          id: idTextEdit2
-          width: idEditDlg.width / 2 - 30
-        }
+      InputTextQuiz {
+        id: idTextEdit1
+        x:0
+        width: idEditDlg.width - parent.x*2
+      }
+
+      InputTextQuiz {
+        id: idTextEdit2
+        x:0
+        width: idEditDlg.width - parent.x*2
       }
     }
 

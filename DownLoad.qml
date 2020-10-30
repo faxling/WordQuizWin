@@ -12,6 +12,7 @@ Flipable {
   property string sDesc1
   property string sLang
   property string sDescDate
+  property int nError
   property alias currentIndex: idServerListView.currentIndex
   function positionViewAtIndex(nIndex)
   {
@@ -71,6 +72,7 @@ Flipable {
               bIsDownloadingList = true
               sLang = lang
               idNumberAnimation.duration = 1500
+              nError = 0
               MyDownloader.listQuizLang(code)
               idContainer.state = "Back"
             }
@@ -124,12 +126,11 @@ Flipable {
       text:sDescDate
     }
 
-    TextList {
+    TextListLarge {
       id:idImportMsg
-      x:70
-      y:25
+      anchors.centerIn: parent
       color:"red"
-      text:sImportMsg
+      text: sImportMsg
     }
 
     WhiteText {
@@ -155,8 +156,9 @@ Flipable {
     TextListLarge
     {
       anchors.centerIn: parent
-      visible: idServerQModel.count === 0
-      text: "No Quiz aviailable in "+ sLang +"\nplease create one and upload"
+      visible: nError !== 0
+      color: nError === 1 ?  "red" : idQuestionsLabel.color
+      text: nError === 1 ? "Network Error!" :  "No Quiz aviailable in "+ sLang +"\nplease create one and upload"
     }
 
     ListViewHi
@@ -278,7 +280,8 @@ Flipable {
         if (idPwdTextInput.displayText.length > 0)
         {
           idPwdDialog.visible = false;
-          MyDownloader.deleteQuiz(idImport.sSelectedQ, idPwdTextInput.displayText,idServerListView.currentIndex)
+          idImport.sImportMsg = ""
+          MyDownloader.deleteQuiz(idImport.sSelectedQ, idPwdTextInput.text,idServerListView.currentIndex)
           idImport.bIsDeleting = true
           idPwdTextInput.text = ""
         }
@@ -299,6 +302,7 @@ Flipable {
       onClicked:
       {
         bIsDownloading = true
+        idImport.sImportMsg = ""
         idTextInputQuizName.text = idContainer.sSelectedQ + " "
         sQuizName  = idContainer.sSelectedQ
         MyDownloader.importQuiz(idContainer.sSelectedQ, idProgress)

@@ -8,6 +8,12 @@ Rectangle {
   radius: 10
   color: "black"
   property bool bIgnoreBackHandling : false
+
+  MouseArea
+  {
+    anchors.fill: parent
+  }
+
   onVisibleChanged: {
 
     idDlgPopup.forceActiveFocus()
