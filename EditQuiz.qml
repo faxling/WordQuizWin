@@ -41,7 +41,8 @@ Item {
 
         TextListLarge {
           id: idTextTrans
-          Component.onCompleted: MyDownloader.storeTransText(idTextTrans, idErrorText, idTrTextModel)
+          Component.onCompleted: MyDownloader.storeTransText(idTextTrans, idErrorText, idTrTextModel, idTrSynModel,
+                                                             idTrMeanModel)
           //  height: idTextInput.height
           //  width:  idEditQuiz.width / 2
           text: "-"
