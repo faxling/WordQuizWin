@@ -19,6 +19,7 @@ Window {
   property string sReqUrlRev
   property string sReqUrlEn
 
+  property variant oHang
   property variant db
   property string sLangLangSelected
   property string sLangLang
@@ -244,6 +245,7 @@ Window {
     anchors.topMargin:  idMainTitle.height + 10
 
 
+
     Tab
     {
       id:idTab1
@@ -275,14 +277,28 @@ Window {
         anchors.fill: parent
       }
     }
-
+    Tab
+    {
+      id:idTab4M
+      enabled: glosModelIndex.count > 0 && bDownloadNotVisible
+      title: "Hang\nMan"
+      HangMan
+      {
+        id:idTab4
+        Component.onCompleted:
+        {
+          oHang = idTab4
+        }
+        anchors.fill: parent
+      }
+    }
     style: TabViewStyle {
 
       tab: Rectangle {
         color: styleData.selected ? "#626567" :"#BDC3C7"
         opacity: styleData.enabled ? 1 :0.5
         border.color:  "#797D7F"
-        implicitWidth: idTabMain.width / 3
+        implicitWidth: idTabMain.width / 4 + 0.5
         implicitHeight: nBtnHeight
         radius: 2
         Text {
@@ -301,6 +317,10 @@ Window {
         return
       MyDownloader.pushIndex(nLastIndexMain)
       nLastIndexMain = currentIndex
+      console.log("in " + nLastIndexMain)
+      if (nLastIndexMain === 3)
+        if (oHang !== undefined)
+          oHang.newQ()
     }
 
   }

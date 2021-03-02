@@ -9,6 +9,7 @@
 #include <QKeyEvent>
 #include "..\harbour-wordquiz\src\speechdownloader.h"
 #include "..\harbour-wordquiz\src\filehelpers.h"
+#include "..\harbour-wordquiz\src\svgdrawing.h"
 #include <QStandardPaths>
 
 
@@ -69,6 +70,8 @@ class Engine : public QQmlApplicationEngine
 public:
   Engine()
   {
+    qmlRegisterType<SvgDrawing>("SvgDrawing",1,0,"SvgDrawing");
+
     m_p = new Speechdownloader(offlineStoragePath(), nullptr);
     rootContext()->setContextProperty("MyDownloader",  m_p);
 #ifdef Q_OS_ANDROID
@@ -89,13 +92,11 @@ public:
       {
         if (rootObjects().first()->property("oPopDlg") != QVariant() )
         {
-          qDebug() << "oPopDlg " ;
           QMetaObject::invokeMethod(rootObjects().first(), "onBackPressedDlg");
           return true;
         }
         else if (m_p->isStackEmpty() == false)
         {
-          qDebug() << "onBackPressedTab " ;
           QMetaObject::invokeMethod(rootObjects().first(), "onBackPressedTab");
           return true;
         } else if (m_p->isStackEmpty() == true)

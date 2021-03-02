@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick multimedia svg
+QT += qml quick multimedia svg xml
 
 android: QT += androidextras
 
@@ -9,7 +9,9 @@ CONFIG += c++11
 SOURCES += main.cpp \
     ../harbour-wordquiz/src/speechdownloader.cpp \
     ../harbour-wordquiz/src/filehelpers.cpp \
+    ../harbour-wordquiz/src/svgdrawing.cpp \
     imagepickerandroid.cpp
+
 
 RESOURCES += qml.qrc
 
@@ -24,8 +26,10 @@ RC_FILE = ./glosquiz/Resource.rc
 HEADERS += \
     ../harbour-wordquiz/src/speechdownloader.h \
     ../harbour-wordquiz/src/filehelpers.h \
+    ../harbour-wordquiz/src/svgdrawing.h \
     ./glosquiz/Resource.rc \
     imagepickerandroid.h
+
 
 
 

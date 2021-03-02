@@ -266,7 +266,6 @@ Item {
         source:"qrc:r.png"
         onClicked:
         {
-
           bMoving = true
           idView.decrementCurrentIndex()
         }

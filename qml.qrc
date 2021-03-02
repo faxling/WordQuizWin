@@ -39,5 +39,7 @@
         <file>glosquiz/flags/hungary-flag-button-round-icon-128.png</file>
         <file>l.svg</file>
         <file>lr_svg.svg</file>
+        <file>HangMan.qml</file>
+        <file>gubbe.svg</file>
     </qresource>
 </RCC>
