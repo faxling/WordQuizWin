@@ -234,6 +234,7 @@ Item {
       text:idTTrans.visible ? "An" : "Answer"
       onClicked: {
         bAV = !bAV
+        idDrawing.answerShown();
         QuizLib.hangShowAnswer(bAV)
       }
     }
@@ -258,22 +259,20 @@ Item {
     }
 
     Timer {
-      id:idGameOverTimer
+      id:idResultMsgTimer
       interval: 600;
       repeat:true
-      onTriggered: idGameOver.visible = !idGameOver.visible
+      onTriggered: idResultMsg.visible = !idResultMsg.visible
     }
 
     Text {
-      id: idGameOver
+      id: idResultMsg
       visible: false
       anchors.centerIn: parent
       color:"Tomato"
-      text: "Game Over!"
       font.family: "Kristen ITC"
       font.pixelSize:  idHangMan.width / 7
     }
-
   }
 
   Keys.onReturnPressed:
