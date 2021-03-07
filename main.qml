@@ -244,8 +244,6 @@ Window {
     anchors.bottomMargin:  nBtnHeight / 2
     anchors.topMargin:  idMainTitle.height + 10
 
-
-
     Tab
     {
       id:idTab1
@@ -305,6 +303,8 @@ Window {
           id: text
           anchors.centerIn: parent
           text: styleData.title
+          horizontalAlignment: Text.AlignHCenter
+
           color: styleData.selected ? "white" : "black"
         }
       }
@@ -316,11 +316,11 @@ Window {
       if (nLastIndexMain === currentIndex)
         return
       MyDownloader.pushIndex(nLastIndexMain)
-      nLastIndexMain = currentIndex
-      console.log("in " + nLastIndexMain)
-      if (nLastIndexMain === 3)
-        if (oHang !== undefined)
+
+      if (currentIndex === 3 && nLastIndexMain === 0)
           oHang.newQ()
+
+      nLastIndexMain = currentIndex
     }
 
   }
