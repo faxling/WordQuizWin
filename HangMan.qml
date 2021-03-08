@@ -108,13 +108,12 @@ Item {
     }
     MouseArea
     {
+      enabled: idFlagImg.visible
       anchors.fill: idFlagImg
       onClicked:
       {
         bIsReverseHang = !bIsReverseHang
         QuizLib.hangUpdateImage()
-        if (!idHangBtn.visible)
-          QuizLib.hangAddWord()
       }
     }
 
@@ -264,13 +263,16 @@ Item {
       repeat:true
       onTriggered: idResultMsg.visible = !idResultMsg.visible
     }
-
+    FontLoader {
+      id: webFont
+      source: "qrc:ITCKRIST.TTF"
+    }
     Text {
       id: idResultMsg
       visible: false
       anchors.centerIn: parent
       color:"Tomato"
-      font.family: "Kristen ITC"
+      font.family:  webFont.name
       font.pixelSize:  idHangMan.width / 7
     }
   }
@@ -282,6 +284,7 @@ Item {
 
   Keys.onEnterPressed:
   {
+
     QuizLib.hangEnterChar()
   }
 

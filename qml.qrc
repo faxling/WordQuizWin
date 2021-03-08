@@ -41,5 +41,6 @@
         <file>lr_svg.svg</file>
         <file>HangMan.qml</file>
         <file>gubbe.svg</file>
+        <file>ITCKRIST.TTF</file>
     </qresource>
 </RCC>
