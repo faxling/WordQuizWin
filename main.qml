@@ -101,70 +101,12 @@ Window {
   ListModel {
     id: glosModelIndex
   }
-  // https://www.countryflags.com/
+
+
   ListModel {
     id:idLangModel
-    ListElement {
-      lang: "Swedish"
-      imgsource:"qrc:/glosquiz/flags/sweden-flag-button-round-icon-128.png"
-      code:"sv"
-    }
-
-    ListElement {
-      lang: "Russian"
-      imgsource:"qrc:/glosquiz/flags/russia-flag-button-round-icon-128.png"
-      code:"ru"
-    }
-
-    ListElement {
-      lang: "French"
-      imgsource:"qrc:/glosquiz/flags/france-flag-button-round-icon-128.png"
-      code:"fr"
-    }
-
-    ListElement {
-      lang: "Italian"
-      imgsource:"qrc:/glosquiz/flags/italy-flag-button-round-icon-128.png"
-      code:"it"
-    }
-
-    ListElement {
-      lang: "English"
-      imgsource:"qrc:/glosquiz/flags/united-kingdom-flag-button-round-icon-128.png"
-      code:"en"
-    }
-
-    ListElement {
-      lang: "German"
-      imgsource:"qrc:/glosquiz/flags/germany-flag-button-round-icon-128.png"
-      code:"de"
-    }
-
-    ListElement {
-      lang: "Polish"
-      imgsource:"qrc:/glosquiz/flags/poland-flag-button-round-icon-128.png"
-      code:"pl"
-    }
-
-    ListElement {
-      lang: "Norvegian"
-      imgsource:"qrc:/glosquiz/flags/norway-flag-button-round-icon-128.png"
-      code:"no"
-    }
-
-    ListElement {
-      lang: "Spanish"
-      imgsource:"qrc:/glosquiz/flags/spain-flag-button-round-icon-128.png"
-      code:"es"
-    }
-
-    ListElement {
-      lang: "Hungarian"
-      imgsource:"qrc:/glosquiz/flags/hungary-flag-button-round-icon-128.png"
-      code:"hu"
-    }
-
   }
+
   ListModel {
     id:idQuizModel
 
@@ -191,6 +133,7 @@ Window {
 
   Component.onCompleted:
   {
+    QuizLib.initLangList()
     QuizLib.getAndInitDb()
   }
 

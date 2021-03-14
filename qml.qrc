@@ -27,16 +27,16 @@
         <file>TextListLarge.qml</file>
         <file>ButtonQuizImgLarge.qml</file>
         <file>DownLoad.qml</file>
-        <file>glosquiz/flags/france-flag-button-round-icon-128.png</file>
-        <file>glosquiz/flags/germany-flag-button-round-icon-128.png</file>
-        <file>glosquiz/flags/italy-flag-button-round-icon-128.png</file>
-        <file>glosquiz/flags/norway-flag-button-round-icon-128.png</file>
-        <file>glosquiz/flags/spain-flag-button-round-icon-128.png</file>
-        <file>glosquiz/flags/sweden-flag-button-round-icon-128.png</file>
-        <file>glosquiz/flags/russia-flag-button-round-icon-128.png</file>
-        <file>glosquiz/flags/united-kingdom-flag-button-round-icon-128.png</file>
-        <file>glosquiz/flags/poland-flag-button-round-icon-128.png</file>
-        <file>glosquiz/flags/hungary-flag-button-round-icon-128.png</file>
+        <file alias="france-flag-button-round-icon-128.png">glosquiz/flags/france-flag-button-round-icon-128.png</file>
+        <file alias="germany-flag-button-round-icon-128.png">glosquiz/flags/germany-flag-button-round-icon-128.png</file>
+        <file alias="italy-flag-button-round-icon-128.png">glosquiz/flags/italy-flag-button-round-icon-128.png</file>
+        <file alias="norway-flag-button-round-icon-128.png">glosquiz/flags/norway-flag-button-round-icon-128.png</file>
+        <file alias="spain-flag-button-round-icon-128.png">glosquiz/flags/spain-flag-button-round-icon-128.png</file>
+        <file alias="sweden-flag-button-round-icon-128.png">glosquiz/flags/sweden-flag-button-round-icon-128.png</file>
+        <file alias="russia-flag-button-round-icon-128.png">glosquiz/flags/russia-flag-button-round-icon-128.png</file>
+        <file alias="united-kingdom-flag-button-round-icon-128.png">glosquiz/flags/united-kingdom-flag-button-round-icon-128.png</file>
+        <file alias="poland-flag-button-round-icon-128.png">glosquiz/flags/poland-flag-button-round-icon-128.png</file>
+        <file alias="hungary-flag-button-round-icon-128.png">glosquiz/flags/hungary-flag-button-round-icon-128.png</file>
         <file>l.svg</file>
         <file>lr_svg.svg</file>
         <file>HangMan.qml</file>

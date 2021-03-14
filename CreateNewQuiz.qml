@@ -115,7 +115,7 @@ Item
       spacing:20
       function doCurrentIndexChanged()
       {
-        if (idLangList1.currentIndex < 0 || idLangList1.currentIndex < 0)
+        if (idLangList1.currentIndex < 0  || idLangList2.currentIndex < 0)
           return
         sLangLangSelected = idLangModel.get(idLangList1.currentIndex).code + "-" + idLangModel.get(idLangList2.currentIndex).code
       }
