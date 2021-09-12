@@ -1,6 +1,7 @@
 import QtQuick 2.14
 import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.1
+import QtQuick.LocalStorage 2.0 as Sql
 import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
 Item
@@ -197,6 +198,8 @@ Item
 
       Component.onCompleted: {
         QuizLib.connectMyDownloader()
+         QuizLib.initLangList()
+          QuizLib.getAndInitDb()
       }
 
       onCurrentIndexChanged:
@@ -462,10 +465,10 @@ Item
     id:idServerQModel
     ListElement {
       qname: "-"
-      code:""
-      state1:""
-      desc1:""
-      date1:""
+      code:"-"
+      state1:"-"
+      desc1:" "
+      date1:"-"
     }
   }
 }

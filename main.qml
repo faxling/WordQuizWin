@@ -1,7 +1,8 @@
 ﻿import QtQuick 2.3
 import QtQuick.Window 2.2
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.2
 import QtQuick.Controls.Styles 1.4
+import QtQuick.Layouts 1.12
 import QtQuick.LocalStorage 2.0 as Sql
 import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
@@ -133,8 +134,9 @@ Window {
 
   Component.onCompleted:
   {
-    QuizLib.initLangList()
-    QuizLib.getAndInitDb()
+    console.log("main completed")
+    //    QuizLib.initLangList()
+    //    QuizLib.getAndInitDb()
   }
 
   width:570
@@ -179,79 +181,126 @@ Window {
   }
   */
 
-  TabView {
+  TabBar {
     id:idTabMain
+    clip: true
     anchors.fill : parent
     anchors.leftMargin : 50
     anchors.rightMargin : 50
     anchors.bottomMargin:  nBtnHeight / 2
     anchors.topMargin:  idMainTitle.height + 10
+    implicitWidth: 200
+    background: Item {}
 
-    Tab
+    ButtonTab {
+      id: control1
+      text: "Home"
+      onPressed: {
+        checked = true
+        idSwipeView.currentIndex = 0
+      }
+    }
+    ButtonTab {
+      id: control2
+      text: "Edit"
+      onPressed: {
+        checked = true
+        idSwipeView.currentIndex = 1
+      }
+    }
+    ButtonTab {
+      id: control3
+      text: idComboBox.currentText
+      contentItem:  ComboBox
+      {
+        id:idComboBox
+        delegate: ItemDelegate {
+          width: idComboBox.width
+          onPressedChanged: {
+            if (index === 2 && pressed)
+            {
+             // CrossWordQ.createCrossWordFromList(glosModel)
+              idTab5.loadCW()
+            }
+          }
+          contentItem: Text {
+            text: modelData
+            // color: "#21be2b"
+            font.pointSize: 10
+            verticalAlignment: Text.AlignVCenter
+          }
+          highlighted: idComboBox.highlightedIndex === index
+        }
+        background:Item{}
+        contentItem : Text {
+          text: control3.text
+          font.pointSize: 10
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          color: control3.checked ? "white" : "black"
+        }
+        onPressedChanged: {
+          if (pressed)
+          {
+            control3.checked = true
+            idSwipeView.currentIndex = currentIndex + 2
+          }
+        }
+        onCurrentIndexChanged : idSwipeView.currentIndex = currentIndex + 2
+        currentIndex: 0
+        model:  ["Quiz", "Hang Man", "Cross Word"]
+      }
+    }
+  }
+
+  SwipeView {
+    id:idSwipeView
+    clip: true
+
+    x : idTabMain.x
+    y : idTabMain.y + idTabMain.contentHeight
+    height : idTabMain.height - idTabMain.contentHeight
+    width: idTabMain.width
+    Component.onCompleted: console.log("SwipeView completed")
+    interactive : false
+
+    CreateNewQuiz
     {
       id:idTab1
-      title: "Home"
-      active: true
-      CreateNewQuiz
-      {
-        anchors.fill: parent
-      }
     }
-    Tab
+    EditQuiz
     {
-      title: "Edit"
+      id:idTab2
       enabled: glosModelIndex.count > 0 && bDownloadNotVisible
-      active: true
-      EditQuiz
-      {
-        id:idTab2
-        anchors.fill: parent
-      }
     }
-    Tab
+    TakeQuiz
     {
-      enabled: glosModelIndex.count > 0 && bDownloadNotVisible
-      title: "Quiz"
-      TakeQuiz
+      id:idTab3
+      Component.onCompleted:
       {
-        id:idTab3
-        anchors.fill: parent
+        console.log("TakeQuiz completed")
+        //    QuizLib.initLangList()
+        //    QuizLib.getAndInitDb()
       }
-    }
-    Tab
-    {
-      id:idTab4M
-      enabled: glosModelIndex.count > 0 && bDownloadNotVisible
-      title: "Hang\nMan"
-      HangMan
-      {
-        id:idTab4
-        Component.onCompleted:
-        {
-          oHang = idTab4
-        }
-        anchors.fill: parent
-      }
-    }
-    style: TabViewStyle {
 
-      tab: Rectangle {
-        color: styleData.selected ? "#626567" :"#BDC3C7"
-        opacity: styleData.enabled ? 1 :0.5
-        border.color:  "#797D7F"
-        implicitWidth: idTabMain.width / 4 + 0.5
-        implicitHeight: nBtnHeight
-        radius: 2
-        Text {
-          id: text
-          anchors.centerIn: parent
-          text: styleData.title
-          horizontalAlignment: Text.AlignHCenter
-
-          color: styleData.selected ? "white" : "black"
-        }
+    }
+    HangMan
+    {
+      id:idTab4
+      Component.onCompleted:
+      {
+        console.log("HangMan completed")
+        oHang = idTab4
       }
-      frame: Rectangle { color: "#E5E7E9" }
+    }
+
+    CrossWord {
+      id: idTab5
+    }
+
+    Rectangle {
+      id: activityTab3
+      color: "black"
     }
 
     onCurrentIndexChanged:
@@ -261,12 +310,11 @@ Window {
       MyDownloader.pushIndex(nLastIndexMain)
 
       if (currentIndex === 3 && nLastIndexMain === 0)
-          oHang.newQ()
+        oHang.newQ()
 
       nLastIndexMain = currentIndex
     }
 
   }
-
 }
 

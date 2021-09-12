@@ -2,7 +2,7 @@ import QtQuick 2.5
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.1
 import QtQuick.XmlListModel 2.0
-import QtQuick.LocalStorage 2.0 as Sql
+// import QtQuick.LocalStorage 2.0 as Sql
 import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 
 Item {

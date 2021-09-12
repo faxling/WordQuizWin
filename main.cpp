@@ -10,6 +10,7 @@
 #include "..\harbour-wordquiz\src\speechdownloader.h"
 #include "..\harbour-wordquiz\src\filehelpers.h"
 #include "..\harbour-wordquiz\src\svgdrawing.h"
+#include "..\harbour-wordquiz\src\crosswordq.h"
 #include <QStandardPaths>
 
 
@@ -74,6 +75,7 @@ public:
 
     m_p = new Speechdownloader(offlineStoragePath(), nullptr);
     rootContext()->setContextProperty("MyDownloader",  m_p);
+    rootContext()->setContextProperty("CrossWordQ",  new CrossWordQ);
 #ifdef Q_OS_ANDROID
     auto pIP = new ImagePickerAndroid(m_p);
     rootContext()->setContextProperty("MyImagePicker",  pIP);
@@ -112,7 +114,7 @@ public:
 int main(int argc, char *argv[])
 {
 
-  QGuiApplication app(argc, argv);
+  QGuiApplication  app(argc, argv);
 
   Engine engine;
 

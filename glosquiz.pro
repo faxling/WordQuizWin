@@ -4,12 +4,14 @@ QT += qml quick multimedia svg xml
 
 android: QT += androidextras
 
-CONFIG += c++11
+CONFIG += c++14
 
 SOURCES += main.cpp \
+    ../harbour-wordquiz/src/crosswordq.cpp \
     ../harbour-wordquiz/src/speechdownloader.cpp \
     ../harbour-wordquiz/src/filehelpers.cpp \
     ../harbour-wordquiz/src/svgdrawing.cpp \
+    ../CrossMatch/crossword.cpp \
     imagepickerandroid.cpp
 
 
@@ -24,13 +26,13 @@ include(deployment.pri)
 RC_FILE = ./glosquiz/Resource.rc
 
 HEADERS += \
+    ../harbour-wordquiz/src/crosswordq.h \
     ../harbour-wordquiz/src/speechdownloader.h \
     ../harbour-wordquiz/src/filehelpers.h \
     ../harbour-wordquiz/src/svgdrawing.h \
+    ../CrossMatch/crossword.h \
     ./glosquiz/Resource.rc \
     imagepickerandroid.h
-
-
 
 
 DISTFILES += \

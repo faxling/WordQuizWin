@@ -243,8 +243,6 @@ Item {
     {
       id:idSoundBtn
       visible: !idHangBtn.visible
-      height : nBtnHeight
-      width : nBtnHeight
       anchors.right:  parent.right
       anchors.rightMargin:  20
       anchors.bottom: parent.bottom
@@ -284,7 +282,6 @@ Item {
 
   Keys.onEnterPressed:
   {
-
     QuizLib.hangEnterChar()
   }
 
