@@ -509,7 +509,6 @@ Item {
       }
       anchors.fill: parent
       onDropped: {
-        console.log("MyDownloader.downloadImage")
         MyDownloader.downloadImage(drop.urls, idTextEdit1.text, sFromLang,
                                    idTextEdit2.text, sToLang, true)
       }
