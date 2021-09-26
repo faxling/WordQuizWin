@@ -256,12 +256,10 @@ Window {
   SwipeView {
     id:idSwipeView
     clip: true
-
     x : idTabMain.x
     y : idTabMain.y + idTabMain.contentHeight
     height : idTabMain.height - idTabMain.contentHeight
     width: idTabMain.width
-    Component.onCompleted: console.log("SwipeView completed")
     interactive : false
 
     CreateNewQuiz

@@ -4,11 +4,10 @@ import QtQuick.Controls.Styles 1.4
 import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 import QtQuick.Window 2.0
 
-Rectangle {
-  id:idCrossWord
-  clip:true
-  gradient:  "NearMoon"
-  property int nW : 0
+
+
+Item
+{
   enum SquareType {
     Char,
     Blank,
@@ -16,7 +15,7 @@ Rectangle {
     Space,
     Done
   }
-
+    property int nW : 0
   function loadCW()
   {
     console.log("loadCW")
@@ -58,153 +57,168 @@ Rectangle {
     CrossWordQ.assignCharSquares(addCh)
   }
 
+  Flickable {
+    id:idCrossWord
+    clip:true
+    anchors.fill : parent
+    // gradient:  "NearMoon"
+    contentHeight: idCrossWordGrid.height
+    contentWidth:  idCrossWordGrid.width + 80
 
-  Component
-  {
-    id:idChar
-    Rectangle
+
+
+
+
+
+
+    Component
     {
-      id: idCharRect
-      Component.onCompleted:
+      id:idChar
+      Rectangle
       {
-        if (nW ===0 )
-          nW = idT.font.pixelSize*1.3
-        idCharRect.height = nW
-        idCharRect.width = nW
-      }
-
-      property int eSquareType : CrossWord.SquareType.Blank
-      property alias text: idT.text
-      property string textA
-      color : {
-        switch (eSquareType)
+        id: idCharRect
+        Component.onCompleted:
         {
-        case CrossWord.SquareType.Blank:
-          return "grey"
-        case CrossWord.SquareType.Char:
-          return "white"
-        case CrossWord.SquareType.Space:
-          return "#feffcc"
-        case CrossWord.SquareType.Question:
-          return "#e2f087"
-        case CrossWord.SquareType.Done:
-          return "#71ff96"
+          if (nW ===0 )
+            nW = idT.font.pixelSize*1.3
+          idCharRect.height = nW
+          idCharRect.width = nW
         }
-      }
 
-      function isQ()
-      {
-        return (eSquareType ===  CrossWord.SquareType.Question)
-      }
-
-      Text {
-        id: idT
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        anchors.fill:   parent
-        wrapMode: Text.WrapAnywhere
-        font.pointSize: isQ() ? 4 : 20
-      }
-      TextMetrics
-      {
-        id: fontMetrics
-        font.pointSize:20
-      }
-
-      MouseArea
-      {
-        anchors.fill: parent
-        onPressed: {
-          if (idCharRect.eSquareType === CrossWord.SquareType.Question)
+        property int eSquareType : CrossWord.SquareType.Blank
+        property alias text: idT.text
+        property string textA
+        color : {
+          switch (eSquareType)
           {
-            if (idInfoBox.visible === true && idInfoBox.parent === idCharRect)
+          case CrossWord.SquareType.Blank:
+            return "grey"
+          case CrossWord.SquareType.Char:
+            return "white"
+          case CrossWord.SquareType.Space:
+            return "#feffcc"
+          case CrossWord.SquareType.Question:
+            return "#e2f087"
+          case CrossWord.SquareType.Done:
+            return "#71ff96"
+          }
+        }
+
+        function isQ()
+        {
+          return (eSquareType ===  CrossWord.SquareType.Question)
+        }
+
+        Text {
+          id: idT
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          anchors.fill:   parent
+          wrapMode: Text.WrapAnywhere
+          font.pointSize: isQ() ? 4 : 20
+        }
+        TextMetrics
+        {
+          id: fontMetrics
+          font.pointSize:20
+        }
+
+        MouseArea
+        {
+          anchors.fill: parent
+          onPressed: {
+            if (idCharRect.eSquareType === CrossWord.SquareType.Question)
             {
-              idInfoBox.visible = false
-              return
-            }
+              if (idInfoBox.visible === true && idInfoBox.parent === idCharRect)
+              {
+                idInfoBox.visible = false
+                return
+              }
 
-            idInfoBox.parent = idCharRect
-            idInfoBox.show(idT.text)
+              idInfoBox.parent = idCharRect
+              idInfoBox.show(idT.text)
 
-            var sss = idT.text.split("\n\n")
+              var sss = idT.text.split("\n\n")
 
-            console.log("ss " + sss.length)
-            if (sss.length > 1)
-            {
-              if (sss[0].length >  sss[1].length)
-                fontMetrics.text = sss[0]
+              console.log("ss " + sss.length)
+              if (sss.length > 1)
+              {
+                if (sss[0].length >  sss[1].length)
+                  fontMetrics.text = sss[0]
+                else
+                  fontMetrics.text = sss[1]
+              }
               else
-                fontMetrics.text = sss[1]
+                fontMetrics.text = idT.text
+              fontMetrics.text+= "X"
+
+              idInfoBox.width = fontMetrics.width
+
             }
-            else
-              fontMetrics.text = idT.text
-            fontMetrics.text+= "X"
+            else if (idCharRect.eSquareType === CrossWord.SquareType.Char ||
+                     idCharRect.eSquareType === CrossWord.SquareType.Done)
+            {
+              idInfoBox.hide()
+              idInputBox.visible = true
+              idInputBox.t.text = idCharRect.text
+              idInputBox.parent = idCharRect
+              idInputBox.t.forceActiveFocus()
+            }
 
-            idInfoBox.width = fontMetrics.width
-
+            // idInfoBox.x = idCharRect.x + idCrossWordGrid.x- idInfoBox.width / 2
+            //  idInfoBox.y = idCharRect.y + idCrossWordGrid.y- idInfoBox.height
           }
-          else if (idCharRect.eSquareType === CrossWord.SquareType.Char ||
-                   idCharRect.eSquareType === CrossWord.SquareType.Done)
-          {
-            idInfoBox.hide()
-            idInputBox.visible = true
-            idInputBox.t.text = idCharRect.text
-            idInputBox.parent = idCharRect
-            idInputBox.t.forceActiveFocus()
-          }
-
-          // idInfoBox.x = idCharRect.x + idCrossWordGrid.x- idInfoBox.width / 2
-          //  idInfoBox.y = idCharRect.y + idCrossWordGrid.y- idInfoBox.height
         }
       }
     }
-  }
 
-  Grid
-  {
-    id: idCrossWordGrid
-    spacing: 2
-    anchors.centerIn: parent
-  }
-
-  ToolTip
-  {
-    id: idInfoBox
-    font.pointSize: 20
-    visible:false
-  }
-
-  Popup
-  {
-    id: idInputBox
-    property alias t :  idTextInput
-    TextInput
+    Grid
     {
-      id: idTextInput
-      font.pointSize: 20
-      // color: "transparent"
-      anchors.fill: parent
-      font.capitalization: Font.AllUppercase
-
-      onAccepted:
-      {
-        idInputBox.parent.text = text.toUpperCase().charAt(0)
-        if (idInputBox.parent.text === idInputBox.parent.textA)
-          idInputBox.parent.eSquareType = CrossWord.SquareType.Done
-
-      }
-      onEditingFinished:
-      {
-        idInputBox.parent.text = text.toUpperCase().charAt(0)
-        idInputBox.visible = false
-        if (idInputBox.parent.text === idInputBox.parent.textA)
-          idInputBox.parent.eSquareType = CrossWord.SquareType.Done
-      }
-
+      id: idCrossWordGrid
+      x:idTabMain.width > width ? (idTabMain.width - width) / 2 : 0
+      // y:20
+      spacing: 2
+      //  anchors.centerIn: parent
     }
-  }
 
-  /*
+    ToolTip
+    {
+      id: idInfoBox
+      font.pointSize: 20
+      visible:false
+    }
+
+    Popup
+    {
+      id: idInputBox
+      property alias t :  idTextInput
+      TextInput
+      {
+        id: idTextInput
+        font.pointSize: 20
+        // color: "transparent"
+        anchors.fill: parent
+        font.capitalization: Font.AllUppercase
+
+        onAccepted:
+        {
+          idInputBox.parent.text = text.toUpperCase().charAt(0)
+          if (idInputBox.parent.text === idInputBox.parent.textA)
+            idInputBox.parent.eSquareType = CrossWord.SquareType.Done
+
+        }
+        onEditingFinished:
+        {
+          idInputBox.parent.text = text.toUpperCase().charAt(0)
+          idInputBox.visible = false
+          if (idInputBox.parent.text === idInputBox.parent.textA)
+            idInputBox.parent.eSquareType = CrossWord.SquareType.Done
+        }
+
+      }
+    }
+
+    /*
   RectRounded
   {
     id: idInfoBox
@@ -230,30 +244,10 @@ Rectangle {
     }
   }
   */
-  ButtonQuizImgLarge
-  {
-    id:idThis_addVal
-    anchors.right:  parent.right
-    anchors.rightMargin:  20
-    anchors.top: parent.top
-    anchors.topMargin:  20
-    source:"qrc:refresh.png"
 
-    onClicked:
+    Component.onCompleted:
     {
-      loadCW()
-    }
-    WhiteText
-    {
-      anchors.bottom: parent.bottom
-      text: "New"
-      horizontalAlignment: Text.AlignHCenter
-      anchors.horizontalCenter: parent.horizontalCenter
-    }
-  }
-  Component.onCompleted:
-  {
-    /*
+      /*
     CrossWordQ.createCrossWordFromList(glosModel)
 
     idCrossWordGrid.columns = 10
@@ -279,6 +273,26 @@ Rectangle {
     }
     */
 
+    }
+  }
+  ButtonQuizImgLarge
+  {
+    id:idThis_addVal
+    x : idTabMain.width - width -20
+    y : 20
+
+    source:"qrc:refresh.png"
+
+    onClicked:
+    {
+      loadCW()
+    }
+    WhiteText
+    {
+      anchors.bottom: parent.bottom
+      text: "New"
+      horizontalAlignment: Text.AlignHCenter
+      anchors.horizontalCenter: parent.horizontalCenter
+    }
   }
 }
-
