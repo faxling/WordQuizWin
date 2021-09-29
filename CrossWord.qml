@@ -15,7 +15,8 @@ Item
     Space,
     Done
   }
-    property int nW : 0
+  property int nW : 0
+  property int nLastAcceptedCharIndex: -1
   function loadCW()
   {
     console.log("loadCW")
@@ -24,9 +25,15 @@ Item
     CrossWordQ.createCrossWordFromList(glosModel)
 
     idCrossWordGrid.columns = CrossWordQ.nW
-    let nCount = CrossWordQ.nW * CrossWordQ.nH
+
+    // Last low must contain just *
+    let nCount = CrossWordQ.nW * (CrossWordQ.nH -1)
+
     for (let i = 0; i < nCount; ++i)
-      idChar.createObject(idCrossWordGrid)
+    {
+      let o = idChar.createObject(idCrossWordGrid)
+      o.nIndex = i
+    }
 
     function addQ(nIndex, nHorizontal, nVertical)
     {
@@ -65,12 +72,6 @@ Item
     contentHeight: idCrossWordGrid.height
     contentWidth:  idCrossWordGrid.width + 80
 
-
-
-
-
-
-
     Component
     {
       id:idChar
@@ -85,6 +86,7 @@ Item
           idCharRect.width = nW
         }
 
+        property int nIndex
         property int eSquareType : CrossWord.SquareType.Blank
         property alias text: idT.text
         property string textA
@@ -138,18 +140,18 @@ Item
               idInfoBox.parent = idCharRect
               idInfoBox.show(idT.text)
 
-              var sss = idT.text.split("\n\n")
+              const sss = idT.text.split("\n\n")
 
-              console.log("ss " + sss.length)
               if (sss.length > 1)
               {
-                if (sss[0].length >  sss[1].length)
+                if (sss[0].length > sss[1].length)
                   fontMetrics.text = sss[0]
                 else
                   fontMetrics.text = sss[1]
               }
               else
                 fontMetrics.text = idT.text
+
               fontMetrics.text+= "X"
 
               idInfoBox.width = fontMetrics.width
@@ -164,9 +166,11 @@ Item
               idInputBox.parent = idCharRect
               idInputBox.t.forceActiveFocus()
             }
+            else
+            {
+              Qt.inputMethod.hide()
+            }
 
-            // idInfoBox.x = idCharRect.x + idCrossWordGrid.x- idInfoBox.width / 2
-            //  idInfoBox.y = idCharRect.y + idCrossWordGrid.y- idInfoBox.height
           }
         }
       }
@@ -176,9 +180,7 @@ Item
     {
       id: idCrossWordGrid
       x:idTabMain.width > width ? (idTabMain.width - width) / 2 : 0
-      // y:20
       spacing: 2
-      //  anchors.centerIn: parent
     }
 
     ToolTip
@@ -192,86 +194,111 @@ Item
     {
       id: idInputBox
       property alias t :  idTextInput
+
       TextInput
       {
         id: idTextInput
+
+        function isChar(oo)
+        {
+          if (oo.eSquareType === CrossWord.SquareType.Char || oo.eSquareType === CrossWord.SquareType.Done)
+            return true
+          return false
+        }
+
+
+        function chChar(text)
+        {
+          idInputBox.parent.text = text.toUpperCase().charAt(0)
+
+          if (MyDownloader.ignoreAccent(idInputBox.parent.text) === MyDownloader.ignoreAccent(idInputBox.parent.textA))
+          {
+
+            idInputBox.parent.text = idInputBox.parent.textA
+            idInputBox.parent.eSquareType = CrossWord.SquareType.Done
+          }
+
+          let bV = false
+
+          let nNI = idInputBox.parent.nIndex
+
+          if (idCrossWordGrid.children[nNI+ 1].eSquareType === CrossWord.SquareType.Blank &&
+              idCrossWordGrid.children[nNI+ CrossWordQ.nW].eSquareType === CrossWord.SquareType.Blank)
+          {
+            idInputBox.visible = false
+            return
+          }
+
+          let nCurrent = nNI
+
+          if ((nNI - nLastAcceptedCharIndex) === CrossWordQ.nW)
+          {
+            nNI = nNI + CrossWordQ.nW
+            if (isChar(idCrossWordGrid.children[nNI]))
+            {
+              idInputBox.parent = idCrossWordGrid.children[nNI]
+              idTextInput.text = idCrossWordGrid.children[nNI].text
+              Qt.inputMethod.show()
+              bV = true
+            }
+            idInputBox.visible = bV
+            nLastAcceptedCharIndex = nCurrent
+            return
+          }
+
+          if (idCrossWordGrid.children[nNI+ 1].eSquareType === CrossWord.SquareType.Space)
+          {
+            nNI = nNI + 2
+          } else if (idCrossWordGrid.children[nNI+ CrossWordQ.nW].eSquareType === CrossWord.SquareType.Space)
+          {
+            nNI = nNI+ CrossWordQ.nW*2
+          }
+          else
+          {
+            nNI = nNI+ 1
+          }
+
+
+          if (isChar(idCrossWordGrid.children[nNI]))
+          {
+            idInputBox.parent = idCrossWordGrid.children[nNI]
+            idTextInput.text = idCrossWordGrid.children[nNI].text
+            bV = true
+          }
+
+          if (!bV)
+          {
+            nNI = nNI + CrossWordQ.nW -1
+            if (isChar(idCrossWordGrid.children[nNI]))
+            {
+              idInputBox.parent = idCrossWordGrid.children[nNI]
+              idTextInput.text = idCrossWordGrid.children[nNI].text
+              bV = true
+            }
+          }
+
+          nLastAcceptedCharIndex = nCurrent
+
+          if (bV)
+          {
+            idInputBox.visible = bV
+            Qt.inputMethod.show()
+          }
+        }
         font.pointSize: 20
-        // color: "transparent"
         anchors.fill: parent
         font.capitalization: Font.AllUppercase
 
         onAccepted:
         {
-          idInputBox.parent.text = text.toUpperCase().charAt(0)
-          if (idInputBox.parent.text === idInputBox.parent.textA)
-            idInputBox.parent.eSquareType = CrossWord.SquareType.Done
-
-        }
-        onEditingFinished:
-        {
-          idInputBox.parent.text = text.toUpperCase().charAt(0)
-          idInputBox.visible = false
-          if (idInputBox.parent.text === idInputBox.parent.textA)
-            idInputBox.parent.eSquareType = CrossWord.SquareType.Done
+          onEditingFinished:chChar(text)
         }
 
       }
     }
-
-    /*
-  RectRounded
-  {
-    id: idInfoBox
-    visible:false
-    property alias text : idText.text
-    onCloseClicked:  idInfoBox.visible = false
-
-    WhiteText {
-      id:idText
-      x:20
-      font.pointSize: 20
-      anchors.top : idInfoBox.bottomClose
-    }
-
-    width:nDlgHeight
-    height:nW*3
-    bIgnoreBackHandling : true
-    Text {
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
-      anchors.fill:   parent
-      wrapMode: Text.WrapAnywhere
-    }
-  }
-  */
 
     Component.onCompleted:
     {
-      /*
-    CrossWordQ.createCrossWordFromList(glosModel)
-
-    idCrossWordGrid.columns = 10
-
-    let nCount = 10 * 10
-    console.log("nCount " + nCount)
-    for (let i = 0; i < nCount; ++i)
-    {
-
-      const o = idChar.createObject(idCrossWordGrid)
-
-
-      if ((i % 5) === 2)
-      {
-        o.eSquareType = CrossWord.SquareType.Question
-        o.text = "långt och smalt djur hos eva"
-      }
-      if ((i % 10) === 1)
-      {
-        o.eSquareType = CrossWord.SquareType.Blank
-      }
-
-    }
-    */
 
     }
   }
