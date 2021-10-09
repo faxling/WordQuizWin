@@ -10,7 +10,7 @@ Item
 {
   enum SquareType {
     Char,
-    Blank,
+    Grey,
     Question,
     Space,
     Done
@@ -87,13 +87,13 @@ Item
         }
 
         property int nIndex
-        property int eSquareType : CrossWord.SquareType.Blank
+        property int eSquareType : CrossWord.SquareType.Grey
         property alias text: idT.text
         property string textA
         color : {
           switch (eSquareType)
           {
-          case CrossWord.SquareType.Blank:
+          case CrossWord.SquareType.Grey:
             return "grey"
           case CrossWord.SquareType.Char:
             return "white"
@@ -213,17 +213,30 @@ Item
 
           if (MyDownloader.ignoreAccent(idInputBox.parent.text) === MyDownloader.ignoreAccent(idInputBox.parent.textA))
           {
-
             idInputBox.parent.text = idInputBox.parent.textA
             idInputBox.parent.eSquareType = CrossWord.SquareType.Done
           }
+          else
+            idInputBox.parent.eSquareType = CrossWord.SquareType.Char
 
           let bV = false
 
           let nNI = idInputBox.parent.nIndex
 
-          if (idCrossWordGrid.children[nNI+ 1].eSquareType === CrossWord.SquareType.Blank &&
-              idCrossWordGrid.children[nNI+ CrossWordQ.nW].eSquareType === CrossWord.SquareType.Blank)
+          if ((nNI) % CrossWordQ.nW === CrossWordQ.nW)
+          {
+            idInputBox.visible = false
+            return
+          }
+                                                     // Last line skipped
+          if ((nNI+ CrossWordQ.nW) >= (CrossWordQ.nW * (CrossWordQ.nH-1)) )
+          {
+            idInputBox.visible = false
+            return
+          }
+
+          if (idCrossWordGrid.children[nNI+ 1].eSquareType === CrossWord.SquareType.Grey &&
+              idCrossWordGrid.children[nNI+ CrossWordQ.nW].eSquareType === CrossWord.SquareType.Grey)
           {
             idInputBox.visible = false
             return
@@ -231,19 +244,23 @@ Item
 
           let nCurrent = nNI
 
+          // Walking downwards
           if ((nNI - nLastAcceptedCharIndex) === CrossWordQ.nW)
           {
             nNI = nNI + CrossWordQ.nW
-            if (isChar(idCrossWordGrid.children[nNI]))
+            if (idCrossWordGrid.children[nNI].eSquareType  !== CrossWord.SquareType.Space)
             {
-              idInputBox.parent = idCrossWordGrid.children[nNI]
-              idTextInput.text = idCrossWordGrid.children[nNI].text
-              Qt.inputMethod.show()
-              bV = true
+              if (isChar(idCrossWordGrid.children[nNI]))
+              {
+                idInputBox.parent = idCrossWordGrid.children[nNI]
+                idTextInput.text = idCrossWordGrid.children[nNI].text
+                Qt.inputMethod.show()
+                bV = true
+              }
+              idInputBox.visible = bV
+              nLastAcceptedCharIndex = nCurrent
+              return
             }
-            idInputBox.visible = bV
-            nLastAcceptedCharIndex = nCurrent
-            return
           }
 
           if (idCrossWordGrid.children[nNI+ 1].eSquareType === CrossWord.SquareType.Space)
