@@ -16,7 +16,6 @@ Item
     Done
   }
   property int nW : 0
-  property int nLastAcceptedCharIndex: -1
   function loadCW()
   {
     console.log("loadCW")
@@ -69,7 +68,7 @@ Item
     clip:true
     anchors.fill : parent
     // gradient:  "NearMoon"
-    contentHeight: idCrossWordGrid.height
+    contentHeight: idCrossWordGrid.height + idWindow.height / 3
     contentWidth:  idCrossWordGrid.width + 80
 
     Component
@@ -194,7 +193,7 @@ Item
     {
       id: idInputBox
       property alias t :  idTextInput
-
+      width: idTextInput.width + idTextInput.font.pixelSize
       TextInput
       {
         id: idTextInput
@@ -206,104 +205,89 @@ Item
           return false
         }
 
+        function isBlank(oo)
+        {
+          if (oo.text === " " || oo.text === "")
+            return true
+          return false
+        }
 
         function chChar(text)
         {
-          idInputBox.parent.text = text.toUpperCase().charAt(0)
+          const nInTextLen = text.length
 
-          if (MyDownloader.ignoreAccent(idInputBox.parent.text) === MyDownloader.ignoreAccent(idInputBox.parent.textA))
-          {
-            idInputBox.parent.text = idInputBox.parent.textA
-            idInputBox.parent.eSquareType = CrossWord.SquareType.Done
-          }
-          else
-            idInputBox.parent.eSquareType = CrossWord.SquareType.Char
-
-          let bV = false
+          // 0 Horizontal 1 = Verical
+          let eDirection =  0;
+          text = text.replace(" ","").toUpperCase()
 
           let nNI = idInputBox.parent.nIndex
-
-          if ((nNI) % CrossWordQ.nW === CrossWordQ.nW)
+          for (let i = 0; i < nInTextLen; ++i)
           {
-            idInputBox.visible = false
-            return
-          }
-                                                     // Last line skipped
-          if ((nNI+ CrossWordQ.nW) >= (CrossWordQ.nW * (CrossWordQ.nH-1)) )
-          {
-            idInputBox.visible = false
-            return
-          }
-
-          if (idCrossWordGrid.children[nNI+ 1].eSquareType === CrossWord.SquareType.Grey &&
-              idCrossWordGrid.children[nNI+ CrossWordQ.nW].eSquareType === CrossWord.SquareType.Grey)
-          {
-            idInputBox.visible = false
-            return
-          }
-
-          let nCurrent = nNI
-
-          // Walking downwards
-          if ((nNI - nLastAcceptedCharIndex) === CrossWordQ.nW)
-          {
-            nNI = nNI + CrossWordQ.nW
-            if (idCrossWordGrid.children[nNI].eSquareType  !== CrossWord.SquareType.Space)
+            // If First init direction
+            if (i === 0)
             {
-              if (isChar(idCrossWordGrid.children[nNI]))
+              if ((nNI % CrossWordQ.nW) === (CrossWordQ.nW-1))
               {
-                idInputBox.parent = idCrossWordGrid.children[nNI]
-                idTextInput.text = idCrossWordGrid.children[nNI].text
-                Qt.inputMethod.show()
-                bV = true
+                eDirection = 1
               }
-              idInputBox.visible = bV
-              nLastAcceptedCharIndex = nCurrent
-              return
+              else if (!isChar(idCrossWordGrid.children[nNI+ 1]) && isBlank(idCrossWordGrid.children[nNI+ 1]) )
+              {
+                eDirection = 1
+              }
             }
-          }
 
-          if (idCrossWordGrid.children[nNI+ 1].eSquareType === CrossWord.SquareType.Space)
-          {
-            nNI = nNI + 2
-          } else if (idCrossWordGrid.children[nNI+ CrossWordQ.nW].eSquareType === CrossWord.SquareType.Space)
-          {
-            nNI = nNI+ CrossWordQ.nW*2
-          }
-          else
-          {
-            nNI = nNI+ 1
-          }
+            let oCursorSq = idCrossWordGrid.children[nNI];
+            let chIn = text.charAt(i)
 
-
-          if (isChar(idCrossWordGrid.children[nNI]))
-          {
-            idInputBox.parent = idCrossWordGrid.children[nNI]
-            idTextInput.text = idCrossWordGrid.children[nNI].text
-            bV = true
-          }
-
-          if (!bV)
-          {
-            nNI = nNI + CrossWordQ.nW -1
-            if (isChar(idCrossWordGrid.children[nNI]))
+            if (MyDownloader.ignoreAccent(chIn) === MyDownloader.ignoreAccent(oCursorSq.textA))
             {
-              idInputBox.parent = idCrossWordGrid.children[nNI]
-              idTextInput.text = idCrossWordGrid.children[nNI].text
-              bV = true
+              oCursorSq.text = oCursorSq.textA
+              oCursorSq.eSquareType = CrossWord.SquareType.Done
             }
+            else
+            {
+              oCursorSq.text  = chIn
+              oCursorSq.eSquareType = CrossWord.SquareType.Char
+            }
+
+            if (eDirection === 0)
+            {
+              nNI++
+              if ((nNI % CrossWordQ.nW) === 0)
+                break
+            } else
+            {
+              nNI+=CrossWordQ.nW
+              if ( nNI >= (CrossWordQ.nW * (CrossWordQ.nH-1)))
+                break
+            }
+
+            oCursorSq = idCrossWordGrid.children[nNI];
+
+            if (oCursorSq.eSquareType === CrossWord.SquareType.Space)
+            {
+              if (eDirection === 0)
+                nNI++
+              else
+                nNI = nNI + CrossWordQ.nW
+
+              oCursorSq = idCrossWordGrid.children[nNI];
+            }
+
+            if (!isChar(oCursorSq))
+              break
+
           }
 
-          nLastAcceptedCharIndex = nCurrent
-
-          if (bV)
+          idInputBox.visible = false
+          const nCount = idCrossWordGrid.children.length
+          for (let j = 0; j < nCount; ++j)
           {
-            idInputBox.visible = bV
-            Qt.inputMethod.show()
+            console.log(idCrossWordGrid.children[j].eSquareType)
           }
+
         }
         font.pointSize: 20
-        anchors.fill: parent
         font.capitalization: Font.AllUppercase
 
         onAccepted:
