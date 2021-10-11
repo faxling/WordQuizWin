@@ -8,6 +8,7 @@ import QtQuick.Window 2.0
 
 Item
 {
+  id: idCrossWordItem
   enum SquareType {
     Char,
     Grey,
@@ -20,7 +21,7 @@ Item
   {
     console.log("loadCW")
     idCrossWordGrid.children = null
-
+    idCrossResultMsg.visible = false
     CrossWordQ.createCrossWordFromList(glosModel)
 
     idCrossWordGrid.columns = CrossWordQ.nW
@@ -214,12 +215,11 @@ Item
 
         function chChar(text)
         {
-          const nInTextLen = text.length
 
           // 0 Horizontal 1 = Verical
           let eDirection =  0;
-          text = text.replace(" ","").toUpperCase()
-
+          text= text.replace(/ /g,"").toUpperCase()
+          const nInTextLen = text.length
           let nNI = idInputBox.parent.nIndex
           for (let i = 0; i < nInTextLen; ++i)
           {
@@ -281,10 +281,17 @@ Item
 
           idInputBox.visible = false
           const nCount = idCrossWordGrid.children.length
+          let bDone = true
           for (let j = 0; j < nCount; ++j)
           {
-            console.log(idCrossWordGrid.children[j].eSquareType)
+            if (idCrossWordGrid.children[j].eSquareType === CrossWord.SquareType.Char)
+            {
+              bDone = false
+              break
+            }
           }
+          if (bDone)
+            idCrossResultMsg.visible = true
 
         }
         font.pointSize: 20
@@ -323,4 +330,17 @@ Item
       anchors.horizontalCenter: parent.horizontalCenter
     }
   }
+
+
+  Text {
+    text:"Nice job!"
+    id: idCrossResultMsg
+    visible: false
+    anchors.centerIn: parent
+    color:"tomato"
+    font.family:  webFont.name
+    font.pixelSize:  idCrossWordItem.width / 12
+  }
 }
+
+

@@ -261,10 +261,7 @@ Item {
       repeat:true
       onTriggered: idResultMsg.visible = !idResultMsg.visible
     }
-    FontLoader {
-      id: webFont
-      source: "qrc:ITCKRIST.TTF"
-    }
+
     Text {
       id: idResultMsg
       visible: false

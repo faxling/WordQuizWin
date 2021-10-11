@@ -63,7 +63,10 @@ Window {
 
   property int nGlosaTakeQuizIndex : -1
   property int nLastIndexMain : 0
-
+  FontLoader {
+    id: webFont
+    source: "qrc:ITCKRIST.TTF"
+  }
   function onBackPressedTab() {
     nLastIndexMain = MyDownloader.popIndex()
     idTabMain.currentIndex = nLastIndexMain
