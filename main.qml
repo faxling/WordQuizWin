@@ -57,7 +57,8 @@ Window {
   property variant oPopDlg
   property bool bAllok : false
   property bool bDownloadNotVisible : true
-  property int nGlosaDbLastIndex:  -1
+  property bool bCWBusy : false
+  // property int nGlosaDbLastIndex:  -1
 
   color: "#E5E7E9"
 
@@ -133,13 +134,6 @@ Window {
     ListElement {
       number:2
     }
-  }
-
-  Component.onCompleted:
-  {
-    console.log("main completed")
-    //    QuizLib.initLangList()
-    //    QuizLib.getAndInitDb()
   }
 
   width:570
@@ -223,7 +217,7 @@ Window {
             if (index === 2 && pressed)
             {
              // CrossWordQ.createCrossWordFromList(glosModel)
-              idTab5.loadCW()
+              idTab5.sluggCW()
             }
           }
           contentItem: Text {
@@ -277,12 +271,6 @@ Window {
     TakeQuiz
     {
       id:idTab3
-      Component.onCompleted:
-      {
-        console.log("TakeQuiz completed")
-        //    QuizLib.initLangList()
-        //    QuizLib.getAndInitDb()
-      }
 
     }
     HangMan
@@ -290,7 +278,6 @@ Window {
       id:idTab4
       Component.onCompleted:
       {
-        console.log("HangMan completed")
         oHang = idTab4
       }
     }

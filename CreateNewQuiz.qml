@@ -204,10 +204,15 @@ Item
 
       onCurrentIndexChanged:
       {
+         QuizLib.loadFromQuizList()
+
+        /*
         if (nGlosaDbLastIndex >= 0)
           QuizLib.loadFromQuizList()
         else
           nGlosaDbLastIndex = 0;
+
+          */
       }
 
       delegate:Item

@@ -45,45 +45,70 @@ Item {
     }
   }
 
-  function sluggCW() {
-    idCrossWordGrid.children = null
-    CrossWordQ.sluggOneWord()
+  function createGrid() {
+
+    QuizLib.destroyChildren(idCrossWordGrid)
+
     idCrossWordGrid.columns = CrossWordQ.nW
 
     // Last low must contain just *
     let nCount = CrossWordQ.nW * (CrossWordQ.nH - 1)
-    console.log(CrossWordQ.nW + " " + CrossWordQ.nH)
+
     for (var i = 0; i < nCount; ++i) {
       let o = idChar.createObject(idCrossWordGrid)
       o.nIndex = i
     }
-
-    CrossWordQ.assignQuestionSquares(addQ)
-    CrossWordQ.assignCharSquares(addCh)
   }
 
-  function loadCW() {
-    console.log("loadCW")
-    idCrossWordGrid.children = null
+  function isPreReqOk()
+  {
+    if (idWindow.bCWBusy)
+      return false
+    if (glosModel.count <= 6) {
+      idErrMsg.visible = true
+      return false
+    }
+    idErrMsg.visible = false
+    idWindow.bCWBusy = true
+    return true
+  }
+
+  function sluggCW() {
+    if (!isPreReqOk())
+      return
+
+    nLoadedDb = idWindow.quizListView.currentIndex
     idCrossResultMsg.visible = false
+
     CrossWordQ.createCrossWordFromList(glosModel)
 
     CrossWordQ.sluggOneWord()
 
-    console.log(CrossWordQ.nW + " " + CrossWordQ.nH)
-
-    idCrossWordGrid.columns = CrossWordQ.nW
-
-    // Last low must contain just *
-    let nCount = CrossWordQ.nW * (CrossWordQ.nH - 1)
-
-    for (var i = 0; i < nCount; ++i) {
-      let o = idChar.createObject(idCrossWordGrid)
-      o.nIndex = i
-    }
-
+    createGrid()
     CrossWordQ.assignQuestionSquares(addQ)
     CrossWordQ.assignCharSquares(addCh)
+    idWindow.bCWBusy = false
+  }
+
+  property int nLoadedDb
+
+  function loadCW() {
+    if (!isPreReqOk())
+      return
+
+    nLoadedDb = idWindow.quizListView.currentIndex
+    idCrossResultMsg.visible = false
+
+    CrossWordQ.createCrossWordFromList(glosModel)
+    let bRet
+    for (; ; ) {
+      if (!CrossWordQ.sluggOneWord())
+        break
+      createGrid()
+      CrossWordQ.assignQuestionSquares(addQ)
+      CrossWordQ.assignCharSquares(addCh)
+    }
+    idWindow.bCWBusy = false
   }
 
   Flickable {
@@ -169,9 +194,10 @@ Item {
               idInfoBox.width = fontMetrics.width
             } else if (isChar(idCharRect)) {
               idInfoBox.hide()
-              idInputBox.visible = true
+
               idInputBox.t.text = idCharRect.text
               idInputBox.parent = idCharRect
+              idInputBox.visible = true
               idInputBox.t.forceActiveFocus()
             } else {
               Qt.inputMethod.hide()
@@ -207,7 +233,7 @@ Item {
         }
 
         function chChar(text) {
-          // && !isBlank(idCrossWordGrid.children[nNI+ 1])
+
           // 0 Horizontal 1 = Verical
           let eDirection = 0
           text = text.replace(/ /g, "").toUpperCase()
@@ -281,10 +307,6 @@ Item {
         }
       }
     }
-
-    Component.onCompleted: {
-
-    }
   }
 
   ButtonQuizImgLarge {
@@ -297,18 +319,28 @@ Item {
     onClicked: {
       loadCW()
     }
+
     WhiteText {
       anchors.bottom: parent.bottom
       text: "New"
       horizontalAlignment: Text.AlignHCenter
       anchors.horizontalCenter: parent.horizontalCenter
     }
+
+    BusyIndicator {
+      running: bCWBusy
+      id: idBusyIndicator
+      anchors.fill: parent
+    }
   }
 
+
+  /*
   ButtonQuizImgLarge {
     id: idSlugg
 
     anchors.top: idRefresh.bottom
+    anchors.topMargin: 20
     anchors.left: idRefresh.left
 
     source: "qrc:refresh.png"
@@ -323,10 +355,19 @@ Item {
       anchors.horizontalCenter: parent.horizontalCenter
     }
   }
+*/
+  Text {
+    id: idErrMsg
+    text: "Select Quiz with more than 6 questions"
+    visible: false
+    anchors.centerIn: parent
+    color: "red"
+    font.pixelSize: idCrossWordItem.width / 40
+  }
 
   Text {
-    text: "Nice job!"
     id: idCrossResultMsg
+    text: "Nice job!"
     visible: false
     anchors.centerIn: parent
     color: "tomato"
