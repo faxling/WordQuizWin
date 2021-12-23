@@ -213,13 +213,6 @@ Window {
         id:idComboBox
         delegate: ItemDelegate {
           width: idComboBox.width
-          onPressedChanged: {
-            if (index === 2 && pressed)
-            {
-             // CrossWordQ.createCrossWordFromList(glosModel)
-              idTab5.sluggCW()
-            }
-          }
           contentItem: Text {
             text: modelData
             // color: "#21be2b"
@@ -271,7 +264,6 @@ Window {
     TakeQuiz
     {
       id:idTab3
-
     }
     HangMan
     {
@@ -295,12 +287,16 @@ Window {
     {
       if (nLastIndexMain === currentIndex)
         return
+
       MyDownloader.pushIndex(nLastIndexMain)
 
-      if (currentIndex === 3 && nLastIndexMain === 0)
+      if (currentIndex === 3)
         oHang.newQ()
+      else if (currentIndex ===4)
+        idTab5.sluggCW()
 
       nLastIndexMain = currentIndex
+
     }
 
   }

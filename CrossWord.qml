@@ -14,6 +14,7 @@ Item {
     Done
   }
   property int nW: 0
+  property int nLastCrossDbId : -1
 
   function isChar(oo) {
     if (oo.eSquareType === CrossWord.SquareType.Char
@@ -73,11 +74,14 @@ Item {
     return true
   }
 
+
   function sluggCW() {
+    if (idWindow.nDbNumber == nLastCrossDbId)
+      return
+    nLastCrossDbId = idWindow.nDbNumber
     if (!isPreReqOk())
       return
 
-    nLoadedDb = idWindow.quizListView.currentIndex
     idCrossResultMsg.visible = false
 
     CrossWordQ.createCrossWordFromList(glosModel)
@@ -90,13 +94,10 @@ Item {
     idWindow.bCWBusy = false
   }
 
-  property int nLoadedDb
-
   function loadCW() {
     if (!isPreReqOk())
       return
 
-    nLoadedDb = idWindow.quizListView.currentIndex
     idCrossResultMsg.visible = false
 
     CrossWordQ.createCrossWordFromList(glosModel)
@@ -335,27 +336,6 @@ Item {
   }
 
 
-  /*
-  ButtonQuizImgLarge {
-    id: idSlugg
-
-    anchors.top: idRefresh.bottom
-    anchors.topMargin: 20
-    anchors.left: idRefresh.left
-
-    source: "qrc:refresh.png"
-
-    onClicked: {
-      sluggCW()
-    }
-    WhiteText {
-      anchors.bottom: parent.bottom
-      text: "Slugg"
-      horizontalAlignment: Text.AlignHCenter
-      anchors.horizontalCenter: parent.horizontalCenter
-    }
-  }
-*/
   Text {
     id: idErrMsg
     text: "Select Quiz with more than 6 questions"
