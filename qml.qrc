@@ -46,5 +46,6 @@
         <file>ButtonTab.qml</file>
         <file>CrossWord.qml</file>
         <file>refresh.png</file>
+        <file>../harbour-wordquiz/Qml/CrossWordFunctions.js</file>
     </qresource>
 </RCC>

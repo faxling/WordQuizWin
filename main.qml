@@ -1,14 +1,15 @@
-﻿import QtQuick 2.3
+﻿import QtQuick 2.14
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.12
 import QtQuick.LocalStorage 2.0 as Sql
 import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
+import "../harbour-wordquiz/Qml/CrossWordFunctions.js" as CWLib
 
 Window {
 
-  id:idWindow
+  id: idWindow
   // init in initUrls
   property string sReqDictUrlBase
   property string sReqDictUrl
@@ -27,19 +28,19 @@ Window {
   property string sLangLangRev
   property string sToLang
   property string sFromLang
-  property string sQuestionLang : bIsReverse ? sToLang : sFromLang
-  property string sAnswerLang : bIsReverse ? sFromLang : sToLang
+  property string sQuestionLang: bIsReverse ? sToLang : sFromLang
+  property string sAnswerLang: bIsReverse ? sFromLang : sToLang
   property bool bIsReverse
-  property bool bHasDictTo : sToLang ==="ru" || sToLang ==="en"
-  property bool bHasDictFrom : sFromLang ==="ru" || sFromLang ==="en"
+  property bool bHasDictTo: sToLang === "ru" || sToLang === "en"
+  property bool bHasDictFrom: sFromLang === "ru" || sFromLang === "en"
   property string sLangLangEn
-  property string sQuizName : "-"
-  property string sQuizDate : "-"
-  property string sQuizDesc : "-"
-  property string sScoreText : "-"
-  property int nDbNumber : 0;
+  property string sQuizName: "-"
+  property string sQuizDate: "-"
+  property string sQuizDesc: "-"
+  property string sScoreText: "-"
+  property int nDbNumber: 0
   property int nQuizIndex: 1
-  property int nFontSize:  idWindow.height > 1200 ? 14 : 11
+  property int nFontSize: idWindow.height > 1200 ? 14 : 11
   property int nDlgHeight: idWindow.height / 5 + 80
   property int nDlgHeightLarge: idWindow.height / 2.5
   property int nBtnHeight: idWindow.height / 15
@@ -49,46 +50,70 @@ Window {
   property int n25BtnWidth: idTabMain.width / 2.4 - 7
   property int n2BtnWidth: idTabMain.width / 2 - 10
   property int nMainWidth: idTabMain.width
-  property bool bQSort : true
-  property string sQSort : bQSort ? "UPPER(quizword)" : "UPPER(answer)"
+  property bool bQSort: true
+  property string sQSort: bQSort ? "UPPER(quizword)" : "UPPER(answer)"
   property variant glosListView
   property variant quizListView
   property variant oTakeQuiz
   property variant oPopDlg
-  property bool bAllok : false
-  property bool bDownloadNotVisible : true
-  property bool bCWBusy : false
-  // property int nGlosaDbLastIndex:  -1
+  property bool bAllok: false
+  property bool bDownloadNotVisible: true
+  property bool bCWBusy: false
 
+  // property int nGlosaDbLastIndex:  -1
   color: "#E5E7E9"
 
-  property int nGlosaTakeQuizIndex : -1
-  property int nLastIndexMain : 0
+  property int nGlosaTakeQuizIndex: -1
+  property int nLastIndexMain: 0
   FontLoader {
     id: webFont
     source: "qrc:ITCKRIST.TTF"
   }
+
+  // Called from c++ event loop
   function onBackPressedTab() {
-    nLastIndexMain = MyDownloader.popIndex()
-    idTabMain.currentIndex = nLastIndexMain
+
+    var n = MyDownloader.popIndex()
+    if (n < 0)
+      return
+
+
+    switch (n) {
+    case 0:
+      idTabMain.currentIndex = 0
+      idSwipeView.currentIndex = 0
+      break
+    case 1:
+      idTabMain.currentIndex = 1
+      idSwipeView.currentIndex = 1
+      break
+    case 2:
+      idTabMain.currentIndex = 2
+      idSwipeView.currentIndex = 2
+      break
+    case 3:
+      idTabMain.currentIndex = 2
+      idSwipeView.currentIndex = 3
+      break;
+    case 4:
+      idTabMain.currentIndex = 2
+      idSwipeView.currentIndex = 4
+      break;
+    }
   }
 
   function onBackPressedDlg() {
     idWindow.oPopDlg.closeThisDlg()
   }
 
+  onSScoreTextChanged: {
 
-  onSScoreTextChanged:
-  {
-
-    db.transaction(
-          function(tx) {
-            tx.executeSql('UPDATE GlosaDbIndex SET state1=? WHERE dbnumber=?',[sScoreText, nDbNumber]);
-            var i = MyDownloader.indexFromGlosNr(glosModelIndex, nDbNumber)
-            glosModelIndex.setProperty(i,"state1", sScoreText)
-
-          }
-          )
+    db.transaction(function (tx) {
+      tx.executeSql('UPDATE GlosaDbIndex SET state1=? WHERE dbnumber=?',
+                    [sScoreText, nDbNumber])
+      var i = MyDownloader.indexFromGlosNr(glosModelIndex, nDbNumber)
+      glosModelIndex.setProperty(i, "state1", sScoreText)
+    })
   }
 
   ListModel {
@@ -107,43 +132,40 @@ Window {
     id: glosModelIndex
   }
 
-
   ListModel {
-    id:idLangModel
+    id: idLangModel
   }
 
   ListModel {
-    id:idQuizModel
+    id: idQuizModel
 
     property string question
     property string extra
     property string answer
     property int number
 
-    onQuestionChanged:
-    {
-      MyDownloader.setImgWord(question,sQuestionLang )
+    onQuestionChanged: {
+      MyDownloader.setImgWord(question, sQuestionLang)
     }
 
     ListElement {
-      number:0
+      number: 0
     }
     ListElement {
-      number:1
+      number: 1
     }
     ListElement {
-      number:2
+      number: 2
     }
   }
 
-  width:570
-  height:730
+  width: 570
+  height: 730
   visible: true
-  Item
-  {
-    id:idMainTitle
+  Item {
+    id: idMainTitle
     z: 3
-    width:parent.width
+    width: parent.width
     height: idBtnHelp.height
     TextList {
       id: idTitle
@@ -154,22 +176,23 @@ Window {
         if (glosModelIndex.count === 0)
           return "No Quiz create one or download"
 
-        return sQuizName + " " + sFromLang + (bIsReverse ? "<-" : "->") +  sToLang + " " + sScoreText
-
+        return sQuizName + " " + sFromLang + (bIsReverse ? "<-" : "->") + sToLang + " " + sScoreText
       }
     }
 
-    ButtonQuizImg
-    {
+    ButtonQuizImg {
       id: idBtnHelp
       anchors.right: parent.right
-      anchors.rightMargin : 40
-      anchors.top : parent.top
-      anchors.topMargin : 5
-      source:"qrc:help.png"
-      onClicked: Qt.openUrlExternally("https://faxling.github.io/WordQuizWin/index.html");
+      anchors.rightMargin: 40
+      anchors.top: parent.top
+      anchors.topMargin: 5
+      source: "qrc:help.png"
+      onClicked: Qt.openUrlExternally(
+                   "https://faxling.github.io/WordQuizWin/index.html")
     }
   }
+
+
   /*
   TextList
   {
@@ -177,15 +200,14 @@ Window {
     anchors.horizontalCenter: parent.horizontalCenter
   }
   */
-
   TabBar {
-    id:idTabMain
+    id: idTabMain
     clip: true
-    anchors.fill : parent
-    anchors.leftMargin : 50
-    anchors.rightMargin : 50
-    anchors.bottomMargin:  nBtnHeight / 2
-    anchors.topMargin:  idMainTitle.height + 10
+    anchors.fill: parent
+    anchors.leftMargin: 50
+    anchors.rightMargin: 50
+    anchors.bottomMargin: nBtnHeight / 2
+    anchors.topMargin: idMainTitle.height + 10
     implicitWidth: 200
     background: Item {}
 
@@ -208,9 +230,8 @@ Window {
     ButtonTab {
       id: control3
       text: idComboBox.currentText
-      contentItem:  ComboBox
-      {
-        id:idComboBox
+      contentItem: ComboBox {
+        id: idComboBox
         delegate: ItemDelegate {
           width: idComboBox.width
           contentItem: Text {
@@ -221,8 +242,8 @@ Window {
           }
           highlighted: idComboBox.highlightedIndex === index
         }
-        background:Item{}
-        contentItem : Text {
+        background: Item {}
+        contentItem: Text {
           text: control3.text
           font.pointSize: 10
           horizontalAlignment: Text.AlignHCenter
@@ -230,46 +251,45 @@ Window {
           color: control3.checked ? "white" : "black"
         }
         onPressedChanged: {
-          if (pressed)
-          {
+          if (pressed) {
             control3.checked = true
             idSwipeView.currentIndex = currentIndex + 2
           }
         }
-        onCurrentIndexChanged : idSwipeView.currentIndex = currentIndex + 2
+        onCurrentIndexChanged: idSwipeView.currentIndex = currentIndex + 2
         currentIndex: 0
-        model:  ["Quiz", "Hang Man", "Cross Word"]
+        model: ["Quiz", "Hang Man", "Cross Word"]
+      }
+
+      onPressed: {
+        // checked = true
+        idSwipeView.currentIndex = idComboBox.currentIndex + 2
       }
     }
   }
 
   SwipeView {
-    id:idSwipeView
+    id: idSwipeView
     clip: true
-    x : idTabMain.x
-    y : idTabMain.y + idTabMain.contentHeight
-    height : idTabMain.height - idTabMain.contentHeight
+    x: idTabMain.x
+    y: idTabMain.y + idTabMain.contentHeight
+    height: idTabMain.height - idTabMain.contentHeight
     width: idTabMain.width
-    interactive : false
+    interactive: false
 
-    CreateNewQuiz
-    {
-      id:idTab1
+    CreateNewQuiz {
+      id: idTab1
     }
-    EditQuiz
-    {
-      id:idTab2
+    EditQuiz {
+      id: idTab2
       enabled: glosModelIndex.count > 0 && bDownloadNotVisible
     }
-    TakeQuiz
-    {
-      id:idTab3
+    TakeQuiz {
+      id: idTab3
     }
-    HangMan
-    {
-      id:idTab4
-      Component.onCompleted:
-      {
+    HangMan {
+      id: idTab4
+      Component.onCompleted: {
         oHang = idTab4
       }
     }
@@ -283,22 +303,16 @@ Window {
       color: "black"
     }
 
-    onCurrentIndexChanged:
-    {
-      if (nLastIndexMain === currentIndex)
-        return
+    onCurrentIndexChanged: {
 
       MyDownloader.pushIndex(nLastIndexMain)
 
       if (currentIndex === 3)
         oHang.newQ()
-      else if (currentIndex ===4)
-        idTab5.sluggCW()
+      else if (currentIndex === 4)
+        idTab5.loadCW()
 
       nLastIndexMain = currentIndex
-
     }
-
   }
 }
-

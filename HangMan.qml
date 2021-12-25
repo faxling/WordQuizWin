@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.14
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib

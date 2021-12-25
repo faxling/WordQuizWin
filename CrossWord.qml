@@ -1,8 +1,10 @@
-import QtQuick 2.5
+import QtQuick 2.14
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Styles 1.4
-import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
 import QtQuick.Window 2.0
+
+import "../harbour-wordquiz/Qml/QuizFunctions.js" as QuizLib
+import "../harbour-wordquiz/Qml/CrossWordFunctions.js" as CWLib
 
 Item {
   id: idCrossWordItem
@@ -14,102 +16,10 @@ Item {
     Done
   }
   property int nW: 0
-  property int nLastCrossDbId : -1
-
-  function isChar(oo) {
-    if (oo.eSquareType === CrossWord.SquareType.Char
-        || oo.eSquareType === CrossWord.SquareType.Done)
-      return true
-    return false
-  }
-
-  function addQ(nIndex, nHorizontal, nVertical) {
-    const o = idCrossWordGrid.children[nIndex]
-    o.eSquareType = CrossWord.SquareType.Question
-    if (nHorizontal !== -1)
-      o.text = glosModel.get(nHorizontal).question
-
-    if (nHorizontal !== -1 && nVertical !== -1)
-      o.text += "\n\n"
-
-    if (nVertical !== -1)
-      o.text += glosModel.get(nVertical).question
-  }
-
-  function addCh(nIndex, vVal) {
-    const o = idCrossWordGrid.children[nIndex]
-    if (vVal === " ")
-      o.eSquareType = CrossWord.SquareType.Space
-    else {
-      o.eSquareType = CrossWord.SquareType.Char
-      o.textA = vVal
-    }
-  }
-
-  function createGrid() {
-
-    QuizLib.destroyChildren(idCrossWordGrid)
-
-    idCrossWordGrid.columns = CrossWordQ.nW
-
-    // Last low must contain just *
-    let nCount = CrossWordQ.nW * (CrossWordQ.nH - 1)
-
-    for (var i = 0; i < nCount; ++i) {
-      let o = idChar.createObject(idCrossWordGrid)
-      o.nIndex = i
-    }
-  }
-
-  function isPreReqOk()
-  {
-    if (idWindow.bCWBusy)
-      return false
-    if (glosModel.count <= 6) {
-      idErrMsg.visible = true
-      return false
-    }
-    idErrMsg.visible = false
-    idWindow.bCWBusy = true
-    return true
-  }
-
-
-  function sluggCW() {
-    if (idWindow.nDbNumber == nLastCrossDbId)
-      return
-    nLastCrossDbId = idWindow.nDbNumber
-    if (!isPreReqOk())
-      return
-
-    idCrossResultMsg.visible = false
-
-    CrossWordQ.createCrossWordFromList(glosModel)
-
-    CrossWordQ.sluggOneWord()
-
-    createGrid()
-    CrossWordQ.assignQuestionSquares(addQ)
-    CrossWordQ.assignCharSquares(addCh)
-    idWindow.bCWBusy = false
-  }
+  property int nLastCrossDbId: -1
 
   function loadCW() {
-    if (!isPreReqOk())
-      return
-
-    idCrossResultMsg.visible = false
-
-    CrossWordQ.createCrossWordFromList(glosModel)
-    let bRet
-    for (; ; ) {
-      if (!CrossWordQ.sluggOneWord())
-        break
-      createGrid()
-      CrossWordQ.assignQuestionSquares(addQ)
-      CrossWordQ.assignCharSquares(addCh)
-    }
-    idWindow.bCWBusy = false
+    CWLib.loadCW()
   }
 
   Flickable {
@@ -169,41 +79,7 @@ Item {
 
         MouseArea {
           anchors.fill: parent
-          onPressed: {
-            if (idCharRect.eSquareType === CrossWord.SquareType.Question) {
-              if (idInfoBox.visible === true
-                  && idInfoBox.parent === idCharRect) {
-                idInfoBox.visible = false
-                return
-              }
-
-              idInfoBox.parent = idCharRect
-              idInfoBox.show(idT.text)
-
-              const sss = idT.text.split("\n\n")
-
-              if (sss.length > 1) {
-                if (sss[0].length > sss[1].length)
-                  fontMetrics.text = sss[0]
-                else
-                  fontMetrics.text = sss[1]
-              } else
-                fontMetrics.text = idT.text
-
-              fontMetrics.text += "X"
-
-              idInfoBox.width = fontMetrics.width
-            } else if (isChar(idCharRect)) {
-              idInfoBox.hide()
-
-              idInputBox.t.text = idCharRect.text
-              idInputBox.parent = idCharRect
-              idInputBox.visible = true
-              idInputBox.t.forceActiveFocus()
-            } else {
-              Qt.inputMethod.hide()
-            }
-          }
+          onPressed: CWLib.popupOnPress(idCharRect, idT, fontMetrics)
         }
       }
     }
@@ -226,85 +102,10 @@ Item {
       width: idTextInput.width + idTextInput.font.pixelSize
       TextInput {
         id: idTextInput
-
-        function isBlank(oo) {
-          if (oo.text === " " || oo.text === "")
-            return true
-          return false
-        }
-
-        function chChar(text) {
-
-          // 0 Horizontal 1 = Verical
-          let eDirection = 0
-          text = text.replace(/ /g, "").toUpperCase()
-          const nInTextLen = text.length
-          let nNI = idInputBox.parent.nIndex
-          for (var i = 0; i < nInTextLen; ++i) {
-            // If First init direction
-            if (i === 0) {
-              // on right bound
-              let oRightSq = idCrossWordGrid.children[nNI + 1]
-              if ((nNI % CrossWordQ.nW) === (CrossWordQ.nW - 1))
-                eDirection = 1
-              else if (!isChar(oRightSq))
-                eDirection = 1
-            }
-
-            let oCursorSq = idCrossWordGrid.children[nNI]
-            let chIn = text.charAt(i)
-
-            if (MyDownloader.ignoreAccent(chIn) === MyDownloader.ignoreAccent(
-                  oCursorSq.textA)) {
-              oCursorSq.text = oCursorSq.textA
-              oCursorSq.eSquareType = CrossWord.SquareType.Done
-            } else {
-              oCursorSq.text = chIn
-              oCursorSq.eSquareType = CrossWord.SquareType.Char
-            }
-
-            if (eDirection === 0) {
-              nNI++
-              if ((nNI % CrossWordQ.nW) === 0)
-                break
-            } else {
-              nNI += CrossWordQ.nW
-              if (nNI >= (CrossWordQ.nW * (CrossWordQ.nH - 1)))
-                break
-            }
-
-            oCursorSq = idCrossWordGrid.children[nNI]
-
-            if (oCursorSq.eSquareType === CrossWord.SquareType.Space) {
-              if (eDirection === 0)
-                nNI++
-              else
-                nNI = nNI + CrossWordQ.nW
-
-              oCursorSq = idCrossWordGrid.children[nNI]
-            }
-
-            if (!isChar(oCursorSq))
-              break
-          }
-
-          idInputBox.visible = false
-          const nCount = idCrossWordGrid.children.length
-          let bDone = true
-          for (var j = 0; j < nCount; ++j) {
-            if (idCrossWordGrid.children[j].eSquareType === CrossWord.SquareType.Char) {
-              bDone = false
-              break
-            }
-          }
-          if (bDone)
-            idCrossResultMsg.visible = true
-        }
         font.pointSize: 20
         font.capitalization: Font.AllUppercase
-
         onAccepted: {
-          onEditingFinished: chChar(text)
+          onEditingFinished: CWLib.chChar(text)
         }
       }
     }
@@ -314,11 +115,10 @@ Item {
     id: idRefresh
     x: idTabMain.width - width - 20
     y: 20
-
     source: "qrc:refresh.png"
 
     onClicked: {
-      loadCW()
+      CWLib.sluggCW()
     }
 
     WhiteText {
@@ -334,7 +134,6 @@ Item {
       anchors.fill: parent
     }
   }
-
 
   Text {
     id: idErrMsg

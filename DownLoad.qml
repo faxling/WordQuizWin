@@ -20,6 +20,12 @@ Flipable {
                                          ListView.Center)
   }
 
+
+  function closeThisDlg()
+  {
+    state = ""
+  }
+
   function showPane()
   {
     idContainer.sImportMsg = ""

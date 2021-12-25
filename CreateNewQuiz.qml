@@ -79,6 +79,7 @@ Item {
         }
       }
 
+
       /*
       TextList
       {
@@ -296,6 +297,18 @@ Item {
     height: nDlgHeight
 
     onCloseClicked: idExport.visible = false
+    onVisibleChanged: {
+      if (visible)
+        idWindow.oPopDlg = idExport
+      else
+        idWindow.oPopDlg = undefined
+    }
+
+    function closeThisDlg()
+    {
+      visible = false
+    }
+
 
     WhiteText {
       id: idExportTitle
@@ -397,6 +410,12 @@ Item {
     height: parent.height
     onStateChanged: {
       idWindow.bDownloadNotVisible = (state === "")
+
+      if (idWindow.bDownloadNotVisible) {
+        idWindow.oPopDlg = undefined
+      } else {
+        idWindow.oPopDlg = idImport
+      }
     }
   }
 
