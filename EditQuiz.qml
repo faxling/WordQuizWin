@@ -16,13 +16,6 @@ Item {
   }
 
   property int nLastSearch: 0
-  onVisibleChanged: {
-    if (visible) {
-      idGlosList.currentIndex = idWindow.nGlosaTakeQuizIndex
-      idGlosList.positionViewAtIndex(idWindow.nGlosaTakeQuizIndex,
-                                     ListView.Center)
-    }
-  }
 
   Column {
     id: idGlosListMainColumn
@@ -43,8 +36,7 @@ Item {
           id: idTextTrans
           Component.onCompleted: MyDownloader.storeTransText(idTextTrans, idErrorText, idTrTextModel, idTrSynModel,
                                                              idTrMeanModel)
-          //  height: idTextInput.height
-          //  width:  idEditQuiz.width / 2
+
           text: "-"
           onTextChanged:  QuizLib.assignTextInputField(idTextTrans.text)
           onClick: {

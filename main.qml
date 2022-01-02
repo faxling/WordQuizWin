@@ -77,7 +77,6 @@ Window {
     if (n < 0)
       return
 
-
     switch (n) {
     case 0:
       idTabMain.currentIndex = 0
@@ -94,11 +93,11 @@ Window {
     case 3:
       idTabMain.currentIndex = 2
       idSwipeView.currentIndex = 3
-      break;
+      break
     case 4:
       idTabMain.currentIndex = 2
       idSwipeView.currentIndex = 4
-      break;
+      break
     }
   }
 
@@ -311,6 +310,15 @@ Window {
         oHang.newQ()
       else if (currentIndex === 4)
         idTab5.loadCW()
+      else if (currentIndex === 1) {
+
+        // Highlight the word currenly displayed on Quiz pane
+
+        glosListView.currentIndex = idWindow.nGlosaTakeQuizIndex
+        glosListView.positionViewAtIndex(idWindow.nGlosaTakeQuizIndex,
+                                       ListView.Center)
+
+      }
 
       nLastIndexMain = currentIndex
     }
