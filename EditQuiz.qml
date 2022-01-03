@@ -61,6 +61,8 @@ Item {
       Item {
         height: idTextInput.height
         width:  idEditQuiz.width / 2
+
+
         ButtonQuizImg {
           id : idShiftBtn
           x: 10
@@ -74,6 +76,7 @@ Item {
             idTextInput2.text = sT
           }
         }
+
 
         ButtonQuizImg {
           id: idBtnClear2

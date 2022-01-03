@@ -47,5 +47,6 @@
         <file>CrossWord.qml</file>
         <file>refresh.png</file>
         <file>../harbour-wordquiz/Qml/CrossWordFunctions.js</file>
+        <file>dline.svg</file>
     </qresource>
 </RCC>

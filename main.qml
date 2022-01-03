@@ -231,6 +231,7 @@ Window {
       text: idComboBox.currentText
       contentItem: ComboBox {
         id: idComboBox
+
         delegate: ItemDelegate {
           width: idComboBox.width
           contentItem: Text {
@@ -239,23 +240,36 @@ Window {
             font.pointSize: 10
             verticalAlignment: Text.AlignVCenter
           }
+
           highlighted: idComboBox.highlightedIndex === index
         }
         background: Item {}
-        contentItem: Text {
-          text: control3.text
-          font.pointSize: 10
-          horizontalAlignment: Text.AlignHCenter
-          verticalAlignment: Text.AlignVCenter
-          color: control3.checked ? "white" : "black"
+        contentItem: Item {
+          Text {
+            text: control3.text
+            font.pointSize: 10
+            anchors.fill: parent
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            color: control3.checked ? "white" : "black"
+          }
+          MouseArea {
+            anchors.fill: parent
+            onPressed:
+            {
+              control3.checked = true
+              idSwipeView.currentIndex = idComboBox.currentIndex + 2
+            }
+          }
         }
+
         onPressedChanged: {
           if (pressed) {
             control3.checked = true
-            idSwipeView.currentIndex = currentIndex + 2
+            idSwipeView.currentIndex = idComboBox.currentIndex + 2
           }
         }
-        onCurrentIndexChanged: idSwipeView.currentIndex = currentIndex + 2
+        onCurrentIndexChanged: idSwipeView.currentIndex = idComboBox.currentIndex + 2
         currentIndex: 0
         model: ["Quiz", "Hang Man", "Cross Word"]
       }
@@ -313,11 +327,9 @@ Window {
       else if (currentIndex === 1) {
 
         // Highlight the word currenly displayed on Quiz pane
-
         glosListView.currentIndex = idWindow.nGlosaTakeQuizIndex
         glosListView.positionViewAtIndex(idWindow.nGlosaTakeQuizIndex,
-                                       ListView.Center)
-
+                                         ListView.Center)
       }
 
       nLastIndexMain = currentIndex

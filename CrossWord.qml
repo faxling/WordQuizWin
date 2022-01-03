@@ -12,14 +12,47 @@ Item {
     Char,
     Grey,
     Question,
+    QuestionH,
+    QuestionV,
     Space,
     Done
   }
+  // width in pixel of a char square
   property int nW: 0
   property int nLastCrossDbId: -1
 
   function loadCW() {
     CWLib.loadCW()
+  }
+
+  Component {
+    id: idDline
+
+    Item {
+      anchors.fill: parent
+      property string textH
+      property string textV
+      Image {
+        opacity: 0.35
+        anchors.fill: parent
+        source: "qrc:dline.svg"
+      }
+
+      Text {
+        id: idTV
+        text: textV
+        x: parent.width * 0.10
+        y: parent.height * 0.70
+        font.pointSize: 3
+      }
+      Text {
+        id: idTH
+        text: textH
+        x: parent.width * 0.30
+        y: parent.height * 0.10
+        font.pointSize: 3
+      }
+    }
   }
 
   Flickable {
@@ -31,7 +64,7 @@ Item {
     contentWidth: idCrossWordGrid.width + 80
 
     Component {
-      id: idChar
+      id: idCWCharComponent
       Rectangle {
         id: idCharRect
         Component.onCompleted: {
@@ -44,6 +77,7 @@ Item {
         property int nIndex
         property int eSquareType: CrossWord.SquareType.Grey
         property alias text: idT.text
+
         property string textA
         color: {
           switch (eSquareType) {
@@ -53,6 +87,8 @@ Item {
             return "white"
           case CrossWord.SquareType.Space:
             return "#feffcc"
+          case CrossWord.SquareType.QuestionV:
+          case CrossWord.SquareType.QuestionH:
           case CrossWord.SquareType.Question:
             return "#e2f087"
           case CrossWord.SquareType.Done:
@@ -60,18 +96,16 @@ Item {
           }
         }
 
-        function isQ() {
-          return (eSquareType === CrossWord.SquareType.Question)
-        }
-
         Text {
           id: idT
+          visible: eSquareType !== CrossWord.SquareType.Question
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
           anchors.fill: parent
           wrapMode: Text.WrapAnywhere
-          font.pointSize: isQ() ? 4 : 20
+          font.pointSize: CWLib.isQ(eSquareType) ? 4 : 20
         }
+
         TextMetrics {
           id: fontMetrics
           font.pointSize: 20
@@ -104,9 +138,7 @@ Item {
         id: idTextInput
         font.pointSize: 20
         font.capitalization: Font.AllUppercase
-        onAccepted: {
-          onEditingFinished: CWLib.chChar(text)
-        }
+        onAccepted: CWLib.handleCharInput(text)
       }
     }
   }
