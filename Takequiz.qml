@@ -288,6 +288,23 @@ Item {
     }
   }
 
+  Keys.onLeftPressed: {
+    bMoving = true
+    idView.incrementCurrentIndex()
+  }
+
+  Keys.onRightPressed: {
+    bMoving = true
+    idView.decrementCurrentIndex()
+  }
+  Keys.onSpacePressed: {
+    bAnswerVisible = !bAnswerVisible
+  }
+
+  Keys.onUpPressed: {
+    MyDownloader.playWord(idQuizModel.question,sQuestionLang)
+  }
+
   PathView
   {
     id:idView
@@ -323,22 +340,7 @@ Item {
     }
 
     // focus: true
-    Keys.onLeftPressed: {
-      bMoving = true
-      idView.incrementCurrentIndex()
-    }
 
-    Keys.onRightPressed: {
-      bMoving = true
-      idView.decrementCurrentIndex()
-    }
-    Keys.onSpacePressed: {
-      bAnswerVisible = !bAnswerVisible
-    }
-
-    Keys.onUpPressed: {
-      MyDownloader.playWord(idQuizModel.question,sQuestionLang)
-    }
 
   }
 

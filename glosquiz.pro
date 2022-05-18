@@ -11,7 +11,7 @@ SOURCES += main.cpp \
     ../harbour-wordquiz/src/speechdownloader.cpp \
     ../harbour-wordquiz/src/filehelpers.cpp \
     ../harbour-wordquiz/src/svgdrawing.cpp \
-    ../CrossMatch/crossword.cpp \
+    ../Crossword/crossword.cpp \
     imagepickerandroid.cpp
 
 
@@ -30,7 +30,7 @@ HEADERS += \
     ../harbour-wordquiz/src/speechdownloader.h \
     ../harbour-wordquiz/src/filehelpers.h \
     ../harbour-wordquiz/src/svgdrawing.h \
-    ../CrossMatch/crossword.h \
+    ../Crossword/crossword.h \
     ./glosquiz/Resource.rc \
     imagepickerandroid.h
 

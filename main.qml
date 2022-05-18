@@ -322,6 +322,8 @@ Window {
 
       if (currentIndex === 3)
         oHang.newQ()
+      else if (currentIndex === 2)
+        idTab3.forceActiveFocus()
       else if (currentIndex === 4)
         idTab5.loadCW()
       else if (currentIndex === 1) {

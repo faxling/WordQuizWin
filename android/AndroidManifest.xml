@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<manifest package="org.qtproject.wordquiz" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="4.01" android:versionCode="33" android:installLocation="auto">
-    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="29"/>
+<manifest package="org.qtproject.wordquiz" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="5.00" android:versionCode="34" android:installLocation="auto">
+    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
